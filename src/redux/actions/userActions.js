@@ -1,5 +1,5 @@
 import * as types from '../constants/ActionTypes'
-import {protectedRequest, publicRequest} from "../../utils/requestMethods";
+import {protectedRequest, publicRequest} from "../../util/request-method";
 
 export const login = async (payload) => {
     const action = {type: types.USER_LOGIN_SUCCESS, payload: {}};

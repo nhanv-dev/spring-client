@@ -2,7 +2,7 @@ import React from 'react';
 import {Route, Routes} from "react-router-dom";
 import Home from "../pages/web/Home";
 
-function PrivateRouter() {
+function ManagerRouter() {
     const routes = [
         {path: '/', exact: true, component: Home, replaceTo: '/dang-ky-ban-hang'},
         {path: '/trang-chu', exact: true, component: Home, replaceTo: '/dang-ky-ban-hang'},
@@ -21,4 +21,4 @@ function PrivateRouter() {
     );
 }
 
-export default PrivateRouter;
+export default ManagerRouter;
