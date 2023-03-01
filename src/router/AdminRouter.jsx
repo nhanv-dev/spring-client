@@ -1,6 +1,7 @@
-import React from 'react';
+import React, {lazy} from 'react';
 import {Route, Routes} from "react-router-dom";
-import Home from "../pages/web/Home";
+
+const Home = lazy(() => import('../pages/admin/home'));
 
 function AdminRouter() {
     const routes = [
@@ -11,8 +12,7 @@ function AdminRouter() {
     return (
         <Routes>
             {routes.map(route => (
-                <Route key={route.path} exact={route.exact} path={route.path} element={<route.component/>}
-                />
+                <Route key={route.path} exact={route.exact} path={route.path} element={<route.component/>}/>
             ))}
         </Routes>
     );

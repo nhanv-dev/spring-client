@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const baseURL = "https://ecommerce-server-kapy2vm6o-nhanv-dev.vercel.app/api/v1/";
+export const baseURL = "http://localhost:8080/api";
 
 export const publicRequest = () => {
     return axios.create({

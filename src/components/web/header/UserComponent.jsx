@@ -20,7 +20,7 @@ function UserComponent() {
             {user?.info ?
                 <div className="relative group">
                     <Link to="/nguoi-dung/thong-tin" className="relative outline-none">
-                        <Icon.UilUser className="w-[26px] h-[26px] text-primary"/>
+                        <Icon.UilUser className="w-[24px] h-[24px] text-primary"/>
                     </Link>
                     <div
                         className="transition-all group-hover:opacity-100 group-hover:visible group-hover:top-full mt-[10px] opacity-0 invisible z-[20] absolute top-[70%] right-[-20px]  shadow min-w-max bg-white text-black font-medium rounded-[8px] text-sm">
@@ -77,11 +77,11 @@ function UserComponent() {
                     </div>
                 </div> :
                 <Link to="/dang-nhap"
-                      className="relative outline-none group">
-                    <Icon.UilUser className="w-[26px] h-[26px] text-primary"/>
+                      className="relative outline-none group p-2 rounded-lg bg-white hover:bg-primary-1-hover transition-all">
+                    <Icon.UilUser className="w-[24px] h-[24px] text-primary"/>
                     <p className="transition-all group-hover:opacity-100 group-hover:top-full mt-[10px] opacity-0 z-[20] absolute top-[70%] left-[50%] translate-x-[-50%] min-w-max bg-black text-white font-medium rounded-[8px] text-sm px-2.5 py-1">
                     <span
-                        className="absolute bottom-[99%] left-[50%] translate-x-[-50%] border-[7px] border-[transparent] border-b-[#333333]"/>
+                        className="absolute bottom-[99%] left-[50%] translate-x-[-50%] border-[7px] border-[transparent] border-b-[#333333] text-tiny font-medium"/>
                         Đăng nhập
                     </p>
                 </Link>

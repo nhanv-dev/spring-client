@@ -3,36 +3,57 @@ import {Link} from "react-router-dom";
 import * as Icon from '@iconscout/react-unicons';
 
 const Category = ({categories}) => {
-    const [hover, setHover] = useState(null);
+    const [list, setList] = useState();
+
+    useEffect(() => {
+        setList(categories[0]?.subCategories)
+    }, [categories])
 
     return (
         <div
-            className="max-w-[250px] bg-white z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible shadow-tiny transition-all absolute top-full left-0 rounded-[4px] mt-3">
-            {categories.map((category, index) => (
-                <Link to={`/danh-muc/${category.slug}`} key={index}
-                      className='hover:text-primary hover:bg-[#fde5e4] text-black bg-transparent text-black bg-transparent flex justify-between items-center text-[.9rem] font-medium text-gray px-2.5 py-1.5 min-w-[250px] max-w-[250px] transition-all'>
-                    <div className="flex items-center gap-4">
-                        <img src={category.image} alt="icon" className="w-[40px] h-[40px]"/>
-                    {category.name}
-                    </div>
-                    <Icon.UilAngleRight/>
-                </Link>
-            ))}
+            className="min-w-full  bg-white z-50 group-hover:opacity-100 group-hover:visible opacity-0 invisible shadow-tiny transition-all absolute top-full left-0 rounded-md mt-3 after:absolute after:bottom-full after:left-0 after:right-0 after:bg-[transparent] after:h-3">
+            <div className="flex">
+                <div className="min-w-max p-3">
+                    {categories.map((category, index) => (
+                        <Link to={`/danh-muc/${category.slug}`} key={index}
+                              onMouseEnter={() => setList(category.subCategories)}
+                              className='hover:text-primary hover:bg-primary-1-hover text-black bg-transparent bg-transparent rounded-md flex justify-between items-center text-tiny font-medium text-gray px-2.5 py-1.5 w-full transition-all'>
+                            <div className="flex items-center gap-4">
+                                {/*<img alt="icon" className="w-[32px] h-[32px]"*/}
+                                {/*     src={category.image || "https://cf.shopee.vn/file/vn-50009109-1975fb1af4ae3c22878d04f6f440b6f9_xhdpi"}/>*/}
+                                {category.title}
+                            </div>
+                            <Icon.UilAngleRight className="ml-10"/>
+                        </Link>
+                    ))}
+                    <Link to={`/danh-muc`}
+                          className='hover:text-primary hover:bg-primary-1-hover text-black bg-transparent bg-transparent rounded-md flex justify-between items-center text-tiny font-medium text-gray px-2.5 py-1.5 w-full transition-all'>
+                        <div className="flex items-center gap-4">
+                            {/*<img alt="icon" className="w-[32px] h-[32px]"*/}
+                            {/*     src={"https://cf.shopee.vn/file/vn-50009109-1975fb1af4ae3c22878d04f6f440b6f9_xhdpi"}/>*/}
+                            Xem thêm
+                        </div>
+                        <Icon.UilAngleRight className="ml-10"/>
+                    </Link>
+
+                </div>
+                <SubCategories categories={list}/>
+            </div>
         </div>
     )
 }
 const SubCategories = ({categories}) => {
-    const [subCategories, setSubCategories] = useState([]);
 
     return (
-        <div className={`min-w-max w-full bg-white transition-all bg-[#fde5e4] p-4`}>
-            <div className="grid grid-cols-4 gap-x-8 gap-y-3">
-                {categories.map((category, index) => {
+        <div
+            className={`w-full bg-primary-1 transition-all`}>
+            <div className="grid grid-cols-4 gap-x-8 gap-y-3 w-full max-w-full p-5">
+                {categories?.map((category, index) => {
                     return (
                         <div className="min-w-max" key={index}>
                             <Link to={`/danh-muc/${category.slug}`}
-                                  className="text-md font-medium text-black-1 hover:text-primary">
-                                {category.name}
+                                  className="text-md font-medium text-black-1 hover:text-primary line-clamp-1">
+                                {category.title}
                             </Link>
                         </div>
                     )

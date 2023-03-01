@@ -1,7 +1,14 @@
-import React from 'react';
+import React, {lazy} from 'react';
 import {Route, Routes} from "react-router-dom";
-import Home from "../pages/web/Home";
-import SignIn from "../pages/web/SignIn";
+
+const Home = lazy(() => import('../pages/web/home'));
+const Categories = lazy(() => import('../pages/web/categories'));
+const Category = lazy(() => import('../pages/web/category'));
+const SignIn = lazy(() => import('../pages/web/sign-in'));
+const SignUp = lazy(() => import('../pages/web/sign-up'));
+const ProductDetail = lazy(() => import('../pages/web/product-detail'));
+const UserAddresses = lazy(() => import('../pages/web/user-addresses'));
+const Shop = lazy(() => import('../pages/web/shop'));
 
 function UserRouter() {
 
@@ -9,12 +16,42 @@ function UserRouter() {
         {path: '/', exact: true, component: Home},
         {path: '/trang-chu', exact: true, component: Home},
         {path: '/dang-nhap', exact: true, component: SignIn},
+        {path: '/dang-ky', exact: true, component: SignUp},
+        {path: '/danh-muc', exact: true, component: Categories},
+        {path: '/danh-muc/*', exact: true, component: Category},
+        {path: '/dang-ky', exact: true, component: SignUp},
+        {path: '/san-pham/:slug', exact: true, component: ProductDetail},
+        {path: '/cua-hang/:slug/*', exact: true, component: Shop},
+
+    ];
+
+
+    const authRoutes = [
+        // {path: '/nguoi-dung/thong-tin', exact: true, component: Profile, replaceTo: '/dang-nhap'},
+        {path: '/nguoi-dung/dia-chi', exact: true, component: UserAddresses, replaceTo: '/dang-nhap'},
+        // {path: '/nguoi-dung/doi-mat-khau', exact: true, component: ChangingPassword, replaceTo: '/dang-nhap'},
+        // {path: '/nguoi-dung/hoa-don', exact: true, component: SearchingPayment, replaceTo: '/dang-nhap'},
+        // {path: '/nguoi-dung/don-dat-hang', exact: true, component: Order, replaceTo: '/dang-nhap'},
+        // {path: '/nguoi-dung/cau-hoi', exact: true, component: UserQuestion, replaceTo: '/dang-nhap'},
+        // {path: '/nguoi-dung/thay-doi-dia-chi', exact: true, component: ChangingAddress, replaceTo: '/dang-nhap'},
+        // {path: '/dang-ky-ban-hang', exact: true, component: RegisterShop, replaceTo: '/dang-nhap'},
+        // {path: '/thanh-toan', exact: true, component: Checkout, replaceTo: '/dang-nhap'},
+        // {path: '/don-hang-thanh-cong', exact: true, component: SuccessCheckout, replaceTo: '/dang-nhap'},
+
     ];
 
     return (
         <Routes>
             {routes.map(route => (
                 <Route key={route.path} exact={route.exact} path={route.path} element={<route.component/>}/>
+            ))}
+            {authRoutes.map(route => (
+                <Route key={route.path} exact={route.exact} path={route.path}
+                    // element={
+                    //     user.accessToken ? <route.component/> : <Navigate to={route.replaceTo} replace={true}/>
+                    // }
+                       element={<route.component/>}
+                />
             ))}
         </Routes>
     );
