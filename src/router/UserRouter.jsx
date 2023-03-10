@@ -6,6 +6,7 @@ const Categories = lazy(() => import('../pages/web/categories'));
 const Category = lazy(() => import('../pages/web/category'));
 const SignIn = lazy(() => import('../pages/web/sign-in'));
 const SignUp = lazy(() => import('../pages/web/sign-up'));
+const SalesRegister = lazy(() => import('../pages/web/sales-register'));
 const ProductDetail = lazy(() => import('../pages/web/product-detail'));
 const UserAddresses = lazy(() => import('../pages/web/user-addresses'));
 const Shop = lazy(() => import('../pages/web/shop'));
@@ -17,6 +18,7 @@ function UserRouter() {
         {path: '/trang-chu', exact: true, component: Home},
         {path: '/dang-nhap', exact: true, component: SignIn},
         {path: '/dang-ky', exact: true, component: SignUp},
+        {path: '/dang-ky-ban-hang', exact: true, component: SalesRegister},
         {path: '/danh-muc', exact: true, component: Categories},
         {path: '/danh-muc/*', exact: true, component: Category},
         {path: '/dang-ky', exact: true, component: SignUp},

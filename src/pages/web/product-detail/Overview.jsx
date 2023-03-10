@@ -4,12 +4,24 @@ import * as Icon from "@iconscout/react-unicons";
 import Images from "./Images";
 import {Link} from "react-router-dom";
 import StarRating from "../../../components/common/star-rating/indext";
+import {useEffect} from "react";
 
 
 function Overview(props) {
+    const {product, quantity, selectedOptions, setSelectedOptions} = props;
 
-    const {product, quantity, selectedOption} = props;
+    const handleSelectOption = (option) => {
+        setSelectedOptions((prev) => {
+            const filter = prev.filter(item => {
+                return item.attributeId !== option.attributeId
+            })
+            return [...filter, option]
+        })
+    }
 
+    useEffect(() => {
+
+    }, [selectedOptions])
 
     return (
         <>
@@ -46,14 +58,15 @@ function Overview(props) {
                             <div className="flex items-center justify-between gap-5 mb-5">
                                 <div className="flex items-center gap-3">
                                     <div className="flex items-center gap-0.5">
-                                        <StarRating rating={product.rating} className="w-3.5 h-3.5"/>
+                                        <StarRating rating={product?.ratingInfo?.avgRating || 0}
+                                                    className="w-3.5 h-3.5"/>
                                         <p className="pl-2 text-[#787878] text-tiny font-medium leading-5">
-                                            (Xem {formatToK(product.ratings)} đánh giá)
+                                            (Xem {formatToK(product?.ratingInfo?.totalRating || 0)} đánh giá)
                                         </p>
                                     </div>
                                     <div className="min-h-[14px] w-[2px] bg-[#787878] opacity-60"></div>
                                     <p className="text-[#787878] text-tiny font-medium leading-5">
-                                        Đã bán {formatToK(product.sold)}
+                                        Đã bán {formatToK(product.orderCount || 0)}
                                     </p>
                                 </div>
                                 <button
@@ -76,57 +89,73 @@ function Overview(props) {
                                                 Giá gốc:
                                             </span>
                                             <span className="line-through text-[#808089]">
-                                               {selectedOption ? formatCurrency(selectedOption.price) : formatCurrency(product.price)}
+                                               {/*{selectedOption ? formatCurrency(selectedOption.price) : formatCurrency(product.price)}*/}
                                             </span>
                                         </p>
                                         <div className="flex items-center justify-start gap-5">
                                             <p className="text-3xl font-semibold text-red">
-                                                {selectedOption ? formatCurrency(selectedOption.price) : formatCurrency(product.price * (1 - product.discount.percent))}
+                                                {/*{selectedOption ? formatCurrency(selectedOption.price) : formatCurrency(product.price * (1 - product.discount.percent))}*/}
                                             </p>
-                                            <p className="relative font-bold bg-red text-white px-3 rounded-md text-md">
+                                            <div
+                                                className="relative font-bold bg-red text-white px-3 rounded-md text-md">
                                                 <p className="absolute left-[-6px] top-[50%] translate-y-[-50%] w-0 h-0 border-t-[8px] border-r-[8px] border-b-[8px] border-t-[transparent] border-r-red border-b-[transparent]"/>
                                                 -{formatPercent(product.discount.percent)}
-                                            </p>
+                                            </div>
                                         </div>
                                     </div>
                                 }
                                 {!product?.discount &&
                                     <div className="flex items-end">
                                         <p className="text-2xl font-semibold text-red">
-                                            {selectedOption ? formatCurrency(selectedOption.price) : formatCurrency(product.price)}
+                                            {formatCurrency(product.price)}
+                                            {/*{selectedOption ? formatCurrency(selectedOption.price) : formatCurrency(product.price)}*/}
                                         </p>
                                     </div>
                                 }
                             </div>
                         </div>
-                        {/*{options.map(option => {*/}
-                        {/*    return (*/}
-                        {/*        <div key={option._id} className="flex items-center flex-row mb-5">*/}
-                        {/*            <div className="basis-1/4">*/}
-                        {/*                <p className="font-medium text-[#6f787e] text-md">*/}
-                        {/*                    {option.name}:*/}
-                        {/*                </p>*/}
-                        {/*            </div>*/}
-                        {/*            <div className="flex-1 flex items-center gap-2.5 flex-wrap">*/}
-                        {/*                {option.values.map(value => {*/}
-                        {/*                    const isActive = [...userOptions].filter(item => item.option._id === option._id && item.value._id === value._id).length > 0;*/}
-                        {/*                    return (*/}
-                        {/*                        <button key={value._id}*/}
-                        {/*                                onClick={() => handleChooseOption(option, value)}*/}
-                        {/*                                className={`${isActive ? 'bg-[#E5F2FF] border-[#0d5cb6]'border-border border-border'} outline-none relative group hover:bg-[#E5F2FF] hover:border-[#0d5cb6] border-2 min-w-[50px] py-1 px-2.5  transition-all rounded-md`}>*/}
-                        {/*                            <p className="font-medium text-tiny text-black-1">*/}
-                        {/*                                {value.name}*/}
-                        {/*                            </p>*/}
-                        {/*                            <img alt="check"*/}
-                        {/*                                 src="https://frontend.tikicdn.com/_desktop-next/static/img/pdp_revamp_v2/selected-variant-indicator.svg"*/}
-                        {/*                                 className={`${isActive ? 'visible opacity-100' : 'invisible opacity-0'} group-hover:visible group-hover:opacity-100 transition-all absolute top-[-1px] right-[-1px]`}/>*/}
-                        {/*                        </button>*/}
-                        {/*                    )*/}
-                        {/*                })}*/}
-                        {/*            </div>*/}
-                        {/*        </div>*/}
-                        {/*    )*/}
-                        {/*})}*/}
+                        {product?.attributes?.map(attribute => {
+                            return (
+                                <div key={attribute.id} className="flex items-center flex-row mb-5">
+                                    <div className="basis-1/4">
+                                        <p className="font-medium text-[#6f787e] text-md">
+                                            {attribute.name}:
+                                        </p>
+                                    </div>
+                                    <div className="flex-1 flex items-center gap-2.5 flex-wrap">
+                                        {attribute?.options?.map(option => {
+                                            const isActive = selectedOptions?.filter(selected => selected.id === option.id).length > 0;
+
+                                            return (
+                                                <button key={option.id}
+                                                        onClick={() => {
+                                                            handleSelectOption(option)
+                                                        }}
+                                                        className={`${isActive ? 'bg-[#E5F2FF] border-[#0d5cb6]' : 'border-border border-border'} outline-none relative group hover:bg-[#E5F2FF] hover:border-[#0d5cb6] border-2 min-w-[50px] transition-all rounded-md`}>
+                                                    {option.image &&
+                                                        <p className="flex items-center justify-center">
+                                                            <img src={option.image} alt="option"
+                                                                 className="rounded-l-md h-[60px]"/>
+                                                            <p className="font-medium text-tiny text-black-1 px-3 py-1.5">
+                                                                {option.name}
+                                                            </p>
+                                                        </p>
+                                                    }
+                                                    {!option.image &&
+                                                        <p className="font-medium text-tiny text-black-1 px-3 py-1.5">
+                                                            {option.name}
+                                                        </p>
+                                                    }
+                                                    <img alt="check"
+                                                         src="https://frontend.tikicdn.com/_desktop-next/static/img/pdp_revamp_v2/selected-variant-indicator.svg"
+                                                         className={`${isActive ? 'visible opacity-100' : 'invisible opacity-0'} group-hover:visible group-hover:opacity-100 transition-all absolute top-[-1px] right-[-1px]`}/>
+                                                </button>
+                                            )
+                                        })}
+                                    </div>
+                                </div>
+                            )
+                        })}
 
                         <div className="mb-5 pb-5 border-b border-border">
                             <div className="flex items-center flex-row">
@@ -162,15 +191,7 @@ function Overview(props) {
                             </div>
                             <div className="mt-5">
                                 <p className="font-medium text-tiny rounded-full px-4 py-1 bg-[#e7e8ea] max-w-max">
-                                    {/*{userOptions.length < options.length && (userCombination || userCombination.isNotExist) &&*/}
-                                    {/*    "Vui lòng chọn loại sản phẩm"*/}
-                                    {/*}*/}
-                                    {/*{(userOptions.length === options.length && userCombination?.isNotExist) &&*/}
-                                    {/*    "Vui lòng chọn loại sản phẩm khác"*/}
-                                    {/*}*/}
-                                    {/*{(userOptions.length === options.length && !userCombination?.isNotExist) &&*/}
-                                    {/*    `Mã sản phẩm: ${userCombination.combinationString}`*/}
-                                    {/*}*/}
+                                    Vui lòng chọn loại sản phẩm
                                 </p>
                             </div>
 
@@ -249,7 +270,8 @@ function Overview(props) {
                 </div>
             }
         </>
-    );
+    )
+        ;
 }
 
 export default Overview;

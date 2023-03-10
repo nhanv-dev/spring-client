@@ -2,15 +2,14 @@ import * as types from "../constants/ActionTypes";
 
 const initialState = () => {
     const data = JSON.parse(localStorage.getItem("persist:root")) || {};
-    const state = {...data}
-    return {accessToken: state.accessToken, info: state.info}
+    return {...data}
 }
 
 const userReducers = (state = initialState(), action) => {
     switch (action.type) {
         case types.USER_LOGIN_SUCCESS:
             localStorage.setItem("persist:root", JSON.stringify({...action.payload}))
-            return {accessToken: action.payload.accessToken, info: action.payload.info}
+            return {...action.payload}
         case types.USER_LOGIN_FAILED :
             localStorage.removeItem("persist:root")
             localStorage.removeItem("cart")

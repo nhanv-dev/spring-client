@@ -1,7 +1,7 @@
 import {useEffect} from "react";
 import * as Icon from "@iconscout/react-unicons";
 
-function ModalCategory({name, list, show, setShow, select}) {
+function ModalCategory({ list, show, setShow, select}) {
 
     return (
         <>

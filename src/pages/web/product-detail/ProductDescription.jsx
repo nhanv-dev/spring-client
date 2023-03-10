@@ -5,12 +5,15 @@ function ProductDescription({product}) {
     const [isShow, setIsShow] = useState(false);
 
     return (
-        <>
-            {product &&
-                <div className="rounded-[5px] min-h-[15rem] bg-white p-6 mb-6">
+        <div className="rounded-md bg-white p-6 mb-6">
+            {product?.description ?
+                <div>
                     <div className={`overflow-hidden ${!isShow ? 'h-[15rem]' : 'h-auto mb-[50px]'}`}>
                         <p className="font-bold text-base mb-3">Mô tả sản phẩm</p>
-                        <div dangerouslySetInnerHTML={{__html: product.description}} className="text-md mb-3"></div>
+                        <div dangerouslySetInnerHTML={{__html: product.shortDescription}}
+                             className="text-md mb-3"/>
+                        <div dangerouslySetInnerHTML={{__html: product.description}}
+                             className="text-md mb-3"/>
                     </div>
                     <div className="relative">
                         <div
@@ -21,9 +24,12 @@ function ProductDescription({product}) {
                             </button>
                         </div>
                     </div>
+                </div> :
+                <div>
+                    <p className="font-bold text-base mb-3">Mô tả sản phẩm</p>
                 </div>
             }
-        </>
+        </div>
 
     );
 }

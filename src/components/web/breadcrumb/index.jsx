@@ -6,7 +6,7 @@ function Breadcrumb({children}) {
         <Box className="py-4 flex items-center justify-start gap-0 text-tiny font-medium max-w-full overflow-hidden"
              sx={{
                  '& a': {
-                     color: "#1a9cb7",
+                     color: "#0A68FF",
                      minWidth: 'max-content',
                      paddingRight: "12px",
                      marginRight: "12px",

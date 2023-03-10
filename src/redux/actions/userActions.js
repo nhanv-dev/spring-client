@@ -3,13 +3,9 @@ import {protectedRequest, publicRequest} from "../../util/request-method";
 
 export const login = async (payload) => {
     const action = {type: types.USER_LOGIN_SUCCESS, payload: {}};
-    await publicRequest.post("/auth/login", payload)
+    await publicRequest().post("/auth/sign-in", payload)
         .then(res => {
-            action.payload = {
-                accessToken: res.data.accessToken,
-                info: res.data.user,
-                shop: res.data.shop
-            };
+            action.payload = {...res.data};
         }).catch(err => {
             action.type = types.USER_LOGIN_FAILED;
             action.payload = {};
@@ -23,7 +19,7 @@ export const logout = async () => {
 }
 
 export const register = async (payload) => {
-    const res = await publicRequest.post("/auth/register", payload);
+    const res = await publicRequest().post("/auth/register", payload);
     return {
         type: types.USER_REGISTER, payload, res
     }

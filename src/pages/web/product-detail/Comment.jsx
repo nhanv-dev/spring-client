@@ -2,19 +2,19 @@ import {useEffect, useState} from 'react';
 import * as SolidIcon from "@iconscout/react-unicons-solid";
 import * as Icon from "@iconscout/react-unicons";
 import {Link} from "react-router-dom";
-import {publicRequest} from "../../../utils/requestMethods";
-import {formatSmallDate} from "../../../utils/format";
-import DefaultAvatar from "../../../assets/img/default-avatar.png";
+import {publicRequest} from "../../../util/request-method";
+import {formatSmallDate} from "../../../util/format";
+import DefaultAvatar from "../../../assets/images/default-avatar.png";
 
 function Comment({product}) {
     const [comments, setComments] = useState([])
 
     useEffect(() => {
-        if (!product) return;
-        publicRequest.get(`/evaluates/productId/${product._id}`).then(res => {
-            setComments(res.data.evaluates)
-            console.log(res)
-        })
+        // if (!product) return;
+        // publicRequest().get(`/${product.id}/evaluates`).then(res => {
+        //     setComments(res.data.evaluates)
+        //     console.log(res)
+        // })
     }, [product])
 
     return (

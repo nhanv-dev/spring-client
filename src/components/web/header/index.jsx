@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react"
 import {Link, useNavigate} from "react-router-dom";
 import Category from "./Category";
-import {publicRequest} from "../../../util/request-method";
+import {protectedRequest, publicRequest} from "../../../util/request-method";
 import UserComponent from "./UserComponent";
 import {useSelector} from "react-redux";
 import * as Icon from '@iconscout/react-unicons';
@@ -13,8 +13,9 @@ function Header() {
     const cart = useSelector(state => state.cart);
 
     useEffect(() => {
-        publicRequest().get('/category?limit=10')
+        publicRequest().get('/categories?page=1&limit=10')
             .then((res) => {
+                console.log()
                 setCategories(res.data?.content || [])
             })
             .catch((err => {
@@ -42,7 +43,7 @@ function Header() {
                             </Link>
                             <Link to="/dang-ky-ban-hang"
                                   className="cursor-pointer flex items-center justify-center gap-2 text-sm font-medium text-black">
-                                <span>Bán hàng cùng Shopio</span>
+                                <span>Bán hàng cùng Depot</span>
                             </Link>
                         </div>
                         <div className="flex justify-start items-center gap-4">

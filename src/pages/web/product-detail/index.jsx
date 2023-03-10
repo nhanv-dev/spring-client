@@ -9,23 +9,28 @@ import {productSample} from "../../../constant/ProductSample";
 import Breadcrumb from "../../../components/web/breadcrumb";
 import Shop from "./Shop";
 import Footer from "./Footer";
+import {publicRequest} from "../../../util/request-method";
+import ProductDescription from "./ProductDescription";
+import Comment from "./Comment";
 
 // import 'react-toastify/dist/ReactToastify.css';
 
 function ProductDetail() {
     const {slug} = useParams();
     const dispatch = useDispatch();
-    const user = useSelector(state => state.user);
     const [product, setProduct] = useState(null);
-    const [options, setOptions] = useState([]);
-    const [userOptions, setUserOptions] = useState([]);
-    const [combinations, setCombinations] = useState([]);
-    const [userCombination, setUserCombination] = useState(null);
+    const [selectedOptions, setSelectedOptions] = useState([]);
     const [quantity, setQuantity] = useState(1);
-    const [relatedProducts, setRelatedProducts] = useState([]);
 
     useEffect(() => {
-        setProduct(productSample)
+        publicRequest().get(`/products/slug/${slug}`)
+            .then(res => {
+                console.log(res.data)
+                setProduct(res.data)
+            })
+            .catch(err => {
+
+            })
     }, [slug])
 
 
@@ -45,30 +50,25 @@ function ProductDetail() {
                         <Breadcrumb>
                             <Link to={"/trang-chu"}>Trang Chủ</Link>
                             {product?.category &&
-                                <Link to={`/danh-muc/${product.category.slug}`}>{product.category.name}</Link>}
+                                <Link to={`/danh-muc/${product.category.slug}`}>{product.category.title}</Link>}
                             {product?.subCategory &&
-                                <Link to={`/danh-muc/${product.subCategory.slug}`}>{product.subCategory.name}</Link>}
+                                <Link to={`/danh-muc/${product.subCategory.slug}`}>{product.subCategory.title}</Link>}
                             <p className="line-clamp-1">{product?.name}</p>
                         </Breadcrumb>
                         {/*<ToastContainer/>*/}
                         <Overview product={product}
-                                  slug={slug}
-                                  userCombination={userCombination}
-                                  options={options}
-                                  combinations={combinations}
-                                  userOptions={userOptions}
-                                  setUserOptions={setUserOptions}
                                   updateQuantity={updateQuantity}
                                   handleAddToCart={handleAddToCart}
+                                  selectedOptions={selectedOptions}
+                                  setSelectedOptions={setSelectedOptions}
                                   quantity={quantity}/>
                         <div className="flex flex-wrap justify-between mt-6 max-w-full gap-6 pb-6">
-                            {product?.shop && <Shop shop={product.shop} relatedProducts={relatedProducts}/>}
-                            {/*<div className="flex-1">*/}
-                            {/*    <ProductDescription product={product}/>*/}
-                            {/*    <QuestionBlock product={product} shop={shop}/>*/}
-                            {/*</div>*/}
+                            {product?.shop && <Shop shop={product.shop}/>}
+                            <div className="flex-1">
+                                <ProductDescription product={product}/>
+                                <Comment product={product}/>
+                            </div>
                         </div>
-                        {/*<Comment product={product} shop={shop}/>*/}
                         <Footer product={product}/>
                     </div>
                 </div>

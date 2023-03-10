@@ -44,11 +44,11 @@ function Footer({product}) {
                     style={{boxShadow: 'rgba(100, 100, 111, 0.2) 0px 7px 29px 0px'}}>
                     <div className="container relative flex items-center justify-between gap-6">
                         <div className="flex items-center gap-8">
-                            <div className="flex items-center min-w-[400px] justify-start gap-3">
+                            <div className="flex items-start min-w-[400px] justify-start gap-3">
                                 <div style={{backgroundImage: `url(${product.images[0].url})`}}
                                      className="border-[1px] min-w-[65px] min-h-[65px] overflow-hidden rounded-[5px] border-[#e7e8ea] bg-origin-content bg-center bg-cover bg-no-repeat">
                                 </div>
-                                <div>
+                                <div className="mt-2">
                                     <p className="text-ellipsis font-medium line-clamp-2 overflow-hidden text-tiny">
                                         {product.name}
                                     </p>

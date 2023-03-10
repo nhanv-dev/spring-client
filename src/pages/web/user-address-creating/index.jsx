@@ -104,8 +104,7 @@ function CreateAddress({show, setShow, addNewAddress}) {
                                         </p>
                                         <Icon.UilAngleDown className="w-[18px] h-[18px] min-w-[18px] min-h-[18px]"/>
                                     </button>
-                                    <Modal list={city} show={openCity} setShow={setOpenCity} name="Chọn tỉnh thành"
-                                           select={setSelectCity}/>
+                                    <Modal list={city} show={openCity} setShow={setOpenCity} name="Chọn tỉnh thành" select={setSelectCity}/>
                                 </div>
                             </div>
                             <div className="flex items-center gap-8 mb-5">

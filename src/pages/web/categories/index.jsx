@@ -8,7 +8,7 @@ function Categories() {
     const [categories, setCategories] = useState([]);
 
     useEffect(() => {
-        publicRequest().get("/category")
+        publicRequest().get("/categories")
             .then((res) => {
                 setCategories(res.data)
             })
@@ -46,7 +46,7 @@ const SubCategories = ({categories}) => {
             {categories.map((category, index) => {
                 return (
                     <Link key={index} to={category.slug || "/"}
-                          className="hover:text-primary hover:border-primary border-[1px] border-white transition-all min-h-[4rem] bg-white m-2 p-4 flex items-center justify-center text-center rounded-[4px] text-tiny font-medium text-gray">
+                          className="hover:text-primary hover:border-primary border-2 border-white transition-all min-h-[4rem] bg-white m-2 p-4 flex items-center justify-center text-center rounded-md text-md font-medium text-gray">
                         {category.title}
                     </Link>
                 )

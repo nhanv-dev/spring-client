@@ -1,23 +1,28 @@
 import {useEffect, useState} from "react";
 import Layout from "../../../components/web/layout";
-import {Link} from "react-router-dom";
 import Helmet from "../../../components/common/helmet";
 import ProductCard from "../../../components/web/product-card";
 import {Grid} from "@mui/material";
 import {productSample} from "../../../constant/ProductSample";
-import * as Icon from "@iconscout/react-unicons";
-import FilterSection, {
-    FILTER_BY_COLOR, FILTER_BY_MATERIAL, FILTER_BY_PRICE, FILTER_BY_RATING, FILTER_BY_SERVICE, FILTER_BY_SIZE
-} from "../../../components/web/filter-section";
 import SidebarCategory from "../../../components/web/sidebar-category";
 import Pagination from "../../../components/web/pagination";
+import {publicRequest} from "../../../util/request-method";
 
 function Home() {
     const [items, setItems] = useState([]);
+    const [page, setPage] = useState(1);
+    const [pageable, setPageable] = useState();
 
     useEffect(() => {
-        setItems([productSample, productSample, productSample, productSample, productSample, productSample, productSample, productSample,])
-    }, [])
+        publicRequest().get(`/products?page=${page}`)
+            .then(res => {
+                setPageable({
+                    totalPages: res.data.totalPages,
+                    currentPage: res.data?.pageable?.pageNumber
+                })
+                setItems(res.data.content)
+            })
+    }, [page])
 
     return (
         <Helmet title="Depot - Trang chủ">
@@ -34,7 +39,8 @@ function Home() {
                                         </Grid>))}
                                 </Grid>
                                 <div className="flex items-center justify-center w-full mt-10">
-                                    <Pagination currentPage={1} totalPage={5}/>
+                                    <Pagination currentPage={pageable?.currentPage} totalPages={pageable?.totalPages}
+                                                handleChangePage={setPage}/>
                                 </div>
                             </Grid>
                         </Grid>

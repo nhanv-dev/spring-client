@@ -1,12 +1,30 @@
 import React, {useState} from 'react';
 import Helmet from "../../../components/common/helmet";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import Logo from "../../../assets/images/logo.png";
-import {UilAt, UilEye, UilEyeSlash, UilKeyholeSquare} from '@iconscout/react-unicons'
+import {
+    UilAt, UilEyeSlash, UilKeyholeCircle, UilPhoneAlt, UilUser
+} from '@iconscout/react-unicons'
+import {publicRequest} from "../../../util/request-method";
 
-function Index() {
+function SignUp() {
+    const navigate = useNavigate();
+    const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [repeatPassword, setRepeatPassword] = useState("");
+    const [phoneNumber, setPhoneNumber] = useState("");
+
+    function handleSubmit() {
+        if (!email || !password || !name || !phoneNumber) return;
+        publicRequest().post("/auth/sign-up", {email, password, name, phoneNumber})
+            .then(res => {
+                if (res.status === 200) navigate("/dang-nhap")
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    }
 
     return (
         <Helmet title="Depot - Đăng ký">
@@ -25,16 +43,43 @@ function Index() {
                                     <img src={Logo} alt="logo" className="h-[40px] mx-auto"/>
                                 </Link>
                             </div>
+
                             <div className="mb-5">
-                                <label htmlFor="email" className="block font-medium text-tiny text-black-1 mb-2">
-                                    E-Mail
-                                </label>
+                                <div className="flex items-center px-3 rounded-md border border-border h-[40px]">
+                                    <div className="flex items-center gap-3 w-full">
+                                        <div className="flex items-center justify-center w-[18px] h-[18px]">
+                                            <UilUser className="w-full h-full text-gray"/>
+                                        </div>
+                                        <input id="name" type="text" value={name}
+                                               placeholder="Họ & tên"
+                                               onChange={(e) => setName(e.target.value)}
+                                               className="flex-1 focus:outline-none text-md font-medium text-black-1"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="mb-5">
+                                <div className="flex items-center px-3 rounded-md border border-border h-[40px]">
+                                    <div className="flex items-center gap-3 w-full">
+                                        <div className="flex items-center justify-center w-[18px] h-[18px]">
+                                            <UilPhoneAlt className="w-full h-full text-gray"/>
+                                        </div>
+                                        <input id="email" type="number" value={phoneNumber}
+                                               placeholder="Số điện thoại"
+                                               onChange={(e) => setPhoneNumber(e.target.value)}
+                                               className="flex-1 focus:outline-none text-md font-medium text-black-1"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="mb-5">
                                 <div className="flex items-center px-3 rounded-md border border-border h-[40px]">
                                     <div className="flex items-center gap-3 w-full">
                                         <div className="flex items-center justify-center w-[18px] h-[18px]">
                                             <UilAt className="w-full h-full text-gray"/>
                                         </div>
                                         <input id="email" type="text" value={email}
+                                               placeholder="E-Mail"
                                                onChange={(e) => setEmail(e.target.value)}
                                                className="flex-1 focus:outline-none text-md font-medium text-black-1"
                                         />
@@ -42,73 +87,53 @@ function Index() {
                                 </div>
                             </div>
                             <div className="mb-5">
-                                <label htmlFor="password" className="block font-medium text-tiny text-black-1 mb-2">
-                                    Mật khẩu
-                                </label>
                                 <div className="flex items-center px-3 rounded-md border border-border h-[40px]">
                                     <div className="flex items-center gap-3 w-full">
                                         <div className="flex items-center justify-center w-[18px] h-[18px]">
-                                            <UilKeyholeSquare className="w-full h-full text-gray"/>
+                                            <UilKeyholeCircle className="w-full h-full text-gray"/>
                                         </div>
                                         <input id="password" type="password" value={password}
+                                               placeholder="Mật khẩu"
                                                onChange={(e) => setPassword(e.target.value)}
                                                className="flex-1 focus:outline-none text-md font-medium text-black-1"
                                         />
-                                        <button className="flex items-center justify-center w-[18px] h-[18px]">
+                                        <button tabIndex={-1}
+                                                className="flex items-center justify-center w-[18px] h-[18px]">
                                             <UilEyeSlash className="w-full h-full text-gray"/>
                                         </button>
                                     </div>
                                 </div>
                             </div>
                             <div className="mb-5">
-                                <div className="flex justify-end items-center">
-                                    <Link to="/quen-mat-khau"
-                                          className="font-medium text-tiny text-black hover:text-primary">
-                                        Quên mật khẩu ?
-                                    </Link>
+                                <div className="flex items-center px-3 rounded-md border border-border h-[40px]">
+                                    <div className="flex items-center gap-3 w-full">
+                                        <div className="flex items-center justify-center w-[18px] h-[18px]">
+                                            <UilKeyholeCircle className="w-full h-full text-gray"/>
+                                        </div>
+                                        <input id="repeat-password" type="password" value={repeatPassword}
+                                               placeholder="Nhập lại mật khẩu"
+                                               onChange={(e) => setRepeatPassword(e.target.value)}
+                                               className="flex-1 focus:outline-none text-md font-medium text-black-1"
+                                        />
+                                        <button tabIndex={-1}
+                                                className="flex items-center justify-center w-[18px] h-[18px]">
+                                            <UilEyeSlash className="w-full h-full text-gray"/>
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                             <div className="w-full mb-8">
-                                <button
-                                    className="w-full bg-primary h-[40px] rounded-md text-tiny font-medium text-white">
-                                    Đăng nhập
+                                <button onClick={handleSubmit}
+                                        className="w-full bg-primary h-[40px] rounded-md text-tiny font-medium text-white">
+                                    Đăng ký
                                 </button>
-                            </div>
-                            <div className="mb-10">
-                                <div className="flex items-center justify-center gap-5 mb-8">
-                                    <span className="flex-1 opacity-30 bg-gray h-[1px]"></span>
-                                    <span className="font-medium text-gray text-md">
-                                        đăng nhập với
-                                    </span>
-                                    <span className="flex-1 opacity-30 bg-gray h-[1px]"></span>
-                                </div>
-                                <div className="flex items-center justify-center gap-5">
-                                    <button
-                                        className="rounded-md shadow-md bg-primary-hover w-[42px] h-[42px] flex items-center justify-center">
-                                        <img className="w-[20px]"
-                                             src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/2048px-Google_%22G%22_Logo.svg.png"
-                                             alt="google"/>
-                                    </button>
-                                    <button
-                                        className="rounded-md shadow-md bg-primary-hover w-[42px] h-[42px] flex items-center justify-center">
-                                        <img className="w-[20px]"
-                                             src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Apple_logo_black.svg/1667px-Apple_logo_black.svg.png"
-                                             alt="apple"/>
-                                    </button>
-                                    <button
-                                        className="rounded-md shadow-md bg-primary-hover w-[42px] h-[42px] flex items-center justify-center">
-                                        <img className="w-[20px]"
-                                             src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Facebook_Logo_%282019%29.png/768px-Facebook_Logo_%282019%29.png"
-                                             alt="facebook"/>
-                                    </button>
-                                </div>
                             </div>
                             <div className="mb-5">
                                 <div className="flex justify-center items-center gap-1">
-                                    <span className="font-medium text-tiny text-gray">Bạn chưa có tài khoản? </span>
-                                    <Link to="/dang-ky"
+                                    <span className="font-medium text-tiny text-gray">Bạn đã có tài khoản? </span>
+                                    <Link to="/dang-nhap"
                                           className="font-medium text-tiny text-primary">
-                                        Đăng ký
+                                        Đăng nhập ngay
                                     </Link>
                                 </div>
                             </div>
@@ -120,4 +145,4 @@ function Index() {
     );
 }
 
-export default Index;
+export default SignUp;

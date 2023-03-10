@@ -18,12 +18,22 @@ function Header() {
                         <Link to="/kenh-ban-hang/dang-ban"
                               className="flex items-center justify-center gap-1.5 text-black-1 transition-all hover:text-primary-hover text-md font-semibold">
                             <Icon.UilArchive className="w-[20px] h-[20px]"/>
-                            Đơn đăng ký bán hàng
+                            Đơn đặt hàng
+                        </Link>
+                        <Link to="/kenh-ban-hang/dang-ban"
+                              className="flex items-center justify-center gap-1.5 text-black-1 transition-all hover:text-primary-hover text-md font-semibold">
+                            <Icon.UilEnvelopeCheck className="w-[20px] h-[20px]"/>
+                            Đánh giá & Nhận xét
                         </Link>
                         <Link to="/kenh-ban-hang/dang-ban"
                               className="flex items-center justify-center gap-1.5 text-black-1 transition-all hover:text-primary-hover text-md font-semibold">
                             <Icon.UilMessage className="w-[20px] h-[20px]"/>
                             Tin nhắn
+                        </Link>
+                        <Link to="/kenh-ban-hang/dang-ban"
+                              className="flex items-center justify-center gap-1.5 text-black-1 transition-all hover:text-primary-hover text-md font-semibold">
+                            <Icon.UilCreateDashboard className="w-[20px] h-[20px]"/>
+                            Đăng bán
                         </Link>
                     </div>
                     <ShopComponent user={user}/>
