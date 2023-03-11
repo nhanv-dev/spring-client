@@ -43,9 +43,9 @@ function ProductCard({item}) {
                 </div>
                 <div className=" items-center justify-start gap-2">
                     <div className="flex items-center justify-start gap-1 mb-0.5">
-                        <StarRating rating={item.rating} className="w-[12px] h-[12px]"/>
+                        <StarRating rating={item.ratingInfo.avgRating || 0} className="w-[12px] h-[12px]"/>
                         <p className="font-medium text-sm text-[#757575]">
-                            ({formatToK(item.ratingInfo.avgRating || 0)})
+                            ({formatToK(item.ratingInfo.totalRating || 0)})
                         </p>
                     </div>
                     <p className="font-medium text-sm text-[#757575]">

@@ -15,7 +15,6 @@ function Header() {
     useEffect(() => {
         publicRequest().get('/categories?page=1&limit=10')
             .then((res) => {
-                console.log()
                 setCategories(res.data?.content || [])
             })
             .catch((err => {

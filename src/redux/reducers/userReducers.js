@@ -1,4 +1,5 @@
 import * as types from "../constants/ActionTypes";
+import {setItem} from "../../util/localStorage";
 
 const initialState = () => {
     const data = JSON.parse(localStorage.getItem("persist:root")) || {};
@@ -8,7 +9,7 @@ const initialState = () => {
 const userReducers = (state = initialState(), action) => {
     switch (action.type) {
         case types.USER_LOGIN_SUCCESS:
-            localStorage.setItem("persist:root", JSON.stringify({...action.payload}))
+            setItem("user", {...action.payload})
             return {...action.payload}
         case types.USER_LOGIN_FAILED :
             localStorage.removeItem("persist:root")

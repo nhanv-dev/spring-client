@@ -45,7 +45,7 @@ function SignIn() {
                                     <label htmlFor="email" className="block font-medium text-tiny text-black-1 mb-2">
                                         E-Mail
                                     </label>
-                                    <div className="flex items-center px-3 rounded-md border border-border h-[40px]">
+                                    <div className="flex items-center px-3 rounded-md border border-border-1 h-[40px]">
                                         <div className="flex items-center gap-3 w-full">
                                             <div className="flex items-center justify-center w-[18px] h-[18px]">
                                                 <UilAt className="w-full h-full text-gray"/>
@@ -61,7 +61,7 @@ function SignIn() {
                                     <label htmlFor="password" className="block font-medium text-tiny text-black-1 mb-2">
                                         Mật khẩu
                                     </label>
-                                    <div className="flex items-center px-3 rounded-md border border-border h-[40px]">
+                                    <div className="flex items-center px-3 rounded-md border border-border-1 h-[40px]">
                                         <div className="flex items-center gap-3 w-full">
                                             <div className="flex items-center justify-center w-[18px] h-[18px]">
                                                 <UilKeyholeCircle className="w-full h-full text-gray"/>

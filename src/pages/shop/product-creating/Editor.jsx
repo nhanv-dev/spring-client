@@ -1,17 +1,15 @@
 import {CKEditor} from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
-function Editor({product}) {
+function Editor({product,value}) {
 
     return (
         <div className="editor">
             <CKEditor
                 editor={ClassicEditor}
-                data={product.description}
+                data={product[value]}
                 onChange={(event, editor) => {
-                    const data = editor.getData();
-                    product.description = data;
-                    // console.log({desc: product.description, data});
+                    product[value] = editor.getData();
                 }}
             />
         </div>

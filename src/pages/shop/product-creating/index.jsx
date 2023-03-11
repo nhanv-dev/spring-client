@@ -6,6 +6,8 @@ import {formatCurrency, formatLongDate} from "../../../util/format";
 import Editor from "./Editor";
 import * as Icon from "@iconscout/react-unicons";
 import ModalCategory from "./ModalCategory";
+import ProductVariants from "./ProductVariants";
+import ProductAttributes from "./ProductAttributes";
 
 function ProductCreating() {
     const [images, setImages] = useState([]);
@@ -13,14 +15,10 @@ function ProductCreating() {
     const [options, setOptions] = useState([
         {
             option: {name: "Size"},
-            values: [
-                {name: "S"},
-                {name: "M"},
-                {name: "L"},
-                {name: "XL"},
-            ]
+            values: [{name: "S"}, {name: "M"}, {name: "L"}, {name: "XL"}]
         }
     ]);
+    const [variants, setVariants] = useState([])
     const [showCategory, setShowCategory] = useState(false);
     const [showSubCategory, setShowSubCategory] = useState(false);
     const [category, setCategory] = useState();
@@ -100,9 +98,9 @@ function ProductCreating() {
                                     <div className="basis-2/12">
                                         <p className="mb-2 text-md font-semibold">Số lượng</p>
                                         <div className="shadow-md bg-white w-full rounded-[5px] p-3">
-                                            <input type="number" value={product?.totalStock}
+                                            <input type="number" value={product?.quantity}
                                                    onChange={(e) => setProduct((prev) => ({
-                                                       ...prev, totalStock: e.target.value
+                                                       ...prev, quantity: e.target.value
                                                    }))}
                                                    className="text-black-1 font-medium text-md w-full outline-none"/>
                                         </div>
@@ -110,9 +108,9 @@ function ProductCreating() {
                                     <div className="basis-3/12">
                                         <p className="mb-2 text-md font-semibold">Giá gốc</p>
                                         <div className="shadow-md bg-white w-full rounded-[5px] p-3">
-                                            <input type="number" value={product?.basePrice}
+                                            <input type="number" value={product?.price}
                                                    onChange={(e) => setProduct((prev) => ({
-                                                       ...prev, basePrice: e.target.value
+                                                       ...prev, price: e.target.value
                                                    }))}
                                                    className="text-black-1 font-medium text-md w-full outline-none"/>
                                         </div>
@@ -142,7 +140,11 @@ function ProductCreating() {
                             </div>
                             <div className="mb-5">
                                 <p className="mb-2 text-md font-semibold">Mô tả sản phẩm</p>
-                                <Editor product={product} setProduct={setProduct}/>
+                                <Editor product={product} value={"description"} setProduct={setProduct}/>
+                            </div>
+                            <div className="mb-5">
+                                <p className="mb-2 text-md font-semibold">Chi tiết sản phẩm</p>
+                                <Editor product={product} value={"shortDescription"} setProduct={setProduct}/>
                             </div>
                             <div className="w-full flex items-center justify-end gap-3">
                                 <button onClick={() => {
@@ -155,6 +157,21 @@ function ProductCreating() {
                         </div>
                     </div>
                 </div>
+                <div className="w-full max-w-full flex gap-6">
+                    <div className="w-[430px]">
+                        <ProductAttributes
+                            options={options} setOptions={setOptions}
+                            variants={variants} setVariants={setVariants}
+                        />
+                    </div>
+                    <div className="flex-1">
+                        <ProductVariants
+                            options={options} setOptions={setOptions}
+                            variants={variants} setVariants={setVariants}
+                        />
+                    </div>
+                </div>
+
             </Layout>
         </Helmet>
     );

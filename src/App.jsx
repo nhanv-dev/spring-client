@@ -1,15 +1,25 @@
 import Router from "./router/Router";
-import {useSelector} from "react-redux";
 import {useEffect, useState} from "react";
-import useLocalStorage from "./hooks/useLocalStorage";
-import {getItem} from "./util/localStorage";
+import {getItem, removeItem} from "./util/localStorage";
+import {protectedRequest} from "./util/request-method";
+import {useSelector} from "react-redux";
 
 function App() {
-    const [token, setToken] = useState(getItem("token"));
+    const user = useSelector(state => state.user);
 
     useEffect(() => {
-        // const token =getItem("token")
-    }, [token])
+        const storage = getItem("user")
+        console.log(storage)
+        // protectedRequest().get("/auth/re-login")
+        //     .then(res => {
+        //         console.log(res)
+        //     })
+        //     .catch(err => {
+        //         console.log(err);
+        //         removeItem("token")
+        //         removeItem("token")
+        //     })
+    }, [])
 
 
     return (
