@@ -71,7 +71,7 @@ const Menu = ({user, shop}) => {
                               className="flex items-center justify-start gap-3 text-tiny transition-all hover:text-primary-hover">
                             <Icon.UilUserSquare className="w-[20px] h-[20px]"/> Tài khoản của tôi
                         </Link>
-                        <Link to="/nguoi-dung/hoa-don"
+                        <Link to="/nguoi-dung/don-dat-hang"
                               className="flex items-center justify-start gap-3 text-tiny transition-all hover:text-primary-hover">
                             <Icon.UilCreditCardSearch className="w-[20px] h-[20px]"/> Tra cứu hóa đơn
                         </Link>

@@ -31,7 +31,7 @@ function Header() {
     }
 
     return (
-        <header className="shadow-xl">
+        <header className="shadow-xl border-b border-primary border-b-[3px]">
             <div className="h-[35px] bg-white flex items-center border-b-border border-b-[1px]">
                 <div className="container">
                     <div className="flex justify-between items-center">

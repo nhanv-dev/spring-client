@@ -37,7 +37,7 @@ function ProductVariants(props) {
                         </button>
                     </div>
                 </div>
-                <div className="w-full max-w-full p-5 bg-[#f5f5f5] rounded-[5px]">
+                <div className="w-full max-w-full p-5 bg-app-1 rounded-[5px]">
                     {/*<ModalCreatingCombination showModalCombination={showModalCombination}*/}
                     {/*                          setShowModalCombination={setShowModalCombination}*/}
                     {/*                          variants={variants} setVariants={setVariants}*/}
