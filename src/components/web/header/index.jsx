@@ -71,7 +71,7 @@ function Header() {
                             <div className="flex items-center gap-5">
                                 <div className="min-w-max">
                                     <div
-                                        className="w-[40px] h-[40px] flex items-center justify-center group bg-primary-1-hover text-primary rounded-lg transition-all">
+                                        className="w-[40px] h-[40px] flex items-center justify-center group bg-primary-bg text-primary rounded-lg transition-all">
                                         <Link to="/danh-muc" className="flex items-center justify-center w-full">
                                             <Icon.UilApps className="w-[20px] relative top-[1px]"/>
                                         </Link>
@@ -103,15 +103,15 @@ function Header() {
                         </div>
                         <div className="w-[250px] flex items-center justify-end gap-5">
                             <Link to="/gio-hang"
-                                  className="relative outline-none group flex items-center gap-1 bg-primary-1-hover p-2 px-3.5 rounded-lg">
-                                <Icon.UilEstate className="w-[22px] h-[22px] text-primary"/>
-                                {/*<p className="transition-all font-medium text-primary text-tiny pt-0.5">*/}
-                                {/*    Trang chủ*/}
-                                {/*</p>*/}
+                                  className="relative outline-none group flex items-center gap-1 bg-primary-bg p-2 px-3 rounded-lg">
+                                <Icon.UilEstate className="w-[20px] h-[20px] text-primary"/>
+                                <p className="transition-all text-primary text-tiny pt-0.5 font-semibold">
+                                    Trang chủ
+                                </p>
                             </Link>
                             <UserComponent/>
                             <Link to="/gio-hang"
-                                  className="relative outline-none group bg-primary-1-hover p-2 rounded-lg">
+                                  className="relative outline-none group bg-primary-bg p-2 rounded-lg">
                                 <Icon.UilShoppingBag className="w-[24px] h-[24px] text-primary"/>
                                 <p className="transition-all group-hover:opacity-100 group-hover:visible group-hover:top-full mt-[10px] opacity-0 invisible z-[20] absolute top-[70%] left-[50%] translate-x-[-50%] min-w-max bg-black text-white font-medium rounded-[8px] text-sm px-2.5 py-1">
                                     <span
@@ -156,7 +156,7 @@ const OptionSearch = () => {
                         className="relative bg-white flex flex-col shadow-md rounded-md w-[150px] z-[100] overflow-hidden">
                         {options.map((option, index) => (
                             <button key={index} onClick={() => setActive(index)} type="button"
-                                    className={`${index === active ? 'text-primary' : 'text-black-1'} px-3 py-1.5 hover:bg-primary-1-hover hover:text-primary z-[100] font-medium text-md p-1 cursor-pointer z-50 flex items-center justify-between gap-3`}>
+                                    className={`${index === active ? 'text-primary' : 'text-black-1'} px-3 py-1.5 hover:bg-primary-bg hover:text-primary z-[100] font-medium text-md p-1 cursor-pointer z-50 flex items-center justify-between gap-3`}>
                                 {option.label}
                                 {index === active &&
                                     <Icon.UilCheck className="w-[20px] h-[20px] text-primary"/>
