@@ -1,9 +1,7 @@
 import React, {useState} from 'react';
 import Layout from "../../../components/web/layout";
 import Helmet from "../../../components/common/helmet";
-import {
-    UilEyeSlash, UilKeyholeCircle
-} from '@iconscout/react-unicons'
+import {UilEyeSlash, UilKeyholeCircle} from '@iconscout/react-unicons'
 import UserSidebar from "../../../components/web/manage-user-sidebar";
 import {publicRequest} from "../../../util/request-method";
 import {useNavigate} from "react-router-dom";
@@ -31,18 +29,19 @@ function ChangingPassword() {
         <Helmet title={'Depot - Thông tin người dùng'}>
             <UserLayout>
 
-                <div className="bg-white rounded-md shadow-md p-5">
-                    <div className="flex items-end font-semibold text-[1.4rem] gap-3 mb-3">
+                <div className="bg-white rounded-md shadow p-5">
+                    <div className="flex items-end font-semibold text-xl gap-3 mb-5">
                         Đổi mật khẩu
                     </div>
-                    <form className="w-full" onClick={handleSubmit}>
-                        <div className="mb-5">
+                    <form className="w-full max-w-[500px]" onClick={handleSubmit}>
+                        <div className="mb-8 flex items-center gap-5 flex-wrap justify-start">
                             <label htmlFor="old-password"
-                                   className="block font-semibold text-tiny text-black-1 mb-2">
-                                Mật khẩu cũ
+                                   className="w-[150px] block font-semibold text-md text-black-1">
+                                Mật khẩu hiện tại
                             </label>
                             <div
-                                className="bg-white flex items-center px-3 rounded-md border border-border h-[40px] w-full shadow-md">
+                                className="flex-1 bg-white flex items-center px-3 rounded-md border border-border h-[40px] w-full shadow">
+
                                 <div className="flex items-center gap-3 w-full">
                                     <div className="flex items-center justify-center w-[18px] h-[18px]">
                                         <UilKeyholeCircle className="w-full h-full text-gray"/>
@@ -58,13 +57,15 @@ function ChangingPassword() {
                                 </div>
                             </div>
                         </div>
-                        <div className="mb-5">
+
+                        <div className="mb-8 flex items-center gap-5 flex-wrap justify-start">
                             <label htmlFor="new-password"
-                                   className="block font-semibold text-tiny text-black-1 mb-2">
+                                   className="w-[150px] block font-semibold text-md text-black-1">
                                 Nhập mật khẩu mới
                             </label>
                             <div
-                                className="bg-white flex items-center px-3 rounded-md border border-border h-[40px] w-full shadow-md">
+                                className="flex-1 bg-white flex items-center px-3 rounded-md border border-border h-[40px] w-full shadow">
+
                                 <div className="flex items-center gap-3 w-full">
                                     <div className="flex items-center justify-center w-[18px] h-[18px]">
                                         <UilKeyholeCircle className="w-full h-full text-gray"/>
@@ -79,13 +80,14 @@ function ChangingPassword() {
                                 </div>
                             </div>
                         </div>
-                        <div className="mb-5">
+                        <div className="mb-8 flex items-center gap-5 flex-wrap justify-start">
                             <label htmlFor="repeat-password"
-                                   className="block font-semibold text-tiny text-black-1 mb-2">
+                                   className="w-[150px] block font-semibold text-md text-black-1">
                                 Nhập lại mật khẩu mới
                             </label>
                             <div
-                                className="bg-white flex items-center px-3 rounded-md border border-border h-[40px] w-full shadow-md">
+                                className="flex-1 bg-white flex items-center px-3 rounded-md border border-border h-[40px] w-full shadow">
+
                                 <div className="flex items-center gap-3 w-full">
                                     <div className="flex items-center justify-center w-[18px] h-[18px]">
                                         <UilKeyholeCircle className="w-full h-full text-gray"/>
@@ -100,10 +102,16 @@ function ChangingPassword() {
                                 </div>
                             </div>
                         </div>
-                        <div className="w-full">
+
+                        <div className="flex items-center justify-end gap-5">
+                            <button type="reset"
+                                    className="px-5 h-[40px] rounded-md text-tiny font-semibold text-primary bg-primary-1-hover">
+                                Reset
+                            </button>
                             <button type="submit"
-                                    className="w-full bg-primary h-[40px] rounded-md text-tiny font-medium text-white">
-                                XÁC NHẬN
+                                    className="px-5 h-[40px] rounded-md text-tiny font-semibold text-primary bg-primary-1-hover">
+                                Đổi mật khẩu
+
                             </button>
                         </div>
                     </form>
