@@ -39,6 +39,8 @@ function UserRouter() {
         {path: '/nguoi-dung/don-dat-hang', exact: true, component: Order, replaceTo: '/dang-nhap'},
         {path: '/nguoi-dung/doi-mat-khau', exact: true, component: ChangingPassword, replaceTo: '/dang-nhap'},
         {path: '/nguoi-dung/thay-doi-dia-chi', exact: true, component: ChangingAddress, replaceTo: '/dang-nhap'},
+        // {path: '/nguoi-dung/doi-mat-khau', exact: true, component: ChangingPassword, replaceTo: '/dang-nhap'},
+        {path: '/nguoi-dung/doi-mat-khau', exact: true, component: ChangingPassword, replaceTo: '/dang-nhap'},
         // {path: '/nguoi-dung/hoa-don', exact: true, component: SearchingPayment, replaceTo: '/dang-nhap'},
         // {path: '/nguoi-dung/don-dat-hang', exact: true, component: order, replaceTo: '/dang-nhap'},
         // {path: '/nguoi-dung/cau-hoi', exact: true, component: UserQuestion, replaceTo: '/dang-nhap'},
