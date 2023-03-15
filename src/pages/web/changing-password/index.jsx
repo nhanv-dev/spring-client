@@ -26,9 +26,8 @@ function ChangingPassword() {
     }
 
     return (
-        <Helmet title={'Depot - Thông tin người dùng'}>
+        <Helmet title={'Depot - Đổi mật khẩu'}>
             <UserLayout>
-
                 <div className="bg-white rounded-md shadow p-5">
                     <div className="flex items-end font-semibold text-xl gap-3 mb-5">
                         Đổi mật khẩu
