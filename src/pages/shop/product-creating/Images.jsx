@@ -68,7 +68,7 @@ function Images({images, setImages}) {
                 </h5>
                 <div className="flex items-center justify-center gap-2">
                     <form onSubmit={handleUploadImageByURL}
-                          className="flex-1 flex items-center justify-start gap-2 border-2 border-[#1CAC93] rounded-[5px] px-2 py-1.5 text-[#1CAC93] text-sm font-medium cursor-pointer">
+                          className="flex-1 flex items-center justify-start gap-2 border-2 botext-primary rounded-[5px] px-2 py-1.5 text-primary text-sm font-medium cursor-pointer">
                         <input type="text" id="image" name="image" placeholder="Dán đường dẫn tại đây"
                                className="outline-none text-sm flex-1"/>
                         <button type="submit">
@@ -80,11 +80,11 @@ function Images({images, setImages}) {
                             <input type="file" id="upload-image" name="upload-image" accept="image/png, image/jpeg"
                                    onChange={handleReadImage} className="hidden"/>
                             <label htmlFor="upload-image"
-                                   className="flex items-center justify-center gap-1 border-2 border-[#1CAC93] rounded-[5px] min-w-[70px] p-1.5 text-[#1CAC93] text-sm font-medium cursor-pointer">
+                                   className="flex items-center justify-center gap-1 border-2 botext-primary rounded-[5px] min-w-[70px] p-1.5 text-primary text-sm font-medium cursor-pointer">
                                 Tải ảnh
                             </label>
                             <button type="submit"
-                                    className="flex items-center justify-center gap-1 border-2 border-[#1CAC93] rounded-[5px] min-w-[70px] p-1.5 text-[#1CAC93] text-sm font-medium cursor-pointer">
+                                    className="flex items-center justify-center gap-1 border-2 botext-primary rounded-[5px] min-w-[70px] p-1.5 text-primary text-sm font-medium cursor-pointer">
                                 Lưu ảnh
                             </button>
                         </div>
@@ -100,11 +100,11 @@ function Images({images, setImages}) {
                     <div className="absolute right-[10px] top-[10px] z-10">
                         <button onClick={deleteImage}
                                 className="mb-2 w-[36px] h-[36px] flex items-center justify-center rounded-full bg-[#D8EAFF]">
-                            <Icon.UilImageTimes className="text-[#1CAC93] w-[18px] h-[18px]"/>
+                            <Icon.UilImageTimes className="text-primary w-[18px] h-[18px]"/>
                         </button>
                         <button
                             className="w-[36px] h-[36px] flex items-center justify-center rounded-full bg-[#D8EAFF]">
-                            <Icon.UilExpandRight className="text-[#1CAC93] w-[18px] h-[18px]"/>
+                            <Icon.UilExpandRight className="text-primary w-[18px] h-[18px]"/>
                         </button>
                     </div>
                 </div>
@@ -114,7 +114,7 @@ function Images({images, setImages}) {
                     {images.length > 4 &&
                         <button onClick={() => scroll(-100)}
                                 className="absolute left-[-16px] top-[50%] translate-y-[-50%] z-10 w-[32px] h-[32px] flex items-center justify-center rounded-full bg-[#D8EAFF]">
-                            <Icon.UilAngleLeftB className="text-[#1CAC93] w-[18px] h-[18px]"/>
+                            <Icon.UilAngleLeftB className="text-primary w-[18px] h-[18px]"/>
                         </button>
                     }
                     <div ref={imageRef}
@@ -133,7 +133,7 @@ function Images({images, setImages}) {
                     {images.length > 4 &&
                         <button onClick={() => scroll(100)}
                                 className="absolute right-[-16px] top-[50%] translate-y-[-50%] z-10 w-[32px] h-[32px] flex items-center justify-center rounded-full bg-[#D8EAFF]">
-                            <Icon.UilAngleRightB className="text-[#1CAC93] w-[18px] h-[18px]"/>
+                            <Icon.UilAngleRightB className="text-primary w-[18px] h-[18px]"/>
                         </button>
                     }
                 </div>
