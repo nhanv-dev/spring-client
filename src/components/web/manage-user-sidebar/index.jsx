@@ -12,12 +12,12 @@ function ManageUserSidebar() {
             <div className="mt-3">
                 <div className="flex items-center justify-start gap-3 mb-6">
                     <div className="rounded-full border-[3px] border-primary-hover">
-                        <div style={{backgroundImage: `url(${user.info?.avatar || DefaultAvatar})`}}
+                        <div style={{backgroundImage: `url(${user.avatar || DefaultAvatar})`}}
                              className="rounded-full bg-cover bg-center min-w-[44px] min-h-[44px] max-w-[44px] max-h-[44px] "/>
                     </div>
                     <div className="flex-1">
                         <p className="font-medium text-tiny line-clamp-1 mb-0.5">
-                            {user.info?.fullName}
+                            {user?.name}
                         </p>
                         <Link to="/nguoi-dung/thong-tin"
                               className="flex items-center justify-start gap-1 text-sm text-[#888] hover:text-primary transition-all">
