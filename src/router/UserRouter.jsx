@@ -9,6 +9,8 @@ const SignUp = lazy(() => import('../pages/web/sign-up'));
 const SalesRegister = lazy(() => import('../pages/web/sales-register'));
 const ProductDetail = lazy(() => import('../pages/web/product-detail'));
 const UserAddresses = lazy(() => import('../pages/web/user-addresses'));
+const ChangingAddress = lazy(() => import('../pages/web/changing-address'));
+const ChangingPassword = lazy(() => import('../pages/web/changing-password'));
 const Shop = lazy(() => import('../pages/web/shop'));
 
 function UserRouter() {
@@ -31,14 +33,15 @@ function UserRouter() {
     const authRoutes = [
         // {path: '/nguoi-dung/thong-tin', exact: true, component: Profile, replaceTo: '/dang-nhap'},
         {path: '/nguoi-dung/dia-chi', exact: true, component: UserAddresses, replaceTo: '/dang-nhap'},
-        // {path: '/nguoi-dung/doi-mat-khau', exact: true, component: ChangingPassword, replaceTo: '/dang-nhap'},
+        {path: '/nguoi-dung/doi-mat-khau', exact: true, component: ChangingPassword, replaceTo: '/dang-nhap'},
         // {path: '/nguoi-dung/hoa-don', exact: true, component: SearchingPayment, replaceTo: '/dang-nhap'},
         // {path: '/nguoi-dung/don-dat-hang', exact: true, component: Order, replaceTo: '/dang-nhap'},
         // {path: '/nguoi-dung/cau-hoi', exact: true, component: UserQuestion, replaceTo: '/dang-nhap'},
-        // {path: '/nguoi-dung/thay-doi-dia-chi', exact: true, component: ChangingAddress, replaceTo: '/dang-nhap'},
+        {path: '/nguoi-dung/thay-doi-dia-chi', exact: true, component: ChangingAddress, replaceTo: '/dang-nhap'},
         // {path: '/dang-ky-ban-hang', exact: true, component: RegisterShop, replaceTo: '/dang-nhap'},
         // {path: '/thanh-toan', exact: true, component: Checkout, replaceTo: '/dang-nhap'},
         // {path: '/don-hang-thanh-cong', exact: true, component: SuccessCheckout, replaceTo: '/dang-nhap'},
+        
 
     ];
 
