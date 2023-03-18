@@ -1,9 +1,11 @@
-import {useRef, useState} from "react";
+import {useContext, useEffect, useRef, useState} from "react";
 import {getDownloadURL, ref, uploadBytesResumable} from "@firebase/storage";
 import {storage} from "../../../service/firebase";
 import * as Icon from "@iconscout/react-unicons";
+import {PayloadContext} from "./index";
 
 function Images({images, setImages}) {
+    const {payload, setPayload} = useContext(PayloadContext);
     const imageRef = useRef(null);
     const [files, setFiles] = useState([]);
     const [active, setActive] = useState(0);
@@ -42,17 +44,12 @@ function Images({images, setImages}) {
 
     const handleUploadImageByURL = (e) => {
         e.preventDefault();
-        if (e.target.image?.value) {
-            fetch(e.target.image.value).then(res => {
-                if (res.status === 200) {
-                    setImages(prev => [...prev, {url: res.url}]);
-                    e.target.image.value = "";
-                }
-            }).catch(err => {
-                console.log(err)
-            })
-        }
+        if (!e.target.image.value) return;
+        const url = e.target.image.value;
+        setImages(prev => [{url}, ...prev]);
+        e.target.image.value = "";
     }
+
 
     const handleReadImage = (e) => {
         const objectUrl = URL.createObjectURL(e.target.files[0]);

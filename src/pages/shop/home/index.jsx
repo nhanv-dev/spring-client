@@ -1,5 +1,5 @@
 import React from 'react';
-import Layout from "../../../components/admin/layout";
+import Layout from "../../../components/shop/layout";
 import Helmet from "../../../components/common/helmet";
 
 function Home() {

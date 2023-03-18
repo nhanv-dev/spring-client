@@ -11,7 +11,7 @@ function ManageUserSidebar() {
         <div className="w-[250px]">
             <div className="mt-3">
                 <div className="flex items-center justify-start gap-3 mb-6">
-                    <div className="rounded-full border-[3px] border-primary-hover">
+                    <div className="rounded-full border-[3px] border-primary">
                         <div style={{backgroundImage: `url(${user.avatar || DefaultAvatar})`}}
                              className="rounded-full bg-cover bg-center min-w-[44px] min-h-[44px] max-w-[44px] max-h-[44px] "/>
                     </div>

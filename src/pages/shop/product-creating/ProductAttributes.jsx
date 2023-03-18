@@ -1,8 +1,9 @@
-import {useEffect} from 'react';
+import {useContext, useEffect} from 'react';
 import * as Icon from "@iconscout/react-unicons";
+import {PayloadContext} from "./index";
 
 
-function ProductAttributes({attributes, setAttributes}) {
+function ProductAttributes({attributes, setAttributes, setSelectedOption}) {
     function handleAddAttribute() {
         setAttributes(prev => [...prev, {
             name: "",
@@ -22,9 +23,21 @@ function ProductAttributes({attributes, setAttributes}) {
     function handleAddOption(attribute) {
         setAttributes(prev => {
             return prev.map(attr => {
-                if (attr === attribute) attr.options = [...attr.options, {name: ""}];
+                if (attr === attribute) attr.options = [...attr.options, {
+                    name: "",
+                    image: 'https://salt.tikicdn.com/cache/100x100/ts/product/d5/0d/ec/de71368cd89c977162821b14a30d64b4.jpg.webp'
+                }];
                 return attr;
             })
+        })
+    }
+
+    function handleRemoveOption(attribute, option) {
+        setAttributes(prev => {
+            return prev.map(attr => {
+                attr.options = attr.options.filter(opt => opt !== option);
+                return attr;
+            });
         })
     }
 
@@ -50,10 +63,6 @@ function ProductAttributes({attributes, setAttributes}) {
         })
     }
 
-    useEffect(() => {
-        console.log(attributes)
-    }, [attributes])
-
     return (
         <div className="rounded-md bg-white p-5 shadow-md">
             <div className="flex items-center justify-between mb-5">
@@ -61,14 +70,14 @@ function ProductAttributes({attributes, setAttributes}) {
                     Các tùy chọn
                 </h5>
                 <button onClick={handleAddAttribute}
-                        className="text-md font-medium flex items-center gap-1 py-1 pl-1.5 pr-3 bg-primary-1-hover text-primary rounded-full">
+                        className="text-md font-medium flex items-center gap-1 py-1 pl-1.5 pr-3 bg-primary-bg text-primary rounded-full">
                     <Icon.UilPlusCircle className="w-[20px] h-[20px]"/>
                     Tạo mới
                 </button>
             </div>
             <div className="">
                 {attributes.length === 0 ?
-                    <div className="mx-auto font-medium text-black-1 text-center py-5">
+                    <div className="mx-auto font-semibold text-black-1 text-center py-5">
                         Hiện chưa có tùy chọn nào cho sản phẩm
                     </div> :
                     <div className=" overflow-auto scroll-component">
@@ -77,7 +86,7 @@ function ProductAttributes({attributes, setAttributes}) {
                                 return (
                                     <div key={i} className="bg-app-1 p-5 rounded-md mb-5 relative">
                                         <button onClick={() => handleRemoveAttribute(attribute)}
-                                                className="absolute top-0 right-0 m-2 bg-primary-1-hover text-red rounded-full">
+                                                className="absolute top-0 right-0 m-2 text-red rounded-full">
                                             <Icon.UilTimesCircle className="w-[24px] h-[24px]"/>
                                         </button>
                                         <div className="mb-3">
@@ -92,28 +101,26 @@ function ProductAttributes({attributes, setAttributes}) {
                                         <div className="flex flex-wrap items-center justify-start gap-5">
                                             {attribute.options?.map((option, i) => (
                                                 <div key={i}
-                                                     className="group relative shadow bg-white rounded-md flex items-center max-w-[180px] flex gap-3 items-center py-1 px-3">
-                                                    <input type="text" value={option.name} placeholder="Tùy chọn"
+                                                     className="group relative shadow bg-white rounded-md flex items-center max-w-[180px] flex gap-3 items-center py-2 px-2">
+                                                    <input type="text" value={option.name} placeholder="Giá trị"
                                                            onChange={(e) => handleChangeValueOption(attribute, option, "name", e.target.value)}
                                                            className="rounded-md text-black-1 font-medium text-md w-full outline-none"/>
-                                                    <div className="absolute top-0 right-0 translate-y-[-50%]">
-                                                        <div className="flex gap-1 items-center justify-end">
-                                                            <button onClick={() => handleAddOption(attribute)}
-                                                                    className="bg-primary-1-hover text-primary rounded-full">
-                                                                <Icon.UilPlusCircle className="w-[20px] h-[20px]"/>
-                                                            </button>
-                                                            <button onClick={() => handleAddOption(attribute)}
-                                                                    className="bg-primary-1-hover text-primary rounded-full">
-                                                                <Icon.UilPlusCircle className="w-[20px] h-[20px]"/>
-                                                            </button>
-                                                        </div>
+                                                    <div className="flex gap-2 items-center justify-end">
+                                                        <button onClick={() => setSelectedOption(option)}
+                                                                className="text-primary rounded-full">
+                                                            <Icon.UilEdit className="w-[20px] h-[20px]"/>
+                                                        </button>
+                                                        <button
+                                                            onClick={() => handleRemoveOption(attribute, option)}
+                                                            className="text-red rounded-full">
+                                                            <Icon.UilTimesSquare className="w-[20px] h-[20px]"/>
+                                                        </button>
                                                     </div>
                                                 </div>
                                             ))}
                                             <button onClick={() => handleAddOption(attribute)}
-                                                    className="text-md font-medium flex items-center gap-1 py-1 pl-1.5 pr-2.5 bg-primary-1-hover text-primary rounded-full flex items-center">
-                                                <Icon.UilPlusCircle className="w-[20px] h-[20px] mt-[1px]"/>
-                                                <p className="mt-[1px]">Thêm</p>
+                                                    className="text-md font-medium flex items-center gap-1 bg-primary-bg text-primary rounded-full flex items-center">
+                                                <Icon.UilPlusCircle className="w-[22px] h-[22px]"/>
                                             </button>
                                         </div>
                                     </div>
