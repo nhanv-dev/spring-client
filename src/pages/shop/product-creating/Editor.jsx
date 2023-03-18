@@ -1,16 +1,26 @@
 import {CKEditor} from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import {makeStyles} from '@material-ui/core/styles';
 
-function Editor({product,value}) {
+function Editor({value, setValue}) {
+    const useStyles = makeStyles((theme) => ({
+        richTextEditor: {
+            "& .ck-editor__main > .ck-editor__editable": {
+                minHeight: "350px"
+            }
+        }
+    }));
+    const classes = useStyles();
 
     return (
-        <div className="editor">
+        <div className={classes.richTextEditor}>
             <CKEditor
                 editor={ClassicEditor}
-                data={product[value]}
+                data={value}
                 onChange={(event, editor) => {
-                    product[value] = editor.getData();
+                    setValue(editor.getData())
                 }}
+                height="300"
             />
         </div>
     );

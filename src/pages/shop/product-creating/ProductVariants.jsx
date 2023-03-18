@@ -26,18 +26,18 @@ function ProductVariants(props) {
                     </h5>
                     <div className="flex items-center justify-end gap-3">
                         <button onClick={handleAddVariant}
-                                className="text-md font-medium flex items-center gap-1 py-1 pl-2 pr-2.5 bg-primary-1-hover text-[#1CAC93] rounded-full">
+                                className="text-md font-medium flex items-center gap-1 py-1 pl-2 pr-2.5 bg-primary-1-hover text-primary rounded-full">
                             <Icon.UilPlusCircle className="w-[20px] h-[20px]"/>
                             Tạo mới
                         </button>
                         <button
-                            className="text-md font-medium flex items-center gap-1 py-1 pl-2 pr-2.5 bg-primary-1-hover text-[#1CAC93] rounded-full">
+                            className="text-md font-medium flex items-center gap-1 py-1 pl-2 pr-2.5 bg-primary-1-hover text-primary rounded-full">
                             <Icon.UilBolt className="w-[20px] h-[20px]"/>
                             Tạo tự động
                         </button>
                     </div>
                 </div>
-                <div className="w-full max-w-full p-5 bg-[#f5f5f5] rounded-[5px]">
+                <div className="w-full max-w-full p-5 bg-app-1 rounded-[5px]">
                     {/*<ModalCreatingCombination showModalCombination={showModalCombination}*/}
                     {/*                          setShowModalCombination={setShowModalCombination}*/}
                     {/*                          variants={variants} setVariants={setVariants}*/}
