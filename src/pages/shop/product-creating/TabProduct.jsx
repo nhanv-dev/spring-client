@@ -7,59 +7,106 @@ import {PayloadContext} from "./index";
 
 function TabProduct({handleSubmit}) {
     const {payload, setPayload} = useContext(PayloadContext);
-    const [images, setImages] = useState([]);
+    const [images, setImages] = useState([...payload?.images]);
     const [product, setProduct] = useState({...payload?.product});
-    const [category, setCategory] = useState();
-    const [subCategory, setSubCategory] = useState();
+    const [category, setCategory] = useState({...payload?.product?.category});
+    const [subCategory, setSubCategory] = useState({...payload?.product?.subCategory});
     const [showCategory, setShowCategory] = useState(false);
     const [showSubCategory, setShowSubCategory] = useState(false);
+    const [keyword, setKeyword] = useState("");
+    const [keywords, setKeywords] = useState(payload.product?.keywords?.split(",") || []);
 
     useEffect(() => {
         setPayload(prev => ({...prev, product: {...prev?.product, ...product}}))
-    }, [product])
+    }, [product, setPayload])
 
     useEffect(() => {
         setPayload(prev => {
             prev.product = {...prev.product, category}
             return prev
         })
-    }, [category])
+    }, [category, setPayload])
 
     useEffect(() => {
         setPayload(prev => {
             prev.product = {...prev.product, subCategory}
             return prev
         })
-    }, [subCategory])
+    }, [subCategory, setPayload])
+
+    useEffect(() => {
+        setPayload(prev => {
+            prev.images = [...images]
+            return prev
+        })
+    }, [images, setPayload])
+
+    useEffect(() => {
+        setPayload(prev => {
+            prev.product.keywords = keywords.join(",")
+            return prev;
+        })
+    }, [keywords, setPayload])
 
     function submit(e) {
         e.preventDefault();
-
         handleSubmit(e);
     }
 
+    function handleUpdatePrice(e) {
+        const price = e.target.value;
+        let discountPercent, finalPrice;
+        if (payload.product.finalPrice) finalPrice = price * (1 - discountPercent / 100);
+        else if (payload.product.discountPercent) discountPercent = 10;
+        setPayload((prev) => ({...prev, product: {...prev.product, price, finalPrice, discountPercent}}))
+    }
+
+    function handleUpdateFinalPrice(e) {
+        let discountPercent, finalPrice = e.target.value;
+        if (payload.product.price) discountPercent = Math.round((100 - (finalPrice * 100 / payload.product.price)));
+        setPayload((prev) => ({...prev, product: {...prev.product, finalPrice, discountPercent}}))
+    }
+
+    function handleUpdateDiscountPercent(e) {
+        let discountPercent = e.target.value, finalPrice;
+        if (payload.product.price) finalPrice = payload.product.price * (1 - discountPercent / 100);
+        setPayload((prev) => ({...prev, product: {...prev.product, finalPrice, discountPercent}}))
+    }
+
+    function handleAddKeywords(e) {
+        e.preventDefault();
+        if (!keyword || keywords.length > 6) return;
+        setKeywords(prev => {
+            prev = [...prev, keyword];
+            return prev;
+        })
+        setKeyword("")
+    }
+
+    function handleRemoveKeywords(index) {
+        setKeywords(prev => {
+            prev = [...prev].filter((k, i) => i !== index);
+            return prev;
+        })
+    }
 
     return (
-        <div className="flex flex-wrap gap-8">
+        <div className="flex flex-wrap gap-6">
             <div className="w-4/12 min-h-full">
-                <div className="h-full rounded-md bg-white p-5 shadow-md">
+                <div className="rounded-md bg-white p-5 shadow-md">
                     <Images images={images} setImages={setImages}/>
                 </div>
             </div>
             <div className="flex-1">
                 <div className="rounded-md bg-white p-5 shadow-md">
-                    <div className="flex items-center justify-between mb-5">
+                    <div className="flex items-center justify-between mb-7">
                         <div className="flex items-center">
                             <h5 className="font-bold text-base">
                                 Thông tin sản phẩm
                             </h5>
                         </div>
-                        {product.updatedAt &&
-                            <p className="font-medium text-tiny text-[#6f787e]">
-                                Cập nhật lần cuối: {formatLongDate(product.updatedAt)}
-                            </p>}
                     </div>
-                    <div className="mb-5">
+                    <div className="mb-7">
                         <p className="mb-2 text-md font-semibold">Tên sản phẩm</p>
                         <div className="shadow-md bg-white w-full mb-4 rounded-md p-3">
                             <input type="text" value={product?.name} placeholder="Tên sản phẩm"
@@ -71,101 +118,128 @@ function TabProduct({handleSubmit}) {
                         </div>
                     </div>
                     <div className="mb-7">
-                        <ModalCategory category={category}
-                                       setCategory={setCategory}
-                                       subCategory={subCategory}
-                                       setSubCategory={setSubCategory}
-                                       showCategory={showCategory}
-                                       showSubCategory={showSubCategory}
-                                       setShowCategory={setShowCategory}
-                                       setShowSubCategory={setShowSubCategory}/>
-                        <p className="mb-2 text-md font-semibold">Loại sản phẩm</p>
-                        <div className="flex items-center gap-3">
-                            <button onClick={() => setShowCategory(true)}
-                                    className="flex items-center justify-between gap-3 min-w-max max-w-[300px] shadow-md bg-white rounded-md p-3">
-                                <p className="flex-1 text-black-1 font-medium text-md w-full outline-none">
-                                    {category?.title || 'Chọn loại sản phẩm'}
-                                </p>
-                                <Icon.UilEditAlt
-                                    className="w-[18px] h-[18px] min-w-[18px] min-h-[18px]"/>
-                            </button>
-                            <Icon.UilAngleRightB
-                                className="w-[18px] h-[18px] min-w-[18px] min-h-[18px]"/>
-                            <button onClick={() => setShowSubCategory(true)}
-                                    className="flex items-center justify-between gap-3 min-w-max max-w-[300px] shadow-md bg-white rounded-md p-3">
-                                <p className="flex-1 text-black-1 font-medium text-md w-full outline-none">
-                                    {subCategory?.title || 'Chọn loại sản phẩm'}
-                                </p>
-                                <Icon.UilEditAlt
-                                    className="w-[18px] h-[18px] min-w-[18px] min-h-[18px]"/>
-                            </button>
-                        </div>
-                    </div>
-                    <div className="w-full p-5 bg-app-1 rounded-md mb-5">
-                        <div className="w-full">
-                            <h5 className="mb-1 font-semibold text-md">
-                                Tùy chỉnh giá & số lượng sản phẩm</h5>
-                            <p className="mb-2 font-medium text-sm text-black-1">
-                                * Tổng số lượng sản phẩm của các option sản phẩm khác nhau.
-                            </p>
-                        </div>
-                        <div className="flex items-center gap-5">
-                            <div className="basis-2/12">
+                        <div className="flex gap-10">
+                            <div>
+                                <ModalCategory category={category}
+                                               setCategory={setCategory}
+                                               subCategory={subCategory}
+                                               setSubCategory={setSubCategory}
+                                               showCategory={showCategory}
+                                               showSubCategory={showSubCategory}
+                                               setShowCategory={setShowCategory}
+                                               setShowSubCategory={setShowSubCategory}/>
+                                <p className="mb-2 text-md font-semibold">Loại sản phẩm</p>
+                                <div className="flex items-center gap-3">
+                                    <button onClick={() => setShowCategory(true)}
+                                            className="flex items-center justify-between gap-3 min-w-max max-w-[300px] min-h-[48px] shadow-md bg-white rounded-md p-3">
+                                        <p className="flex-1 text-black-1 font-medium text-md w-full outline-none">
+                                            {category?.title || 'Chọn loại sản phẩm'}
+                                        </p>
+                                        <Icon.UilEditAlt className="w-[18px] h-[18px] min-w-[18px] min-h-[18px]"/>
+                                    </button>
+                                    <Icon.UilAngleRightB
+                                        className="w-[18px] h-[18px] min-w-[18px] min-h-[18px]"/>
+                                    <button onClick={() => setShowSubCategory(true)} disabled={!category?.id}
+                                            className="flex items-center justify-between gap-3 min-w-max max-w-[300px] min-h-[48px] shadow-md bg-white rounded-md p-3">
+                                        <p className="flex-1 text-black-1 font-medium text-md w-full outline-none">
+                                            {subCategory?.title || 'Chọn loại sản phẩm'}
+                                        </p>
+                                        <Icon.UilEditAlt className="w-[18px] h-[18px] min-w-[18px] min-h-[18px]"/>
+                                    </button>
+                                </div>
+                            </div>
+                            <div>
                                 <p className="mb-2 text-md font-semibold">Số lượng</p>
                                 <div className="shadow-md bg-white w-full rounded-md p-3">
-                                    <input type="number" value={product?.quantity}
-                                           onChange={(e) => setProduct((prev) => ({
-                                               ...prev,
-                                               quantity: e.target.value
-                                           }))}
+                                    <input type="number" value={payload.product?.quantity}
+                                           onChange={(e) => setPayload((prev) => {
+                                               prev.product.quantity = e.target.value;
+                                               return prev;
+                                           })}
                                            className="text-black-1 font-medium text-md w-full outline-none"/>
-                                </div>
-                            </div>
-                            <div className="basis-3/12">
-                                <p className="mb-2 text-md font-semibold">Giá gốc</p>
-                                <div className="shadow-md bg-white w-full rounded-md p-3">
-                                    <input type="number" value={product?.price}
-                                           onChange={(e) => setProduct((prev) => ({
-                                               ...prev,
-                                               price: e.target.value
-                                           }))}
-                                           className="text-black-1 font-medium text-md w-full outline-none"/>
-                                </div>
-                            </div>
-                            <div className="basis-3/12">
-                                <p className="mb-2 text-md font-semibold">Giá bán</p>
-                                <div className="shadow-md bg-white w-full rounded-md p-3">
-                                    <input type="number" value={product?.price}
-                                           onChange={(e) => setProduct((prev) => ({
-                                               ...prev,
-                                               finalPrice: e.target.value
-                                           }))}
-                                           className="text-black-1 font-medium text-md w-full outline-none"/>
-                                </div>
-                            </div>
-                            <div className="basis-2/12">
-                                <p className="mb-2 text-md font-semibold">Giảm giá</p>
-                                <div
-                                    className="flex items-center justify-between shadow-md bg-white w-full rounded-md p-3">
-                                    <input type="number" value={product?.discountPercent}
-                                           onChange={(e) => setProduct(prev => ({
-                                               ...prev,
-                                               discountPercent: e.target.value
-                                           }))}
-                                           className="text-black-1 font-medium text-md w-full outline-none"/>
-                                    <p className="text-black-1 font-semibold text-md">%</p>
                                 </div>
                             </div>
                         </div>
                     </div>
-
-                    <div className="w-full flex items-center justify-end gap-3">
-                        <button onClick={submit}
-                                className="outline-none flex items-center justify-center gap-2 p-2 rounded-md border-2 text-primary font-semibold text-tiny">
-                            <Icon.UilSave className="w-[20px] h-[20px]"/>
-                            <span className="leading-3">Đăng sản phẩm</span>
-                        </button>
+                    <div className="mb-7">
+                        <div className="w-full p-5 bg-app-1 rounded-md">
+                            <div className="w-full">
+                                <h5 className="mb-1 font-semibold text-md">
+                                    Tùy chỉnh giá sản phẩm</h5>
+                                <p className="mb-2 font-medium text-sm text-black-1">
+                                    * Lưu ý: đây là giá mặc định của sản phẩm. Nếu có thêm các loại của sản phẩm
+                                    phải
+                                    đặt lại giá cho từng loại.
+                                </p>
+                            </div>
+                            <div className="flex items-center gap-5">
+                                <div className="basis-3/12">
+                                    <p className="mb-2 text-md font-semibold">Giá gốc</p>
+                                    <div
+                                        className="flex items-center justify-between shadow-md bg-white w-full rounded-md p-3">
+                                        <input type="number" value={payload.product?.price}
+                                               onChange={handleUpdatePrice}
+                                               className="text-black-1 font-medium text-md w-full outline-none"/>
+                                        <p className="text-black-1 font-semibold text-md">VNĐ</p>
+                                    </div>
+                                </div>
+                                <div className="basis-3/12">
+                                    <p className="mb-2 text-md font-semibold">Giá bán</p>
+                                    <div
+                                        className="flex items-center justify-between shadow-md bg-white w-full rounded-md p-3">
+                                        <input type="number" value={payload.product?.finalPrice}
+                                               onChange={handleUpdateFinalPrice}
+                                               className="text-black-1 font-medium text-md w-full outline-none"/>
+                                        <p className="text-black-1 font-semibold text-md">VNĐ</p>
+                                    </div>
+                                </div>
+                                <div className="basis-3/12">
+                                    <p className="mb-2 text-md font-semibold">Giảm giá</p>
+                                    <div
+                                        className="flex items-center justify-between shadow-md bg-white w-full rounded-md p-3">
+                                        <input type="number" value={payload.product?.discountPercent}
+                                               onChange={handleUpdateDiscountPercent}
+                                               className="text-black-1 font-medium text-md w-full outline-none"/>
+                                        <p className="text-black-1 font-semibold text-md">%</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+                    <div className="">
+                        <div className="mb-2 text-md font-semibold flex items-center gap-3">
+                            Từ khóa
+                            <div>
+                                <Icon.UilInfoCircle className="w-[18px] h-[18px]"/>
+                            </div>
+                        </div>
+                        <div className="shadow-md bg-white w-full mb-4 rounded-md p-3 min-h-[56px] flex items-center">
+                            <div className="flex flex-wrap items-center justify-start gap-3">
+                                {keywords.map((keyword, i) => (
+                                    <div key={i}
+                                         className="pl-2 pr-1.5 shadow rounded font-medium text-tiny py-1.5 flex gap-4 items-center">
+                                        {keyword}
+                                        <button className="text-red flex items-center justify-end"
+                                                onClick={() => handleRemoveKeywords(i)}>
+                                            <Icon.UilTimesCircle className="w-[18px] h-[18px] relative top-[.75px]"/>
+                                        </button>
+                                    </div>
+                                ))}
+                                <form onSubmit={handleAddKeywords} className="flex-1 min-w-[200px]">
+                                    <input type="text" placeholder="Nhập từ khóa"
+                                           onChange={(e) => setKeyword(e.target.value)} value={keyword}
+                                           className="w-full text-black-1 font-medium text-md w-full outline-none"/>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div className="w-full flex items-center justify-end gap-3 mt-5">
+                    <button onClick={submit}
+                            className="outline-none flex items-center justify-center gap-2 p-2.5 rounded-md border-2 bg-primary text-white font-semibold text-tiny">
+                        <Icon.UilSave className="w-[20px] h-[20px]"/>
+                        <span className="leading-3">Đăng sản phẩm</span>
+                    </button>
                 </div>
             </div>
         </div>

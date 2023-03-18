@@ -11,7 +11,7 @@ function ModalCategory(props) {
     }, [props.showSubCategory, props.showCategory])
 
     useEffect(() => {
-        if (!props.showSubCategory) return;
+        if (!props.showSubCategory || !props.category) return;
         publicRequest().get(`/categories/${props.category.id}/sub-categories`)
             .then(res => {
                 setCategories(res.data)
@@ -20,7 +20,7 @@ function ModalCategory(props) {
 
     useEffect(() => {
         if (!props.showCategory) return;
-        publicRequest().get(`/categories`)
+        publicRequest().get(`/categories?type=short`)
             .then(res => {
                 setCategories(res.data)
             })

@@ -5,6 +5,8 @@ import {Box, Tab, Tabs, Typography} from "@mui/material";
 import TabProduct from "./TabProduct";
 import TabDescription from "./TabDescription";
 import TabOption from "./TabOption";
+import TabDiscount from "./TabDiscount";
+import {protectedRequest} from "../../../util/request-method";
 
 export const PayloadContext = createContext({});
 
@@ -19,15 +21,30 @@ function ProductCreating() {
 
     function handleSubmit(e) {
         e.preventDefault();
-
-        console.log(payload)
+        const data = {
+            ...payload.product, orderCount: 0,
+            images: [...payload.images].filter(image => !!image.url),
+            discount: {
+                price: payload.product.price,
+                finalPrice: payload.product.finalPrice,
+                discountPercent: payload.product.discountPercent,
+            },
+        }
+        console.log(data)
+        protectedRequest().post("/products", data)
+            .then(res => {
+                console.log(res)
+            })
+            .catch(err => {
+                console.log(err)
+            })
     }
 
     return (
         <Helmet title="Depot - Đăng bán sản phẩm">
             <Layout>
                 <PayloadContext.Provider value={{payload, setPayload}}>
-                    <Box className="rounded-md bg-white shadow-md mb-8">
+                    <Box className="rounded-md bg-white shadow-md mb-6">
                         <Tabs value={value} onChange={(event, newValue) => setValue(newValue)}
                               sx={{
                                   '.Mui-selected': {
@@ -36,10 +53,11 @@ function ProductCreating() {
                                   },
                                   'button': {
                                       fontWeight: '600',
-                                      fontSize: '.875rem',
+                                      fontSize: '.85rem',
                                       textTransform: 'none',
                                       borderRadius: '0.375rem 0.375rem 0 0',
                                       padding: '8px 24px',
+                                      letterSpacing: 'normal',
                                   }
                               }}>
                             <Tab label="Thông tin chung" {...allProps(0)}/>
@@ -58,7 +76,7 @@ function ProductCreating() {
                         <TabOption/>
                     </TabPanel>
                     <TabPanel value={value} index={3} component="div">
-                        <TabOption/>
+                        <TabDiscount/>
                     </TabPanel>
                 </PayloadContext.Provider>
             </Layout>

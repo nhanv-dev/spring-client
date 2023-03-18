@@ -6,7 +6,7 @@ import StarRating from "../../common/star-rating/indext";
 
 function ProductCard({item}) {
     return (
-        <div className="relative block w-full shadow-sm bg-white rounded-md hover:shadow-xl transition-all">
+        <div className="relative block w-full min-h-full shadow-sm bg-white rounded-md hover:shadow-xl transition-all">
             <Link to={`/san-pham/${item.slug}`}
                   className="block absolute left-0 right-0 top-0 bottom-0 bg-[transparent] z-10"/>
             <div className="rounded-t-md h-[200px] relative">
@@ -22,7 +22,7 @@ function ProductCard({item}) {
                 </div>
             </div>
             <div className="p-2">
-                <p className="mb-0.5 font-medium text-sm text-black-1 line-clamp-2">
+                <p className="mb-0.5 font-medium text-sm text-black-1 line-clamp-2 h-[36px]">
                     {item.name}
                 </p>
                 <div className="mb-0.5">
@@ -30,10 +30,10 @@ function ProductCard({item}) {
                         item.discount ?
                             <div className="flex items-end justify-start gap-3">
                                 <p className="font-semibold text-base text-red">
-                                    {formatCurrency(item.price * (1 - item.discount.percent))}
+                                    {formatCurrency(item.discount.finalPrice)}
                                 </p>
                                 <p className="font-semibold text-sm text-red">
-                                    -{formatPercent(item.discount.percent)}
+                                    -{item.discount.discountPercent}%
                                 </p>
                             </div> :
                             <p className="font-semibold text-base text-black-1">

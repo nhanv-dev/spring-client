@@ -1,4 +1,5 @@
 import axios from "axios";
+import {getItem} from "./localStorage";
 
 export const baseURL = "http://localhost:8080/api/";
 
@@ -9,8 +10,7 @@ export const publicRequest = () => {
 }
 
 export const protectedRequest = () => {
-    const data = localStorage.getItem("persist:root");
-    const token = JSON.parse(data)?.token
+    const token = getItem("user")?.token
     return axios.create({
         baseURL: baseURL,
         headers: {Authorization: `Bearer ${token}`},

@@ -25,8 +25,8 @@ function UserRouter() {
         {path: '/dang-ky-ban-hang', exact: true, component: SalesRegister},
         {path: '/gio-hang', exact: true, component: Cart},
         {path: '/danh-muc', exact: true, component: Categories},
-        {path: '/danh-muc/*', exact: true, component: Category},
         {path: '/dang-ky', exact: true, component: SignUp},
+        {path: '/danh-muc/:slug', exact: true, component: Category},
         {path: '/san-pham/:slug', exact: true, component: ProductDetail},
         {path: '/cua-hang/:slug/*', exact: true, component: Shop},
 

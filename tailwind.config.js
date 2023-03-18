@@ -74,7 +74,7 @@ module.exports = {
                 '4xl': '2rem',
             },
             boxShadow: {
-                'tiny': '0 -2px 8px 0 rgb(0 0 0 / 10%), 0 4px 8px 0 rgb(0 0 0 / 10%)'
+                // 'md': 'rgba(149, 157, 165, 0.2) 0px 8px 24px;'
             },
             backgroundImage: {}
         }

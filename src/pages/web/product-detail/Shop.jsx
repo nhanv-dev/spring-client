@@ -24,7 +24,7 @@ function Shop({shop}) {
         <div className="flex gap-4 items-start justify-start">
             <Link to={`/cua-hang/${shop.slug}`}
                   className="w-[70px] h-[70px] relative rounded-full bg-cover bg-center border-2 border-border"
-                  style={{backgroundImage: `url(${shop.shopLogo})`}}>
+                  style={{backgroundImage: `url(${shop.shopLogo || DefaultShopImage})`}}>
                 <p className="absolute bottom-0 right-0 border-[3.5px] rounded-full border-[#FFFFFF] w-[24px] h-[24px] bg-[#00C50A]"/>
             </Link>
             <div>
