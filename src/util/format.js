@@ -39,11 +39,13 @@ function monthDiff(dateFrom, dateTo) {
     return dateTo.getMonth() - dateFrom.getMonth() + (12 * (dateTo.getFullYear() - dateFrom.getFullYear()))
 }
 
-export function formatToSlug(Text) {
-    return Text
-        .toLowerCase()
-        .trim()
-        .replace(/[^\w\s-]/g, '')
-        .replace(/[\s_-]+/g, '-')
-        .replace(/^-+|-+$/g, '');
+export function formatToSlug(str) {
+    str = str.toLowerCase();
+    str = str.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    str = str.replace(/[đĐ]/g, 'd');
+    str = str.replace(/([^0-9a-z-\s])/g, '');
+    str = str.replace(/(\s+)/g, '-');
+    str = str.replace(/-+/g, '-');
+    str = str.replace(/^-+|-+$/g, '');
+    return str;
 }

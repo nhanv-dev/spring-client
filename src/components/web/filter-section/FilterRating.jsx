@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {Checkbox, FormControlLabel, FormGroup} from "@mui/material";
-import StarRating from "../../common/star-rating/indext";
+import StarRating from "../../common/star-rating";
 
 function FilterColor({handleFilter}) {
     const [checked, setChecked] = React.useState({});

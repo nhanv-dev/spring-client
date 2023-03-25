@@ -1,4 +1,4 @@
-import {createContext, useState} from 'react';
+import {createContext, useEffect, useState} from 'react';
 import Layout from "../../../components/shop/layout";
 import Helmet from "../../../components/common/helmet";
 import {Box, Tab, Tabs, Typography} from "@mui/material";
@@ -7,19 +7,29 @@ import TabDescription from "./TabDescription";
 import TabOption from "./TabOption";
 import {protectedRequest} from "../../../util/request-method";
 import {toast, ToastContainer} from "react-toastify";
-import {useNavigate} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
+import {UilArrowLeft} from "@iconscout/react-unicons";
+import {Loader} from "../../../router/Router";
 
 export const PayloadContext = createContext({});
 
-function ProductCreating() {
+function ProductUpdating() {
+    const {id} = useParams();
     const navigate = useNavigate();
     const [value, setValue] = useState(0);
-    const [payload, setPayload] = useState({
-        images: [],
-        product: {},
-        attributes: [],
-        variants: [],
-    });
+    const [payload, setPayload] = useState({});
+    useEffect(() => {
+        protectedRequest().get(`/products/${id}`)
+            .then(res => {
+                console.log(res)
+                setPayload({
+                    images: [...res.data.images],
+                    product: {...res.data},
+                    attributes: [...res.data.attributes].map(a => ({...a, attributeId: a.id})),
+                    variants: [...res.data.variants].map(v => ({...v, ...v.deal, indexing: v.id})),
+                })
+            })
+    }, [id])
 
     function formatVariants(variants) {
         return [...variants].map(v => {
@@ -51,7 +61,7 @@ function ProductCreating() {
                 discountPercent: product.discountPercent
             }
         }
-        return {...result, orderCount: 0, isPublic: true, isDeleted: false};
+        return {...result, orderCount: 0};
     }
 
     function handleSubmit(e) {
@@ -64,9 +74,9 @@ function ProductCreating() {
         }
         protectedRequest().post("/shops/products", data)
             .then(res => {
-                toast.success('Đăng bán sản phẩm thành công', {
+                toast.success('Cập nhật sản phẩm thành công', {
                     position: "top-right",
-                    autoClose: 1000,
+                    autoClose: 800,
                     hideProgressBar: false,
                     closeOnClick: true,
                     pauseOnHover: true,
@@ -76,9 +86,10 @@ function ProductCreating() {
                 });
                 setTimeout(() => {
                     navigate("/kenh-ban-hang/san-pham")
-                }, 1000)
+                }, 1400)
             })
             .catch(err => {
+                console.log(err)
                 toast.error('Đăng bán sản phẩm thất bại', {
                     position: "top-right",
                     autoClose: 2000,
@@ -92,10 +103,20 @@ function ProductCreating() {
             })
     }
 
+    if (!payload?.product?.id) {
+        return (<Loader/>)
+    }
     return (
-        <Helmet title="Depot - Đăng bán sản phẩm">
+        <Helmet title="Depot - Cập nhật sản phẩm">
             <Layout>
                 <ToastContainer className="font-medium text-md"/>
+                <div className="mb-3">
+                    <button onClick={() => navigate(-1)}
+                            className="font-medium text-base flex items-center gap-1 justify-start transition-all hover:text-primary text-black">
+                        <UilArrowLeft className="w-[20px] h-[20px]"/>
+                        Quay lại
+                    </button>
+                </div>
                 <PayloadContext.Provider value={{payload, setPayload}}>
                     <Box className="rounded-md bg-white shadow-md mb-6">
                         <Tabs value={value} onChange={(event, newValue) => setValue(newValue)}
@@ -155,4 +176,4 @@ allProps(index) {
     return {id: `simple-tab-${index}`, 'aria-controls': `simple-tab-panel-${index}`};
 }
 
-export default ProductCreating;
+export default ProductUpdating;

@@ -29,11 +29,11 @@ function ChangingPassword() {
         <Helmet title={'Depot - Đổi mật khẩu'}>
             <UserLayout>
                 <div className="bg-white rounded-md shadow p-5">
-                    <div className="flex items-end font-semibold text-xl gap-3 mb-5">
+                    <div className="font-semibold text-xl gap-3 mb-5">
                         Đổi mật khẩu
                     </div>
                     <form className="w-full max-w-[500px]" onClick={handleSubmit}>
-                        <div className="mb-8 flex items-center gap-5 flex-wrap justify-start">
+                        <div className="mb-6 flex items-center gap-5 flex-wrap justify-start">
                             <label htmlFor="old-password"
                                    className="w-[150px] block font-semibold text-md text-black-1">
                                 Mật khẩu hiện tại
@@ -57,7 +57,7 @@ function ChangingPassword() {
                             </div>
                         </div>
 
-                        <div className="mb-8 flex items-center gap-5 flex-wrap justify-start">
+                        <div className="mb-6 flex items-center gap-5 flex-wrap justify-start">
                             <label htmlFor="new-password"
                                    className="w-[150px] block font-semibold text-md text-black-1">
                                 Nhập mật khẩu mới
@@ -79,7 +79,7 @@ function ChangingPassword() {
                                 </div>
                             </div>
                         </div>
-                        <div className="mb-8 flex items-center gap-5 flex-wrap justify-start">
+                        <div className="mb-6 flex items-center gap-5 flex-wrap justify-start">
                             <label htmlFor="repeat-password"
                                    className="w-[150px] block font-semibold text-md text-black-1">
                                 Nhập lại mật khẩu mới
@@ -102,15 +102,14 @@ function ChangingPassword() {
                             </div>
                         </div>
 
-                        <div className="flex items-center justify-end gap-5">
+                        <div className="flex items-center justify-end gap-3">
                             <button type="reset"
-                                    className="px-5 h-[40px] rounded-md text-tiny font-semibold text-primary bg-primary-1-hover">
+                                    className="min-w-max px-5 bg-primary h-[40px] rounded-md text-tiny font-semibold text-primary bg-primary-bg">
                                 Reset
                             </button>
                             <button type="submit"
-                                    className="px-5 h-[40px] rounded-md text-tiny font-semibold text-primary bg-primary-1-hover">
+                                    className="min-w-max px-5 bg-primary h-[40px] rounded-md text-tiny font-semibold text-primary bg-primary-bg">
                                 Đổi mật khẩu
-
                             </button>
                         </div>
                     </form>

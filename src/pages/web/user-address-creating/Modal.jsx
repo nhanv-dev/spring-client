@@ -1,7 +1,4 @@
-import {useEffect} from "react";
-import * as Icon from "@iconscout/react-unicons";
-
-function ModalCategory({ list, show, setShow, select}) {
+function Modal({list, show, setShow, select}) {
 
     return (
         <>
@@ -21,7 +18,7 @@ function ModalCategory({ list, show, setShow, select}) {
                     </div>
                 </div>
             </div>
-            <div onClick={() =>{
+            <div onClick={() => {
                 setShow(false)
             }}
                  className={`${show ? 'visible opacity-100' : 'invisible opacity-0'} z-[50] fixed top-0 left-0 right-0 bottom-0 w-full`}>
@@ -30,4 +27,4 @@ function ModalCategory({ list, show, setShow, select}) {
     );
 }
 
-export default ModalCategory;
+export default Modal;

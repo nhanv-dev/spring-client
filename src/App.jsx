@@ -1,26 +1,23 @@
 import Router from "./router/Router";
-import {useEffect, useState} from "react";
-import {getItem, removeItem} from "./util/localStorage";
-import {protectedRequest} from "./util/request-method";
-import {useSelector} from "react-redux";
+import 'react-toastify/dist/ReactToastify.css';
+import {useDispatch, useSelector} from "react-redux";
+import {useEffect} from "react";
+import {protectedRequest, publicRequest} from "./util/request-method";
+import {reLogin, validateToken} from "./redux/actions/userActions";
 
 function App() {
-    const user = useSelector(state => state.user);
-
+    const {user, cart} = useSelector(state => state);
+    const dispatch = useDispatch();
     useEffect(() => {
-        const storage = getItem("user")
-        console.log(storage)
-        // protectedRequest().get("/auth/re-login")
-        //     .then(res => {
-        //         console.log(res)
-        //     })
-        //     .catch(err => {
-        //         console.log(err);
-        //         removeItem("token")
-        //         removeItem("token")
-        //     })
+        if (!user?.token) return;
+        const load = async () => {
+            const action = await validateToken();
+            dispatch(action);
+            return {loading: false}
+        }
+        load().then((data) => {
+        })
     }, [])
-
 
     return (
         <Router></Router>

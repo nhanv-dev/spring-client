@@ -32,7 +32,7 @@ function Header() {
 
     return (
         <header className="shadow-xl border-b border-primary border-b-[3px]">
-            <div className="h-[35px] bg-white flex items-center border-b-border border-b-[1px]">
+            <div className="h-[35px] bg-white flex items-center border-b-border-1 border-b-[1px]">
                 <div className="container">
                     <div className="flex justify-between items-center">
                         <div className="flex justify-start items-center gap-4">
@@ -61,7 +61,7 @@ function Header() {
             </div>
             <div className="h-[95px] flex items-center bg-white border-b-[1px] border-b-border">
                 <div className="container">
-                    <div className="relative flex gap-6 justify-between items-center">
+                    <div className="relative flex gap-x-10 justify-between items-center">
                         <div className="w-[150px]">
                             <Link to="/trang-chu" className="block w-[130px]">
                                 <img className="w-full h-auto" src={Logo} alt="logo"/>
@@ -79,14 +79,14 @@ function Header() {
                                     </div>
                                 </div>
                                 <div
-                                    className="border-border border flex-1 rounded-md min-h-[40px] h-[40px] flex bg-white items-center justify-center">
+                                    className="border-border-1 border flex-1 rounded-md min-h-[40px] h-[40px] flex bg-white items-center justify-center">
                                     <form onSubmit={handleSearch} className="flex item-center relative h-full w-full">
                                         <div className="cursor-pointer">
                                             <OptionSearch/>
                                         </div>
                                         <div className="relative">
                                             <div
-                                                className="absolute w-[1px] h-[100%] top-[50%] translate-y-[-50%] bg-[#00000017]"/>
+                                                className="absolute w-[1px] h-[100%] top-[50%] translate-y-[-50%] bg-border-1"/>
                                         </div>
                                         <input type="text" name="searching"
                                                className="px-3 w-[400px] text-[#666] bg-white text-tiny font-normal bg-white flex-1 focus-visible:outline-none"
@@ -101,11 +101,11 @@ function Header() {
                                 </div>
                             </div>
                         </div>
-                        <div className="w-[250px] flex items-center justify-end gap-5">
+                        <div className="min-w-max flex items-center justify-end gap-3">
                             <Link to="/gio-hang"
                                   className="relative outline-none group flex items-center gap-1 bg-primary-bg p-2 px-3 rounded-lg">
                                 <Icon.UilEstate className="w-[20px] h-[20px] text-primary"/>
-                                <p className="transition-all text-primary text-tiny pt-0.5 font-semibold">
+                                <p className="transition-all text-primary text-[.85rem] relative top-[1px] font-bold">
                                     Trang chủ
                                 </p>
                             </Link>

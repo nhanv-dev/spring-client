@@ -15,22 +15,22 @@ function Header() {
                 </Link>
                 <div className="flex justify-end items-center gap-10 flex-1 pr-3">
                     <div className="flex items-center justify-center gap-6">
-                        <Link to="/kenh-ban-hang/dang-ban"
+                        <Link to="/kenh-ban-hang/san-pham/dang-ban"
                               className="flex items-center justify-center gap-1.5 text-black-1 transition-all hover:text-primary-hover text-tiny font-semibold">
                             <Icon.UilArchive className="w-[20px] h-[20px]"/>
                             Đơn đặt hàng
                         </Link>
-                        <Link to="/kenh-ban-hang/dang-ban"
+                        <Link to="/kenh-ban-hang/san-pham/dang-ban"
                               className="flex items-center justify-center gap-1.5 text-black-1 transition-all hover:text-primary-hover text-tiny font-semibold">
                             <Icon.UilEnvelopeCheck className="w-[20px] h-[20px]"/>
                             Đánh giá & Nhận xét
                         </Link>
-                        <Link to="/kenh-ban-hang/dang-ban"
+                        <Link to="/kenh-ban-hang/san-pham/dang-ban"
                               className="flex items-center justify-center gap-1.5 text-black-1 transition-all hover:text-primary-hover text-tiny font-semibold">
                             <Icon.UilMessage className="w-[20px] h-[20px]"/>
                             Tin nhắn
                         </Link>
-                        <Link to="/kenh-ban-hang/dang-ban"
+                        <Link to="/kenh-ban-hang/san-pham/dang-ban"
                               className="flex items-center justify-center gap-1.5 text-black-1 transition-all hover:text-primary-hover text-tiny font-semibold">
                             <Icon.UilCreateDashboard className="w-[20px] h-[20px]"/>
                             Đăng bán

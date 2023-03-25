@@ -11,16 +11,16 @@ function Images({images}) {
     }
 
     return (
-        <div className="mb-5 w-full">
-            <div className="mb-5 w-full">
+        <div className="w-full">
+            <div className="mb-3 w-full">
                 <div
-                    className="group relative w-full h-[450px] overflow-hidden border border-border rounded-[8px] flex items-center justify-center">
+                    className="group relative w-full h-[350px] overflow-hidden border border-border rounded-md flex items-center justify-center">
                     <div
                         style={{backgroundImage: `url(${(images && images[active]) ? images[active].url : ImageNotFound})`}}
-                        className="h-full bg-cover bg-center w-full rounded-[8px] relative "/>
+                        className="h-full bg-cover bg-center w-full rounded-md relative "/>
                     <div className="absolute right-[10px] top-[10px] z-10">
                         <button
-                            className="w-[36px] h-[36px] flex items-center justify-center rounded-full bg-primary-bg">
+                            className="w-[30px] h-[30px] flex items-center justify-center rounded-full bg-primary-bg">
                             <Icon.UilExpandRight className="text-primary w-[18px] h-[18px]"/>
                         </button>
                     </div>

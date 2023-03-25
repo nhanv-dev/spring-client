@@ -1,5 +1,6 @@
 import React, {lazy} from 'react';
 import {Route, Routes} from "react-router-dom";
+import {NotFound} from "./Router";
 
 const Home = lazy(() => import('../pages/admin/home'));
 const SalesRegister = lazy(() => import('../pages/admin/sales-register'));
@@ -16,6 +17,7 @@ function AdminRouter() {
             {routes.map(route => (
                 <Route key={route.path} exact={route.exact} path={route.path} element={<route.component/>}/>
             ))}
+            <Route path="*" element={<NotFound/>}/>
         </Routes>
     );
 }

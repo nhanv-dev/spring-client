@@ -6,9 +6,9 @@ function ProductAttributes({attributes, setAttributes}) {
 
     function handleAddAttribute() {
         setAttributes(prev => [...prev, {
-            attributeId: prev.length,
+            attributeId: prev.id || prev.length,
             name: "",
-            options: [{attributeId: prev.length, name: "", image: ""}]
+            options: [{attributeId: prev.id ||prev.length, name: "", image: ""}]
         }])
     }
 
@@ -81,7 +81,8 @@ function ProductAttributes({attributes, setAttributes}) {
                     <div className="mx-auto font-semibold text-black-1 text-center py-5">
                         Hiện chưa có tùy chọn nào cho sản phẩm
                     </div> :
-                    <div className="max-h-[350px] overflow-auto scroll-component">
+                    <div
+                        className={`max-h-[350px] overflow-auto scroll-component scroll-component-white ${attributes?.length > 1 ? 'pr-2' : 'pr-0'}`}>
                         {
                             attributes.map((attribute, i) => {
                                 return (
