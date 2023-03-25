@@ -1,5 +1,6 @@
 import React, {lazy} from 'react';
 import {Route, Routes} from "react-router-dom";
+import {NotFound} from "./Router";
 
 const Home = lazy(() => import('../pages/web/home'));
 const Categories = lazy(() => import('../pages/web/categories'));
@@ -38,12 +39,12 @@ function UserRouter() {
         {path: '/nguoi-dung/dia-chi', exact: true, component: UserAddresses, replaceTo: '/dang-nhap'},
         {path: '/nguoi-dung/don-dat-hang', exact: true, component: Order, replaceTo: '/dang-nhap'},
         {path: '/nguoi-dung/doi-mat-khau', exact: true, component: ChangingPassword, replaceTo: '/dang-nhap'},
-        {path: '/nguoi-dung/thay-doi-dia-chi', exact: true, component: ChangingAddress, replaceTo: '/dang-nhap'},
+        {path: '/nguoi-dung/thong-tin', exact: true, component: userProfile, replaceTo: '/dang-nhap'},
+        // {path: '/nguoi-dung/thay-doi-dia-chi', exact: true, component: ChangingAddress, replaceTo: '/dang-nhap'},
         // {path: '/nguoi-dung/doi-mat-khau', exact: true, component: ChangingPassword, replaceTo: '/dang-nhap'},
         // {path: '/nguoi-dung/hoa-don', exact: true, component: SearchingPayment, replaceTo: '/dang-nhap'},
         // {path: '/nguoi-dung/don-dat-hang', exact: true, component: order, replaceTo: '/dang-nhap'},
         // {path: '/nguoi-dung/cau-hoi', exact: true, component: UserQuestion, replaceTo: '/dang-nhap'},
-        {path: '/nguoi-dung/thay-doi-thong-tin', exact: true, component: userProfile, replaceTo: '/dang-nhap'},
         // {path: '/dang-ky-ban-hang', exact: true, component: RegisterShop, replaceTo: '/dang-nhap'},
         // {path: '/thanh-toan', exact: true, component: Checkout, replaceTo: '/dang-nhap'},
         // {path: '/don-hang-thanh-cong', exact: true, component: SuccessCheckout, replaceTo: '/dang-nhap'},
@@ -64,6 +65,7 @@ function UserRouter() {
                     // }
                 />
             ))}
+            <Route path="*" element={<NotFound/>}/>
         </Routes>
     );
 }

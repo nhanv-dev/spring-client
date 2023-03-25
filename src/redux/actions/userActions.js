@@ -1,42 +1,36 @@
-import * as types from '../constants/ActionTypes'
+import * as types from '../constants/ActionType'
 import {protectedRequest, publicRequest} from "../../util/request-method";
 
 export const login = async (payload) => {
-    const action = {type: types.USER_LOGIN_SUCCESS, payload: {}};
+    const action = {};
     await publicRequest().post("/auth/sign-in", payload)
         .then(res => {
             action.payload = {...res.data};
+            action.type = types.user.USER_LOGIN_SUCCESS
         }).catch(err => {
-            action.type = types.USER_LOGIN_FAILED;
+            action.type = types.user.USER_LOGIN_FAILED;
             action.payload = {};
         })
     return {...action}
 }
 export const logout = async () => {
     return {
-        type: types.USER_LOGOUT,
+        type: types.user.USER_LOGOUT,
     }
 }
 
 export const register = async (payload) => {
     const res = await publicRequest().post("/auth/register", payload);
     return {
-        type: types.USER_REGISTER, payload, res
+        type: types.user.USER_REGISTER, payload, res
     }
 }
 
-export const reLogin = async () => {
-    const action = {type: types.USER_LOGIN_SUCCESS, payload: {}};
-    await protectedRequest().post("/auth/re-login")
-        .then(async (res) => {
-            action.payload = {
-                accessToken: res.data.accessToken,
-                info: res.data.user,
-                shop: res.data.shop
-            };
-        }).catch(err => {
-            action.type = types.USER_LOGIN_FAILED;
-            action.payload = {};
-        })
+export const validateToken = async () => {
+    const res = await protectedRequest().get("/auth/token-valid")
+    const action = {
+        type: types.user.CHECK_TOKEN_SUCCESS,
+        payload: res.data,
+    };
     return {...action}
 }

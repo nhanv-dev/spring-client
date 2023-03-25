@@ -11,7 +11,7 @@ const Category = ({categories}) => {
 
     return (
         <div
-            className="min-w-full bg-white z-50 group-hover:opacity-100 group-hover:visible opacity-0 invisible shadow-tiny transition-all absolute top-full left-0 rounded-md mt-3 after:absolute after:bottom-full after:left-0 after:right-0 after:bg-[transparent] after:h-3">
+            className="min-w-full bg-white z-50 group-hover:opacity-100 group-hover:visible opacity-0 invisible shadow-md transition-all absolute top-full left-0 rounded-md mt-3 after:absolute after:bottom-full after:left-0 after:right-0 after:bg-[transparent] after:h-3">
             <div className="flex">
                 <div className="min-w-max p-3">
                     {categories.map((category, index) => (
@@ -46,7 +46,7 @@ const SubCategories = ({categories}) => {
 
     return (
         <div
-            className={`w-full bg-primary-bg transition-all`}>
+            className={`w-full bg-primary-bg transition-all rounded-r-md`}>
             <div className="grid grid-cols-4 gap-x-8 gap-y-3 w-full max-w-full p-5">
                 {categories?.map((category, index) => {
                     return (

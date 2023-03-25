@@ -12,15 +12,13 @@ import Tooltip from "@mui/material/Tooltip";
 
 function TabProduct({handleSubmit}) {
     const {payload, setPayload} = useContext(PayloadContext);
-    const [images, setImages] = useState([...payload?.images]);
     const [product, setProduct] = useState({...payload?.product});
     const [category, setCategory] = useState({...payload?.product?.category});
     const [subCategory, setSubCategory] = useState({...payload?.product?.subCategory});
     const [showCategory, setShowCategory] = useState(false);
     const [showSubCategory, setShowSubCategory] = useState(false);
-    const [keyword, setKeyword] = useState("");
-    const [keywords, setKeywords] = useState(payload.product?.keywords?.split(",") || []);
     const [returnPolicies, setReturnPolicies] = useState([]);
+    const [keyword, setKeyword] = useState("");
 
     useEffect(() => {
         publicRequest().get("/products/return-policy")
@@ -36,30 +34,16 @@ function TabProduct({handleSubmit}) {
     useEffect(() => {
         setPayload(prev => {
             prev.product = {...prev.product, category}
-            return prev
+            return {...prev}
         })
     }, [category, setPayload])
 
     useEffect(() => {
         setPayload(prev => {
             prev.product = {...prev.product, subCategory}
-            return prev
+            return {...prev}
         })
     }, [subCategory, setPayload])
-
-    useEffect(() => {
-        setPayload(prev => {
-            prev.images = [...images]
-            return prev
-        })
-    }, [images, setPayload])
-
-    useEffect(() => {
-        setPayload(prev => {
-            prev.product.keywords = keywords.join(",")
-            return prev;
-        })
-    }, [keywords, setPayload])
 
     function submit(e) {
         e.preventDefault();
@@ -68,17 +52,21 @@ function TabProduct({handleSubmit}) {
 
     function handleAddKeywords(e) {
         e.preventDefault();
-        if (!keyword || keywords.length > 6) return;
-        setKeywords(prev => {
-            return [...prev, keyword];
+        if (!keyword || payload.keywords?.length > 6) return;
+        setPayload(prev => {
+            if (prev.product.keywords)
+                prev.product.keywords = [...prev.product?.keywords.split(','), keyword].join(",")
+            else
+                prev.product.keywords = [keyword].join(",")
+            return {...prev}
         })
         setKeyword("")
     }
 
     function handleRemoveKeywords(index) {
-        setKeywords(prev => {
-            prev = [...prev].filter((k, i) => i !== index);
-            return prev;
+        setPayload(prev => {
+            prev.product.keywords = prev.product.keywords.split(',').filter((k, i) => i !== index).join(",")
+            return {...prev}
         })
     }
 
@@ -111,11 +99,18 @@ function TabProduct({handleSubmit}) {
             })
     }
 
+    const handleSetImages = (images) => {
+        setPayload(prev => {
+            prev.images = [...images]
+            return {...prev}
+        })
+    }
+
     return (
         <div className="flex flex-wrap gap-6">
             <div className="w-4/12 min-h-full">
                 <div className="rounded-md bg-white p-5 shadow-md">
-                    <Images images={images} setImages={setImages}/>
+                    <Images images={payload?.images} setImages={handleSetImages}/>
                 </div>
             </div>
             <div className="flex-1">
@@ -190,7 +185,7 @@ function TabProduct({handleSubmit}) {
                                     </div>
                                     <Tooltip title="Cập nhật số lượng sản phẩm theo phiên bản" arrow>
                                         <button type="button" onClick={handleUpdateQuantity}
-                                                className="text-primary bg-primary-bg hover:bg-primary-bg rounded-full p-1 transition-all">
+                                                className="text-primary bg-primary-bg rounded-full p-1.5 transition-all">
                                             <UilCopy className="w-[20px] h-[20px]"/>
                                         </button>
                                     </Tooltip>
@@ -208,7 +203,7 @@ function TabProduct({handleSubmit}) {
                         </div>
                         <div className="shadow-md bg-white w-full mb-4 rounded-md p-3 min-h-[56px] flex items-center">
                             <div className="flex flex-wrap items-center justify-start gap-3">
-                                {keywords.filter(k => !!k).map((keyword, i) => {
+                                {payload?.product?.keywords?.split(",").filter(k => !!k).map((keyword, i) => {
                                     return (
                                         <div key={i}
                                              className="pl-2 pr-1.5 shadow rounded font-medium text-tiny py-1.5 flex gap-4 items-center">

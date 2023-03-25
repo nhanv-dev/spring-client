@@ -1,42 +1,35 @@
-import * as types from '../constants/ActionTypes'
-import {protectedRequest, publicRequest} from "../../util/request-method";
+import * as types from '../constants/ActionType'
+import {protectedRequest} from "../../util/request-method";
 
-export const login = async (payload) => {
-    const action = {type: types.USER_LOGIN_SUCCESS, payload: {}};
-    await publicRequest().post("/auth/sign-in", payload)
+export const initializeCart = async () => {
+    const res = await protectedRequest().get(`/cart`);
+    const action = {
+        type: types.cart.INITIALIZE_CART,
+        payload: {cartByShop: [...res.data]}
+    };
+    return {...action}
+}
+
+export const addToCart = async (payload) => {
+    const action = {};
+    await protectedRequest().post("/cart/items", payload)
         .then(res => {
-            action.payload = {...res.data};
+            action.payload = {...res.data.data};
+            action.type = types.cart.ADD_CART_ITEM;
         }).catch(err => {
-            action.type = types.USER_LOGIN_FAILED;
-            action.payload = {};
+            console.log(err)
         })
     return {...action}
 }
-export const logout = async () => {
-    return {
-        type: types.USER_LOGOUT,
-    }
-}
+export const removeFromCart = async (payload) => {
+    if (!payload?.id) return;
+    const res = await protectedRequest().delete(`/cart/items/${payload.id}`);
+    console.log(res)
+    const action = {
+        id: payload.id,
+        type: types.cart.REMOVE_CART_ITEM,
+    };
 
-export const register = async (payload) => {
-    const res = await publicRequest().post("/auth/register", payload);
-    return {
-        type: types.USER_REGISTER, payload, res
-    }
-}
-
-export const reLogin = async () => {
-    const action = {type: types.USER_LOGIN_SUCCESS, payload: {}};
-    await protectedRequest().post("/auth/re-login")
-        .then(async (res) => {
-            action.payload = {
-                accessToken: res.data.accessToken,
-                info: res.data.user,
-                shop: res.data.shop
-            };
-        }).catch(err => {
-            action.type = types.USER_LOGIN_FAILED;
-            action.payload = {};
-        })
     return {...action}
 }
+

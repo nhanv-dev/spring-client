@@ -5,9 +5,7 @@ import DefaultAvatar from "../../../assets/images/default-avatar.png";
 import {logout} from "../../../redux/actions/userActions";
 
 function UserComponent() {
-    const user = useSelector(state => state.user);
-    const shop = useSelector(state => state.shop);
-
+    const {user, shop} = useSelector(state => state);
     return (
         <>
             {user.token ? <Menu user={user} shop={shop}/> : <Button/>}
@@ -36,7 +34,8 @@ const Menu = ({user, shop}) => {
 
     return (
         <div className="relative group">
-            <Link to="/nguoi-dung/thong-tin" className="relative outline-none">
+            <Link to="/nguoi-dung/thong-tin"
+                  className="block relative outline-none p-2 rounded-lg bg-white hover:bg-primary-bg transition-all">
                 <Icon.UilUser className="w-[24px] h-[24px] text-primary"/>
             </Link>
             <div
@@ -47,7 +46,7 @@ const Menu = ({user, shop}) => {
                     <div
                         className="flex items-center justify-start gap-3 border-b-[1px] border-[#eee] py-3 px-4">
                         <Link to="/nguoi-dung/thong-tin"
-                              className="bg-cover min-w-[35px] min-h-[35px] rounded-full border-2 border-primary"
+                              className="bg-cover bg-center min-w-[35px] min-h-[35px] rounded-full border-2 border-primary"
                               style={{backgroundImage: `url(${DefaultAvatar})`}}/>
                         <div className="flex flex-col overflow-hidden w-full">
                             <Link to="/nguoi-dung/thong-tin"

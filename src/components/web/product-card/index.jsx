@@ -1,10 +1,12 @@
 import React from 'react';
 import ImageNotFound from "../../../assets/images/image-not-found.jpg";
 import {Link} from "react-router-dom";
-import {formatCurrency, formatPercent, formatToK} from "../../../util/format";
-import StarRating from "../../common/star-rating/indext";
+import {formatCurrency, formatToK} from "../../../util/format";
+import StarRating from "../../common/star-rating";
+import {Skeleton} from "@mui/material";
 
 function ProductCard({item}) {
+    if (!item) return <ProductSkeleton/>
     return (
         <div className="relative block w-full min-h-full shadow-sm bg-white rounded-md hover:shadow-xl transition-all">
             <Link to={`/san-pham/${item.slug}`}
@@ -27,17 +29,17 @@ function ProductCard({item}) {
                 </p>
                 <div className="mb-0.5">
                     {
-                        item.discount ?
+                        item.deal ?
                             <div className="flex items-end justify-start gap-3">
                                 <p className="font-semibold text-base text-red">
-                                    {formatCurrency(item.discount.finalPrice)}
+                                    {formatCurrency(item.deal.finalPrice)}
                                 </p>
                                 <p className="font-semibold text-sm text-red">
-                                    -{item.discount.discountPercent}%
+                                    -{item.deal.discountPercent}%
                                 </p>
                             </div> :
                             <p className="font-semibold text-base text-black-1">
-                                {formatCurrency(item.price)}
+                                {formatCurrency(item.deal.price)}
                             </p>
                     }
                 </div>
@@ -55,6 +57,17 @@ function ProductCard({item}) {
             </div>
         </div>
     );
+}
+
+const ProductSkeleton = () => {
+    return (
+        <Skeleton
+            sx={{bgcolor: 'grey.900'}}
+            variant="rectangular"
+            width={210}
+            height={118}
+        />
+    )
 }
 
 export default ProductCard;

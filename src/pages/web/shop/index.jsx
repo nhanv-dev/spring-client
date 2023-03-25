@@ -11,7 +11,7 @@ import Review from "./Review";
 import {formatBetweenDate, formatToK} from "../../../util/format";
 import {publicRequest} from "../../../util/request-method";
 import {shopSample} from "../../../constant/ShopSample";
-import StarRating from "../../../components/common/star-rating/indext";
+import StarRating from "../../../components/common/star-rating";
 
 function Shop() {
     const {slug} = useParams();

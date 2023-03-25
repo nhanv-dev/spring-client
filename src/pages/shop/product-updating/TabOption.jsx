@@ -21,7 +21,6 @@ function TabOption() {
         setPayload(prev => ({...prev, variants}))
     }, [variants, setPayload])
 
-
     return (
         <div className="w-full">
             <div className="mb-6">
@@ -145,6 +144,8 @@ const Variant = ({attributes, selectedVariant, setSelectedVariant, variants, set
         if (selectedOption.length <= 0) return null;
         return selectedOption[0].name;
     }
+
+    console.log(selectedVariant)
 
     return (
         <div className="w-full max-w-full rounded-md bg-white p-5 shadow-md">
