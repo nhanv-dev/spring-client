@@ -9,14 +9,16 @@ import {useDispatch, useSelector} from "react-redux";
 import {initializeCart} from "../../../redux/actions/cartActions";
 import DefaultShop from "../../../assets/images/default-shop.png";
 import StarRating from "../../../components/common/star-rating";
+import {toast} from "react-toastify";
 
 function Cart() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const cart = useSelector(state => state.cart);
-    const [total, setTotal] = useState(0);
-    const [discount, setDiscount] = useState(0);
+    const [price, setPrice] = useState(0);
+    const [finalPrice, setFinalPrice] = useState(0);
     const [loading, setLoading] = useState(true);
+    const [cartByShop, setCartByShop] = useState([]);
 
     useEffect(() => {
         const load = async () => {
@@ -26,25 +28,44 @@ function Cart() {
         load().then(data => {
             if (data.status) setLoading(false)
         })
-    }, [])
+    }, [dispatch])
 
     useEffect(() => {
-        // let total = 0, discount = 0
-        // cart.items?.forEach(item => {
-        //     if (item.combination && item.checked) {
-        //         total += item.combination.price * item.quantity
-        //         discount += (item.combination.price * item.quantity * item.product.discountPercent) / 100
-        //     }
-        // })
-        // setTotal(total);
-        // setDiscount(discount);
-        console.log(cart)
+        if (!cart?.items?.length > 0) return setCartByShop([]);
+        let list = [];
+        cart?.items.forEach(i => {
+            const shop = i.product.shop;
+            const index = list.findIndex(item => item.shop?.id === shop.id);
+            if (index !== -1) {
+                list[index].items = [...list[index].items, i];
+            } else {
+                list = [...list, {shop, items: [i]}];
+            }
+        })
+        setCartByShop(list)
+    }, [cart])
+
+    useEffect(() => {
+        let total = 0, finalPrice = 0;
+        cart.items?.forEach(item => {
+            if (item.checked) {
+                if (item.variant?.id) {
+                    total += item.variant.deal.price * item.quantity;
+                    finalPrice += item.variant.deal.finalPrice * item.quantity;
+                } else {
+                    total += item.product.deal.price * item.quantity;
+                    finalPrice += item.product.deal.finalPrice * item.quantity;
+                }
+            }
+        })
+        setPrice(total);
+        setFinalPrice(finalPrice);
     }, [cart])
 
     const handleOrder = () => {
         const items = cart.items.filter(item => (item.checked))
-        // if (items.length <= 0) return toast.error("Bạn chưa chọn sản phẩm muốn mua")
-        navigate("/thanh-toan")
+        if (items.length <= 0) return toast().error("Bạn chưa chọn sản phẩm muốn mua")
+        navigate("/dat-hang")
     }
 
     if (loading)
@@ -65,7 +86,7 @@ function Cart() {
                                 <p className="font-bold text-lg">Giỏ hàng của bạn</p>
                             </div>
                             <div className="flex-1">
-                                {cart?.cartByShop?.length <= 0 ?
+                                {cartByShop?.length <= 0 ?
                                     <div className={`p-5 bg-white rounded-md mb-5`}>
                                         <div className="flex flex-col items-center justify-center"
                                              style={{backgroundImage: `url()`}}>
@@ -78,7 +99,7 @@ function Cart() {
                                         </div>
                                     </div> :
                                     <div>
-                                        <FilterCart cartByShop={cart.cartByShop}/>
+                                        <FilterCart cartByShop={cartByShop}/>
                                     </div>
                                 }
                             </div>
@@ -87,23 +108,23 @@ function Cart() {
                                     <div className="mb-3 flex items-center justify-between">
                                         <p className="font-semibold text-md">Tổng tiền:</p>
                                         <p className="font-bold text-primary-hover text-lg">
-                                            {formatCurrency(total || 0)}
+                                            {formatCurrency(price || 0)}
                                         </p>
                                     </div>
                                     <div className="mb-3 flex items-center justify-between">
                                         <p className="font-semibold text-md">Giảm:</p>
-                                        <p className="font-bold text-primary-hover text-lg">
-                                            -{formatCurrency(discount || 0)}
+                                        <p className="font-bold text-primary-hover text-lg text-red">
+                                            -{formatCurrency(price - finalPrice || 0)}
                                         </p>
                                     </div>
                                     <div className="mb-8 flex items-center justify-between">
                                         <p className="font-semibold text-md">Thành tiền:</p>
-                                        <p className="font-bold text-primary-hover text-lg">
-                                            {formatCurrency(total - discount || 0)}
+                                        <p className="font-bold text-primary-hover text-xl text-primary">
+                                            {formatCurrency(finalPrice || 0)}
                                         </p>
                                     </div>
                                     <button onClick={handleOrder}
-                                            className="w-full p-2 bg-primary rounded-[5px] font-bold text-white hover:bg-primary-hover">
+                                            className="w-full p-2 bg-primary rounded-md font-bold text-white hover:bg-primary-hover">
                                         Mua hàng
                                     </button>
                                 </div>
@@ -117,21 +138,16 @@ function Cart() {
 }
 
 const FilterCart = ({cartByShop}) => {
-    const [filterCart, setFilterCart] = useState([]);
-
-    useEffect(() => {
-        console.log(cartByShop)
-    }, [cartByShop])
 
     return (
         <>
             {cartByShop.map((cart, index) => {
                 return (
                     <div key={index} className={`p-5 bg-white rounded-md mb-6`}>
-                        <div className="flex items-center justify-between pb-5">
+                        <div className="flex items-center justify-between pb-5 border-b border-b-border">
                             <div className="flex items-start justify-start gap-3">
                                 <Link to={`/cua-hang/${cart.shop.slug}`}
-                                      className=" block rounded-full flex items-center justify-center w-[50px] h-[50px] border-2 border-primary p-[2px]">
+                                      className=" block rounded-full flex items-center justify-center w-[46px] h-[46px] border-2 border-primary p-[2px]">
                                     <img alt="shop"
                                          className="rounded-full"
                                          src={cart.shop.shopLogo || 'https://www.iconpacks.net/icons/2/free-store-icon-2017-thumb.png'}/>
@@ -146,7 +162,7 @@ const FilterCart = ({cartByShop}) => {
                                 </div>
                             </div>
                             <Link to={`/cua-hang/${cart.shop.slug}`}
-                                  className="flex items-center gap-2 text-tiny font-medium">
+                                  className="flex items-center gap-2 text-tiny font-semibold text-black">
                                 <Icon.UilCommentAltLines className="w-[16px]"/>
                                 Chat với Shop
                             </Link>

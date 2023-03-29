@@ -1,3 +1,4 @@
+import {useState} from 'react';
 import {Link} from "react-router-dom";
 import * as Icon from "@iconscout/react-unicons";
 import {formatCurrency} from "../../../util/format";
@@ -8,7 +9,18 @@ import Checkbox from "@mui/material/Checkbox";
 
 function CartItem({item}) {
     const dispatch = useDispatch();
+    const [total, setTotal] = useState(0);
+    const [discountTotal, setDiscountTotal] = useState(0);
 
+    // useEffect(() => {
+    //     if (item.combination) {
+    //         const total = item.combination.price * item.quantity;
+    //         const discountTotal = total * (100 - item.product.discountPercent) / 100;
+    //         setTotal(total);
+    //         setDiscountTotal(discountTotal);
+    //     }
+    // }, [item])
+    //
     const handleDelete = async (item) => {
         const action = await removeFromCart(item);
         dispatch(action)

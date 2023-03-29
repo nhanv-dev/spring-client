@@ -34,11 +34,13 @@ function Shop({shop}) {
     return (
         <div className="w-[500px] bg-white p-6 sticky top-6 h-full rounded-md">
             <div className="flex gap-4 items-start justify-start">
-                <Link to={`/cua-hang/${shop.slug}`}
-                      className="w-[70px] h-[70px] relative rounded-full bg-cover bg-center border-2 border-border"
-                      style={{backgroundImage: `url(${shop.shopLogo || DefaultShopImage})`}}>
-                    <p className="absolute bottom-0 right-0 border-[3.5px] rounded-full border-[#FFFFFF] w-[24px] h-[24px] bg-[#00C50A]"/>
-                </Link>
+                <div className="relative">
+                    <Link to={`/cua-hang/${shop.slug}`}
+                          className="block w-[70px] h-[70px] overflow-hidden relative rounded-full bg-cover bg-center border-[3px] border-primary">
+                        <img src={shop.shopLogo || DefaultShopImage} className="rounded-full w-full" alt={""}/>
+                    </Link>
+                    <p className="absolute bottom-0 right-0 border-[3px] rounded-full border-[#FFFFFF] w-[20px] h-[20px] bg-[#00C50A]"/>
+                </div>
                 <div>
                     <Link to={`/cua-hang/${shop.slug}`}
                           className="font-bold mt-1 mb-1 block transition-all hover:text-primary-hover">
@@ -97,7 +99,7 @@ function Shop({shop}) {
                     <div className="mt-3">
                         <p className="font-bold text-[#3f4b53]">Gợi ý thêm từ shop</p>
                         <div
-                            className="w-full h-[100%] bg-gradient-to-t to-[#f5f5f5] from-[#fbcbcb] rounded-md mt-3">
+                            className="w-full h-[100%] bg-gradient-to-t to-[#ececec] from-[#d5ecfd] rounded-md mt-3">
                             <div className="w-full">
                                 <div className="relative flex justify-center">
                                     {products.length > 3 &&

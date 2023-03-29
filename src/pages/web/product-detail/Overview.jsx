@@ -165,34 +165,26 @@ function Overview(props) {
                             </div>
                             <div className="min-w-max flex items-center">
                                 <button onClick={() => updateQuantity(quantity - 1)}
-                                        className="hover:bg-[#F3F3F3] rounded-[4px] bg-[#e7e8ea] w-[30px] h-[30px] flex items-center justify-center">
+                                        className="hover:bg-[#F3F3F3] rounded-md bg-[#e7e8ea] w-[30px] h-[30px] flex items-center justify-center">
                                     <Icon.UilMinus className="text-center text-[#3f4b53] w-[16px] h-[16px]"/>
                                 </button>
                                 <input value={quantity} type="number"
                                        onChange={(e) => updateQuantity(e.target.value)}
-                                       className="text-center mx-1 rounded-[4px] border-2 border-border w-[35px] h-[30px] outline-none font-medium text-md"/>
+                                       className="text-center mx-1 rounded-md border-2 border-border w-[35px] h-[30px] outline-none font-medium text-md"/>
                                 <button onClick={() => updateQuantity(quantity + 1)}
-                                        className="hover:bg-[#F3F3F3] rounded-[4px] bg-[#e7e8ea] w-[30px] h-[30px] flex items-center justify-center">
+                                        className="hover:bg-[#F3F3F3] rounded-md bg-[#e7e8ea] w-[30px] h-[30px] flex items-center justify-center">
                                     <Icon.UilPlus className="text-center text-[#3f4b53] w-[16px] h-[16px]"/>
                                 </button>
                             </div>
-                            {(!selectedVariant) ?
-                                <p className="ml-5 font-medium text-tiny rounded-full px-4 py-1 bg-[#e7e8ea]  max-w-max">
-                                    Hiện có {product.quantity} sản phẩm
-                                </p> :
-                                <p className="ml-5 font-medium text-tiny rounded-full px-4 py-1 bg-[#e7e8ea]  max-w-max">
-                                    Hiện có {selectedVariant.quantity} sản phẩm
-                                </p>
-                            }
                         </div>
                         <div className="mt-5">
                             <p className="font-medium text-tiny rounded-full px-4 py-1 bg-[#e7e8ea] max-w-max">
-                                {product?.variants?.length <= 0 ?
+                                {product?.variants?.length > 0 ?
                                     <>
-                                        {selectedOptions.length > 0 ? 'Vui lòng chọn loại sản phẩm khác' : 'Vui lòng chọn loại sản phẩm'}
+                                        {selectedVariant ? `Hiện có ${selectedVariant.quantity} sản phẩm` : 'Vui lòng chọn loại sản phẩm'}
                                     </> :
                                     <>
-                                        {selectedVariant ? selectedVariant.attributeHash : 'Vui lòng chọn loại sản phẩm'}
+                                        Hiện có {product.quantity} sản phẩm
                                     </>
                                 }
                             </p>
@@ -201,14 +193,14 @@ function Overview(props) {
                         <div className="mt-5 flex items-center flex-row gap-3">
                             <div className="basis-1/2 ">
                                 <button
-                                    className="text-base text-[#3f4b53] font-bold hover:bg-[#F3F3F3] rounded-[4px] bg-[#e7e8ea] w-[100%] h-[44px]"
+                                    className="text-base text-[#3f4b53] font-bold hover:bg-[#F3F3F3] rounded-md bg-[#e7e8ea] w-[100%] h-[44px]"
                                     onClick={() => handleAddToCart()}>
                                     Thêm vào giỏ
                                 </button>
                             </div>
                             <div className="basis-1/2">
                                 <button
-                                    className="text-base text-white font-medium hover:bg-primary-hover rounded-[4px] bg-primary w-[100%] h-[44px]">
+                                    className="text-base text-white font-medium hover:bg-primary-hover rounded-md bg-primary w-[100%] h-[44px]">
                                     Mua ngay
                                 </button>
                             </div>

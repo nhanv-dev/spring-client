@@ -9,6 +9,7 @@ import Checkbox from "@mui/material/Checkbox";
 import {FormGroup} from "@mui/material";
 import {UilCopy} from "@iconscout/react-unicons";
 import Tooltip from "@mui/material/Tooltip";
+import Switch from "@mui/material/Switch";
 
 function TabProduct({handleSubmit}) {
     const {payload, setPayload} = useContext(PayloadContext);
@@ -19,6 +20,7 @@ function TabProduct({handleSubmit}) {
     const [showSubCategory, setShowSubCategory] = useState(false);
     const [returnPolicies, setReturnPolicies] = useState([]);
     const [keyword, setKeyword] = useState("");
+    const [isPublic, setIsPublic] = useState(payload.product.isPublic || false);
 
     useEffect(() => {
         publicRequest().get("/products/return-policy")
@@ -44,6 +46,13 @@ function TabProduct({handleSubmit}) {
             return {...prev}
         })
     }, [subCategory, setPayload])
+
+    useEffect(() => {
+        setPayload(prev => {
+            prev.product.isPublic = isPublic
+            return prev;
+        })
+    }, [isPublic, setPayload])
 
     function submit(e) {
         e.preventDefault();
@@ -104,6 +113,25 @@ function TabProduct({handleSubmit}) {
             prev.images = [...images]
             return {...prev}
         })
+    }
+
+    function handleChangeDeal(field, value) {
+        setPayload(prev => {
+            const deal = {...prev.product?.deal};
+            deal[field] = value;
+            if (field === 'price') {
+                if (deal.discountPercent) deal.finalPrice = deal.price * (1 - (deal.discountPercent / 100));
+                else if (deal.finalPrice) deal.discountPercent = Math.trunc(100 - (deal.finalPrice * 100 / deal.price));
+            }
+            if (field === 'discountPercent' && !deal.finalPrice) {
+                if (deal.price) deal.finalPrice = deal.price * (1 - (deal.discountPercent / 100));
+            }
+            if (field === 'finalPrice') {
+                if (deal.price) deal.discountPercent = Math.trunc(100 - (deal.finalPrice * 100 / deal.price));
+            }
+            prev.product.deal = deal;
+            return {...prev}
+        });
     }
 
     return (
@@ -193,7 +221,35 @@ function TabProduct({handleSubmit}) {
                             </div>
                         </div>
                     </div>
+                    <div className="mb-7">
+                        <div className="flex items-center gap-5">
+                            <div>
+                                <p className="text-md font-semibold mb-2">Giá gốc</p>
+                                <div className="shadow bg-white w-full h-[40px] rounded-md px-3">
+                                    <input type="number" value={payload.product?.deal?.price}
+                                           onChange={(e) => handleChangeDeal('price', e.target.value)}
+                                           className="h-[40px] text-black-1 font-medium text-md w-full outline-none"/>
+                                </div>
+                            </div>
+                            <div>
+                                <p className="text-md font-semibold mb-2">Giá bán</p>
+                                <div className="shadow bg-white w-full h-[40px] rounded-md px-3">
+                                    <input type="number" value={payload.product?.deal?.finalPrice}
+                                           onChange={(e) => handleChangeDeal('finalPrice', e.target.value)}
 
+                                           className="h-[40px] text-black-1 font-medium text-md w-full outline-none"/>
+                                </div>
+                            </div>
+                            <div>
+                                <p className="text-md font-semibold mb-2">Giảm giá</p>
+                                <div className="shadow bg-white w-full h-[40px] rounded-md px-3">
+                                    <input type="number" value={payload.product?.deal?.discountPercent}
+                                           onChange={(e) => handleChangeDeal('discountPercent', e.target.value)}
+                                           className="h-[40px] text-black-1 font-medium text-md w-full outline-none"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div className="mb-7">
                         <div className="mb-2 text-md font-semibold flex items-center gap-3">
                             Từ khóa
@@ -258,10 +314,23 @@ function TabProduct({handleSubmit}) {
                     </div>
                 </div>
                 <div className="w-full flex items-center justify-end gap-3 mt-5">
+                    <div
+                        className={`${isPublic ? 'bg-primary-bg text-primary' : ' bg-secondary-bg text-secondary'} transition-all flex items-center gap-1 pl-3.5 pr-1 rounded-full`}>
+                        <p className="font-semibold text-md">
+                            {isPublic ? 'Đăng bán ngay' : 'Tạm lưu'}
+                        </p>
+                        <Switch
+                            checked={isPublic}
+                            onChange={() => {
+                                setIsPublic(prev => !prev)
+                            }}
+                            inputProps={{'aria-label': 'controlled'}}
+                        />
+                    </div>
                     <button onClick={submit}
                             className="outline-none flex items-center justify-center gap-2 p-2.5 rounded-md border-2 bg-primary text-white font-semibold text-tiny">
                         <Icon.UilSave className="w-[20px] h-[20px]"/>
-                        <span className="leading-3">Đăng sản phẩm</span>
+                        <span className="leading-3">Lưu sản phẩm</span>
                     </button>
                 </div>
             </div>

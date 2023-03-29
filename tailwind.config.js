@@ -31,7 +31,7 @@ module.exports = {
             'gray': '#4f4f4f',
             'white': '#fff',
             'border': '#f7f7f7',
-            'border-1': '#e7e8ea',
+            'border-1': '#ececec',
             'app-1': '#f5f5fa',
             'app-2': '#efefef',
             'rating': '#e4a400',

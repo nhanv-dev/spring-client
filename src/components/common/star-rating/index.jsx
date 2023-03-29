@@ -6,7 +6,7 @@ function StarRating({rating, className}) {
     const classes = "text-rating " + className
     return (
         <div className="flex items-center justify-start gap-.5">
-            {rating >= 0 ? <UisStar className={classes}/> :
+            {rating >= 1 ? <UisStar className={classes}/> :
                 rating >= 0.4 ? <UisStarHalfAlt className={classes}/> :
                     <UilStar className={classes}/>
             }

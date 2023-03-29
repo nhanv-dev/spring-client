@@ -3,7 +3,7 @@ import * as Icon from '@iconscout/react-unicons';
 
 function Sidebar() {
     return (
-        <div className="fixed z-[100] left-0 bottom-0 top-[76px] bg-white w-[66px] border-r-[1px] border-[#EBEDF5]">
+        <div className="fixed z-[50] left-0 bottom-0 top-[76px] bg-white w-[66px] border-r-[1px] border-[#EBEDF5]">
             <div className="w-full h-full flex flex-col items-center py-5 justify-between">
                 <div className="flex flex-col items-center gap-7">
                     <NavigationLink to="/kenh-ban-hang/trang-chu" title="Trang quản trị"

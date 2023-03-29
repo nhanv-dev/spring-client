@@ -10,35 +10,30 @@ import Product from "./Product";
 import Review from "./Review";
 import {formatBetweenDate, formatToK} from "../../../util/format";
 import {publicRequest} from "../../../util/request-method";
-import {shopSample} from "../../../constant/ShopSample";
 import StarRating from "../../../components/common/star-rating";
+import {Loader} from "../../../router/Router";
+import DefaultShop from '../../../assets/images/default-shop.png';
+import DefaultShopBg from '../../../assets/images/default-shop-bg.png';
 
 function Shop() {
     const {slug} = useParams();
     const [shop, setShop] = useState({});
-    const [vouchers, setVouchers] = useState(null);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        setShop(shopSample)
-        // publicRequest.get(`/shops/${slug}`).then(res => {
-        //     if (res.data?.success) setShop(res.data.shop);
-        // }).catch(err => {
-        // })
+        publicRequest().get(`/shops/slug/${slug}`)
+            .then(res => {
+                console.log(res)
+                setShop(res.data);
+                setLoading(false);
+            })
+            .catch(err => {
+                setShop({})
+                setLoading(false);
+            })
     }, [slug])
 
-    useEffect(() => {
-        const vouchers = [{
-            _id: 1,
-            shopId: 1,
-            max: 15000,
-            apply: 1000,
-            percent: 0.03,
-            expiredDate: '23:59 15/12/2022',
-            createdDate: '23:59 30/9/2022'
-        },]
-        setVouchers([...vouchers, ...vouchers, ...vouchers])
-        console.log(shop)
-    }, [shop])
+    if (loading) return <Loader/>
 
     return (
         <Helmet title={`Depot - ${shop ? shop.name : 'Cửa hàng'}`}>
@@ -49,27 +44,28 @@ function Shop() {
                             <div className="bg-white rounded-b-[8px]">
                                 <div className="h-[200px] overflow-hidden flex items-center justify-center">
                                     <img alt="background" className="w-auto h-[150px]"
-                                         src={shop.background || "https://pwa-web.scdn.vn/static/media/page_loading.4a62ff00.png"}/>
+                                         src={shop.shopBackground || DefaultShopBg}/>
                                 </div>
                                 <div className="flex gap-3 py-4 px-6 border-b-2 border-[#e7e8ea]">
                                     <div
-                                        className="rounded-[50%] w-[90px] h-[90px] overflow-hidden border-[.1rem] border-primary ">
-                                        <img src={shop.avatar} alt="avatar"/>
+                                        className="flex items-center justify-center rounded-full w-[90px] h-[90px] overflow-hidden border-[3px] border-primary">
+                                        <img src={shop.shopLogo || DefaultShop} alt="avatar" className="w-full"/>
                                     </div>
                                     <div className="flex gap-4 border-r-2 border-[#e7e8ea] pr-4">
                                         <div className="flex-1">
                                             <h5 className="max-w-[250px] font-bold text-black text-lg line-clamp-1 break-words"
-                                                title={shop.name}>
-                                                {shop.name}
+                                                title={shop.shopName}>
+                                                {shop.shopName}
                                             </h5>
-                                            {shop.rating && (
+                                            {shop.ratingInfo && (
                                                 <div className="flex items-center justify-start gap-2.5 mb-3">
                                                     <div className="flex gap-[.075rem] items-center">
-                                                        <StarRating rating={shop.rating} className="w-[16px]"/>
+                                                        <StarRating rating={shop.ratingInfo.avgRating}
+                                                                    className="w-[16px]"/>
                                                     </div>
                                                     <p className="text-base font-[700] text-red">{shop.rating}</p>
                                                     <p className="text-tiny font-bold text-black-1">
-                                                        ({formatToK(shop.numberOfRating)} Đánh giá)
+                                                        ({formatToK(shop.ratingInfo.totalRating)} Đánh giá)
                                                     </p>
                                                 </div>
                                             )}
@@ -154,9 +150,7 @@ function Shop() {
                                         <NavigationLink to="thong-tin" title="Thông tin Shop"/>
                                         <NavigationLink to="danh-gia-phan-hoi" title="Đánh giá & Phản hồi"/>
                                     </div>
-                                    <div>
-                                        <input placeholder="Tìm kiếm trong cửa hàng"/>
-                                    </div>
+
                                 </div>
                             </div>
                         </div>
