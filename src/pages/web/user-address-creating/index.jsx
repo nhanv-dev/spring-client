@@ -52,10 +52,10 @@ function CreateAddress({show, setShow, addNewAddress}) {
         e.preventDefault();
         if (!selectCity.name || !selectDistrict.name || !selectWard.name) return toast.error("Vui lòng điền đầy đủ thông tin")
         const payload = {
-            fullName: e.target.fullName.value,
-            phone: e.target.phone.value,
-            address: e.target.address.value,
+            customerName: e.target.fullName.value,
             email: e.target.email.value,
+            phoneNumber: e.target.phone.value,
+            addressDetail: e.target.address.value,
             city: selectCity.name,
             district: selectDistrict.name,
             wards: selectWard.name,

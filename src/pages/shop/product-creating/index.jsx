@@ -38,20 +38,8 @@ function ProductCreating() {
 
     function formatProduct(product) {
         const result = {...product};
-        if (payload.variants?.length > 0) {
-            result.deal = {
-                price: payload.variants[0].price,
-                finalPrice: payload.variants[0].finalPrice,
-                discountPercent: payload.variants[0].discountPercent
-            }
-        } else {
-            result.deal = {
-                price: product.price,
-                finalPrice: product.finalPrice,
-                discountPercent: product.discountPercent
-            }
-        }
-        return {...result, orderCount: 0, isPublic: true, isDeleted: false};
+        result.keywords = result.keywords.split(",").filter(k => !!k).join(",");
+        return {...result, orderCount: 0, isDeleted: false};
     }
 
     function handleSubmit(e) {

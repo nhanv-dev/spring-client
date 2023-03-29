@@ -9,6 +9,7 @@ import Checkbox from "@mui/material/Checkbox";
 import {FormGroup} from "@mui/material";
 import {UilCopy} from "@iconscout/react-unicons";
 import Tooltip from "@mui/material/Tooltip";
+import Switch from "@mui/material/Switch";
 
 function TabProduct({handleSubmit}) {
     const {payload, setPayload} = useContext(PayloadContext);
@@ -21,6 +22,7 @@ function TabProduct({handleSubmit}) {
     const [keyword, setKeyword] = useState("");
     const [keywords, setKeywords] = useState(payload.product?.keywords?.split(",") || []);
     const [returnPolicies, setReturnPolicies] = useState([]);
+    const [isPublic, setIsPublic] = useState(payload.product.isPublic || false);
 
     useEffect(() => {
         publicRequest().get("/products/return-policy")
@@ -60,6 +62,13 @@ function TabProduct({handleSubmit}) {
             return prev;
         })
     }, [keywords, setPayload])
+
+    useEffect(() => {
+        setPayload(prev => {
+            prev.product.isPublic = isPublic
+            return prev;
+        })
+    }, [isPublic, setPayload])
 
     function submit(e) {
         e.preventDefault();
@@ -111,15 +120,34 @@ function TabProduct({handleSubmit}) {
             })
     }
 
+    function handleChangeDeal(field, value) {
+        setPayload(prev => {
+            const deal = {...prev.product?.deal};
+            deal[field] = value;
+            if (field === 'price') {
+                if (deal.discountPercent) deal.finalPrice = deal.price * (1 - (deal.discountPercent / 100));
+                else if (deal.finalPrice) deal.discountPercent = Math.trunc(100 - (deal.finalPrice * 100 / deal.price));
+            }
+            if (field === 'discountPercent' && !deal.finalPrice) {
+                if (deal.price) deal.finalPrice = deal.price * (1 - (deal.discountPercent / 100));
+            }
+            if (field === 'finalPrice') {
+                if (deal.price) deal.discountPercent = Math.trunc(100 - (deal.finalPrice * 100 / deal.price));
+            }
+            prev.product.deal = deal;
+            return {...prev}
+        });
+    }
+
     return (
         <div className="flex flex-wrap gap-6">
             <div className="w-4/12 min-h-full">
-                <div className="rounded-md bg-white p-5 shadow-md">
+                <div className="rounded-md bg-white p-5 shadow">
                     <Images images={images} setImages={setImages}/>
                 </div>
             </div>
             <div className="flex-1">
-                <div className="rounded-md bg-white p-5 shadow-md">
+                <div className="rounded-md bg-white p-5 shadow">
                     <div className="flex items-center justify-between mb-7">
                         <div className="flex items-center">
                             <h5 className="font-bold text-base">
@@ -129,7 +157,7 @@ function TabProduct({handleSubmit}) {
                     </div>
                     <div className="mb-7">
                         <p className="mb-2 text-md font-semibold">Tên sản phẩm</p>
-                        <div className="shadow-md bg-white w-full mb-4 rounded-md p-3">
+                        <div className="shadow bg-white w-full mb-4 rounded-md p-3">
                             <input type="text" value={product?.name} placeholder="Tên sản phẩm"
                                    onChange={(e) => setProduct(prev => ({
                                        ...prev,
@@ -152,7 +180,7 @@ function TabProduct({handleSubmit}) {
                                 <p className="mb-2 text-md font-semibold">Loại sản phẩm</p>
                                 <div className="flex items-center gap-3">
                                     <button onClick={() => setShowCategory(true)}
-                                            className="flex items-center justify-between gap-3 min-w-max max-w-[300px] min-h-[48px] shadow-md bg-white rounded-md p-3">
+                                            className="flex items-center justify-between gap-3 min-w-max max-w-[300px] h-[40px] shadow bg-white rounded-md p-3">
                                         <p className="flex-1 text-black-1 font-medium text-md w-full outline-none">
                                             {category?.title || 'Chọn loại sản phẩm'}
                                         </p>
@@ -161,7 +189,7 @@ function TabProduct({handleSubmit}) {
                                     <Icon.UilAngleRightB
                                         className="w-[18px] h-[18px] min-w-[18px] min-h-[18px]"/>
                                     <button onClick={() => setShowSubCategory(true)} disabled={!category?.id}
-                                            className="flex items-center justify-between gap-3 min-w-max max-w-[300px] min-h-[48px] shadow-md bg-white rounded-md p-3">
+                                            className="flex items-center justify-between gap-3 min-w-max max-w-[300px] h-[40px] shadow bg-white rounded-md p-3">
                                         <p className="flex-1 text-black-1 font-medium text-md w-full outline-none">
                                             {subCategory?.title || 'Chọn loại sản phẩm'}
                                         </p>
@@ -170,7 +198,7 @@ function TabProduct({handleSubmit}) {
                                 </div>
                             </div>
                             <div>
-                                <div className="mb-2 ">
+                                <div className="mb-2">
                                     <Tooltip arrow followCursor
                                              title="Số lượng sản phẩm phải khớp với tổng số lượng của từng phiên bản sản phẩm">
                                         <div className="flex items-center gap-3 max-w-max">
@@ -180,13 +208,13 @@ function TabProduct({handleSubmit}) {
                                     </Tooltip>
                                 </div>
                                 <div className="flex items-center gap-3">
-                                    <div className="shadow-md bg-white w-full rounded-md p-3">
+                                    <div className="shadow bg-white w-full h-[40px] rounded-md px-3">
                                         <input type="number" value={payload.product?.quantity + ""}
                                                onChange={(e) => setPayload((prev) => {
                                                    prev.product.quantity = e.target.value + "";
                                                    return {...prev};
                                                })}
-                                               className="text-black-1 font-medium text-md w-full outline-none"/>
+                                               className="h-[40px] text-black-1 font-medium text-md w-full outline-none"/>
                                     </div>
                                     <Tooltip title="Cập nhật số lượng sản phẩm theo phiên bản" arrow>
                                         <button type="button" onClick={handleUpdateQuantity}
@@ -198,7 +226,35 @@ function TabProduct({handleSubmit}) {
                             </div>
                         </div>
                     </div>
+                    <div className="mb-7">
+                        <div className="flex items-center gap-5">
+                            <div>
+                                <p className="text-md font-semibold mb-2">Giá gốc</p>
+                                <div className="shadow bg-white w-full h-[40px] rounded-md px-3">
+                                    <input type="number" value={payload.product?.deal?.price}
+                                           onChange={(e) => handleChangeDeal('price', e.target.value)}
+                                           className="h-[40px] text-black-1 font-medium text-md w-full outline-none"/>
+                                </div>
+                            </div>
+                            <div>
+                                <p className="text-md font-semibold mb-2">Giá bán</p>
+                                <div className="shadow bg-white w-full h-[40px] rounded-md px-3">
+                                    <input type="number" value={payload.product?.deal?.finalPrice}
+                                           onChange={(e) => handleChangeDeal('finalPrice', e.target.value)}
 
+                                           className="h-[40px] text-black-1 font-medium text-md w-full outline-none"/>
+                                </div>
+                            </div>
+                            <div>
+                                <p className="text-md font-semibold mb-2">Giảm giá</p>
+                                <div className="shadow bg-white w-full h-[40px] rounded-md px-3">
+                                    <input type="number" value={payload.product?.deal?.discountPercent}
+                                           onChange={(e) => handleChangeDeal('discountPercent', e.target.value)}
+                                           className="h-[40px] text-black-1 font-medium text-md w-full outline-none"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div className="mb-7">
                         <div className="mb-2 text-md font-semibold flex items-center gap-3">
                             Từ khóa
@@ -206,7 +262,7 @@ function TabProduct({handleSubmit}) {
                                 <Icon.UilInfoCircle className="w-[18px] h-[18px]"/>
                             </div>
                         </div>
-                        <div className="shadow-md bg-white w-full mb-4 rounded-md p-3 min-h-[56px] flex items-center">
+                        <div className="shadow bg-white w-full mb-4 rounded-md p-3 min-h-[56px] flex items-center">
                             <div className="flex flex-wrap items-center justify-start gap-3">
                                 {keywords.filter(k => !!k).map((keyword, i) => {
                                     return (
@@ -263,6 +319,19 @@ function TabProduct({handleSubmit}) {
                     </div>
                 </div>
                 <div className="w-full flex items-center justify-end gap-3 mt-5">
+                    <div
+                        className={`${isPublic ? 'bg-primary-bg text-primary' : ' bg-secondary-bg text-secondary'} transition-all flex items-center gap-1 pl-3.5 pr-1 rounded-full`}>
+                        <p className="font-semibold text-md">
+                            {isPublic ? 'Đăng bán ngay' : 'Tạm lưu'}
+                        </p>
+                        <Switch
+                            checked={isPublic}
+                            onChange={() => {
+                                setIsPublic(prev => !prev)
+                            }}
+                            inputProps={{'aria-label': 'controlled'}}
+                        />
+                    </div>
                     <button onClick={submit}
                             className="outline-none flex items-center justify-center gap-2 p-2.5 rounded-md border-2 bg-primary text-white font-semibold text-tiny">
                         <Icon.UilSave className="w-[20px] h-[20px]"/>

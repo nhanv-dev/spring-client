@@ -22,7 +22,6 @@ function Header() {
             }));
     }, [])
 
-
     const handleSearch = (e) => {
         e.preventDefault();
         const {searching, type} = e.target;
@@ -71,7 +70,7 @@ function Header() {
                             <div className="flex items-center gap-5">
                                 <div className="min-w-max">
                                     <div
-                                        className="w-[40px] h-[40px] flex items-center justify-center group bg-primary-bg text-primary rounded-lg transition-all">
+                                        className="w-[40px] h-[40px] flex items-center justify-center group bg-primary-bg text-primary rounded-md transition-all">
                                         <Link to="/danh-muc" className="flex items-center justify-center w-full">
                                             <Icon.UilApps className="w-[20px] relative top-[1px]"/>
                                         </Link>
@@ -103,7 +102,7 @@ function Header() {
                         </div>
                         <div className="min-w-max flex items-center justify-end gap-3">
                             <Link to="/gio-hang"
-                                  className="relative outline-none group flex items-center gap-1 bg-primary-bg p-2 px-3 rounded-lg">
+                                  className="relative outline-none group flex items-center gap-1 bg-primary-bg p-2 px-3 rounded-md">
                                 <Icon.UilEstate className="w-[20px] h-[20px] text-primary"/>
                                 <p className="transition-all text-primary text-[.85rem] relative top-[1px] font-bold">
                                     Trang chủ
@@ -111,16 +110,16 @@ function Header() {
                             </Link>
                             <UserComponent/>
                             <Link to="/gio-hang"
-                                  className="relative outline-none group bg-primary-bg p-2 rounded-lg">
+                                  className="relative outline-none group bg-primary-bg p-2 rounded-md">
                                 <Icon.UilShoppingBag className="w-[24px] h-[24px] text-primary"/>
                                 <p className="transition-all group-hover:opacity-100 group-hover:visible group-hover:top-full mt-[10px] opacity-0 invisible z-[20] absolute top-[70%] left-[50%] translate-x-[-50%] min-w-max bg-black text-white font-medium rounded-[8px] text-sm px-2.5 py-1">
                                     <span
                                         className="absolute bottom-[99%] left-[50%] translate-x-[-50%] border-[7px] border-[transparent] border-b-[#333333]"/>
                                     Giỏ hàng
                                 </p>
-                                <p className="absolute right-[-5px] top-[-5px] rounded-full w-[20px] h-[20px] flex items-center justify-center text-white bg-[red]">
+                                <p className="absolute right-[-9px] top-[-9px] rounded-full min-w-[22px] min-h-[22px] flex items-center justify-center text-white bg-red">
                                     <span
-                                        className="text-tiny font-medium relative top-[1px]">{cart?.items?.length || 0}</span>
+                                        className="text-sm font-semibold relative top-[0.5px]">{cart?.items?.length || 0}</span>
                                 </p>
                             </Link>
                         </div>

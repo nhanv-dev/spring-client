@@ -18,20 +18,20 @@ function ProductUpdating() {
     const navigate = useNavigate();
     const [value, setValue] = useState(0);
     const [payload, setPayload] = useState({});
+
     useEffect(() => {
-        protectedRequest().get(`/products/${id}`)
+        protectedRequest().get(`/shops/products/${id}`)
             .then(res => {
-                console.log(res)
-                setPayload({
-                    images: [...res.data.images],
-                    product: {...res.data},
-                    attributes: [...res.data.attributes].map(a => ({...a, attributeId: a.id})),
-                    variants: [...res.data.variants].map(v => ({...v, ...v.deal, indexing: v.id})),
-                })
+                const images = [...res.data.images];
+                const product = {...res.data};
+                const attributes = res.data?.attributes?.map(a => ({...a, attributeId: a.id}));
+                const variants = res.data?.variants?.map(v => ({...v, ...v.deal, indexing: v.id}));
+                setPayload({images, product, attributes, variants})
             })
     }, [id])
 
     function formatVariants(variants) {
+        if (!variants) return null;
         return [...variants].map(v => {
             const attributeHash = v.options.map(o => o.name).join("_")
             const skuUser = v.options.map(o => o.name).join(" + ")
@@ -48,20 +48,8 @@ function ProductUpdating() {
 
     function formatProduct(product) {
         const result = {...product};
-        if (payload.variants?.length > 0) {
-            result.deal = {
-                price: payload.variants[0].price,
-                finalPrice: payload.variants[0].finalPrice,
-                discountPercent: payload.variants[0].discountPercent
-            }
-        } else {
-            result.deal = {
-                price: product.price,
-                finalPrice: product.finalPrice,
-                discountPercent: product.discountPercent
-            }
-        }
-        return {...result, orderCount: 0};
+        result.keywords = result.keywords.split(",").filter(k => !!k).join(",");
+        return {...result};
     }
 
     function handleSubmit(e) {
@@ -69,9 +57,10 @@ function ProductUpdating() {
         const data = {
             ...formatProduct(payload.product),
             images: [...payload.images].filter(image => !!image.url),
-            attributes: [...payload.attributes],
+            attributes: payload.attributes,
             variants: formatVariants(payload.variants),
         }
+        console.log(data)
         protectedRequest().post("/shops/products", data)
             .then(res => {
                 toast.success('Cập nhật sản phẩm thành công', {

@@ -52,11 +52,9 @@ function ProductDetail() {
         const payload = {
             quantity: quantity,
             productId: product.id,
-            variantId: selectedVariant.id,
-            shopId: product.shop?.id,
+            variantId: selectedVariant?.id
         }
-        const action = await addToCart(payload)
-        dispatch(action);
+        dispatch(await addToCart(payload));
     }
 
     return (

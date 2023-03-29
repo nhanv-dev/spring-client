@@ -1,10 +1,12 @@
 import React, {useEffect, useState} from 'react';
 import Helmet from "../../../components/common/helmet";
-import {Link, useNavigate} from "react-router-dom";
+import * as types from '../../../redux/constants/ActionType'
 import Logo from "../../../assets/images/logo.png";
-import {UilAt, UilEye, UilEyeSlash, UilKeyholeCircle} from '@iconscout/react-unicons'
+import {Link, useNavigate} from "react-router-dom";
+import {UilAt, UilEyeSlash, UilKeyholeCircle} from '@iconscout/react-unicons'
 import {login} from "../../../redux/actions/userActions";
 import {useDispatch, useSelector} from "react-redux";
+import {initializeCart} from "../../../redux/actions/cartActions";
 
 function SignIn() {
     const dispatch = useDispatch();
@@ -14,13 +16,21 @@ function SignIn() {
     const user = useSelector((state) => state.user)
 
     useEffect(() => {
-        if (user.token) navigate("/trang-chu")
+        if (user.token) {
+            handleInit().then(() => {
+                navigate("/trang-chu")
+            })
+        }
     }, [navigate, user])
 
     async function handleSubmit(e) {
         e.preventDefault();
-        const payload = await login({email, password})
-        dispatch(payload);
+        const action = await login({email, password});
+        dispatch(action);
+    }
+
+    async function handleInit() {
+        dispatch(await initializeCart());
     }
 
     return (
