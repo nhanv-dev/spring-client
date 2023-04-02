@@ -17,7 +17,7 @@ const Category = ({categories}) => {
                     {categories.map((category, index) => (
                         <Link to={`/danh-muc/${category.slug}`} key={index}
                               onMouseEnter={() => setList(category.subCategories)}
-                              className='hover:text-primary hover:bg-primary-bg text-black bg-transparent bg-transparent rounded-md flex justify-between items-center text-tiny font-medium text-gray px-2.5 py-1.5 w-full transition-all'>
+                              className='hover:text-primary hover:bg-primary-bg bg-transparent rounded-md flex justify-between items-center text-tiny font-medium text-gray px-2.5 py-1.5 w-full transition-all'>
                             <div className="flex items-center gap-4">
                                 {/*<img alt="icon" className="w-[32px] h-[32px]"*/}
                                 {/*     src={category.image || "https://cf.shopee.vn/file/vn-50009109-1975fb1af4ae3c22878d04f6f440b6f9_xhdpi"}/>*/}
@@ -27,7 +27,7 @@ const Category = ({categories}) => {
                         </Link>
                     ))}
                     <Link to={`/danh-muc`}
-                          className='hover:text-primary hover:bg-primary-bg text-black bg-transparent bg-transparent rounded-md flex justify-between items-center text-tiny font-medium text-gray px-2.5 py-1.5 w-full transition-all'>
+                          className='hover:text-primary hover:bg-primary-bg bg-transparent rounded-md flex justify-between items-center text-tiny font-medium text-gray px-2.5 py-1.5 w-full transition-all'>
                         <div className="flex items-center gap-4">
                             {/*<img alt="icon" className="w-[32px] h-[32px]"*/}
                             {/*     src={"https://cf.shopee.vn/file/vn-50009109-1975fb1af4ae3c22878d04f6f440b6f9_xhdpi"}/>*/}

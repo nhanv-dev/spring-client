@@ -1,9 +1,7 @@
-import {useState, useEffect} from 'react';
+import {useEffect, useState} from 'react';
 import Helmet from "../../../components/common/helmet";
-import Layout from "../../../components/web/layout";
 import {useSelector} from "react-redux";
 import {Link, useNavigate} from "react-router-dom";
-import UserSidebar from "../../../components/web/manage-user-sidebar";
 import * as Icon from "@iconscout/react-unicons";
 import {protectedRequest} from "../../../util/request-method";
 import OrderBlock from "./OrderBlock";
@@ -15,20 +13,24 @@ function Order() {
     const [orders, setOrders] = useState([]);
 
     useEffect(() => {
-        if (!user.accessToken) console.log(user);
-        protectedRequest().get("/orders/user").then(res => {
-            setOrders(res.data.orders)
-        }).catch(error => {
-
-        })
+        if (!user.token) console.log(user);
+        protectedRequest().get(`/users/${user.id}/orders`)
+            .then(res => {
+                console.log(res)
+                setOrders(res.data)
+            })
+            .catch(err => {
+                setOrders([])
+            })
     }, [user])
 
     const reset = () => {
         console.log("reset")
         if (!user.accessToken) console.log(user);
-        protectedRequest().get("/orders/user").then(res => {
-            setOrders(res.data.orders)
-        }).catch(error => {
+        protectedRequest().get("/orders/user")
+            .then(res => {
+                setOrders(res.data.orders)
+            }).catch(error => {
 
         })
     }
@@ -75,24 +77,19 @@ function Order() {
                     </div>
                 </div>
                 <div className="w-full">
-                    <OrdersComponent orders={orders} reset={reset}/>
+                    <div className="flex flex-col gap-5">
+                        {orders.map((order) => (
+                            <div key={order.id}
+                                 className={`${order.status !== 'Cancel' ? 'bg-white' : 'bg-[#EAEAEA]'} shadow rounded-md`}>
+                                <OrderBlock order={order} reset={reset}/>
+                            </div>
+                        ))}
+                    </div>
                 </div>
             </UserLayout>
         </Helmet>
     );
 }
 
-const OrdersComponent = ({orders, reset}) => {
-    return (
-        <div className="flex flex-col gap-5">
-            {orders.map((order, index) => (
-                <div key={index}
-                     className={`${order.status !== 'Cancel' ? 'bg-white' : 'bg-[#EAEAEA]'} shadow rounded-md`}>
-                    <OrderBlock order={order} reset={reset}/>
-                </div>
-            ))}
-        </div>
-    )
-}
 
 export default Order;

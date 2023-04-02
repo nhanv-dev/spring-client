@@ -7,9 +7,8 @@ import * as Icon from "@iconscout/react-unicons"
 import {formatCurrency} from "../../../util/format";
 import {useDispatch, useSelector} from "react-redux";
 import {initializeCart} from "../../../redux/actions/cartActions";
-import DefaultShop from "../../../assets/images/default-shop.png";
 import StarRating from "../../../components/common/star-rating";
-import {toast} from "react-toastify";
+import {toast, ToastContainer} from "react-toastify";
 
 function Cart() {
     const navigate = useNavigate();
@@ -64,7 +63,7 @@ function Cart() {
 
     const handleOrder = () => {
         const items = cart.items.filter(item => (item.checked))
-        if (items.length <= 0) return toast().error("Bạn chưa chọn sản phẩm muốn mua")
+        if (items.length <= 0) return toast.error("Bạn chưa chọn sản phẩm muốn mua")
         navigate("/dat-hang")
     }
 
@@ -79,6 +78,7 @@ function Cart() {
     return (
         <Helmet title="Depot - Giỏ hàng">
             <Layout>
+                <ToastContainer/>
                 <div className="bg-app-1">
                     <div className="container py-10">
                         <div className="flex flex-wrap items-start justify-start gap-6 relative">

@@ -32,6 +32,14 @@ const cartReducer = (state = initialState(), action) => {
             return {...state, ...action.payload}
         case types.cart.INITIALIZE_CART:
             return {...state, ...action.payload}
+        case types.order.PLACE_ORDER_SUCCESS:
+            state.items = state.items.filter(i => {
+                const isCorrect= action.payload.items.filter(item=>item.id ===i.id).length > 0;
+                return isCorrect;
+            })
+            return {...state}
+        case types.order.PLACE_ORDER_FAILED:
+            return {...state}
         case types.user.USER_LOGIN_FAILED :
             return {items: []}
         case types.user.USER_LOGOUT:

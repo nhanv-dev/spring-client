@@ -3,48 +3,62 @@ import Helmet from "../../../components/common/helmet";
 import Layout from "../../../components/web/layout";
 import {Link, useNavigate} from "react-router-dom";
 import {protectedRequest} from "../../../util/request-method";
-import {ToastContainer} from 'react-toastify';
+import {toast, ToastContainer} from 'react-toastify';
 import {useDispatch, useSelector} from "react-redux";
 import {formatCurrency} from "../../../util/format";
 import NotFoundImage from "../../../assets/images/image-not-found.jpg";
 import * as Icon from '@iconscout/react-unicons';
 import {Radio} from "@mui/material";
+import {placeOrder} from "../../../redux/actions/orderActions";
 
 function PlaceOrder() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const {user, cart} = useSelector(state => state);
-    const [items, setItems] = useState([]);
+    const [list, setList] = useState([]);
     const [total, setTotal] = useState(0);
     const [finalTotal, setFinalTotal] = useState(0);
     const [note, setNote] = useState("");
-    const [address, setAddress] = useState();
+    const [address, setAddress] = useState(null);
     const [paymentMethod, setPaymentMethod] = useState("cod");
     const [shippingMethod, setShippingMethod] = useState("now");
+    const [isSending, setIsSending] = useState(false);
+    useEffect(() => {
+        if (!isSending && cart.items.filter(item => item.checked).length <= 0) navigate("/gio-hang")
+    }, [cart.items, isSending, navigate])
 
     useEffect(() => {
-        if (cart.items.filter(item => item.checked).length <= 0) navigate("/gio-hang")
-    }, [cart.items])
-
-    useEffect(() => {
-        const list = cart.items.filter(item => item.checked);
+        let items = cart.items.filter(item => item.checked);
         let total = 0, finalTotal = 0;
-        list.forEach(item => {
+        let list = [];
+        items.forEach(item => {
             if (item.variant) {
-                total += item.variant.deal.price;
-                finalTotal += item.variant.deal.finalPrice;
+                total += item.variant.deal.price * item.quantity;
+                finalTotal += item.variant.deal.finalPrice * item.quantity;
             } else {
-                total += item.product.deal.price;
-                finalTotal += item.product.deal.finalPrice;
+                total += item.product.deal.price * item.quantity;
+                finalTotal += item.product.deal.finalPrice * item.quantity;
+            }
+            const shop = item.product.shop;
+            const index = list.findIndex(item => item.shop?.id === shop.id);
+            if (index !== -1) {
+                list[index].items = [...list[index].items, item];
+            } else {
+                list = [...list, {shop, items: [item]}];
             }
         })
         setTotal(total);
         setFinalTotal(finalTotal);
-        setItems(list);
+        setList(list);
     }, [cart])
 
-    const handlePlaceOrder = () => {
-
+    const handlePlaceOrder = async () => {
+        setIsSending(true);
+        const action = await placeOrder({
+            list, note, address, userId: user.id
+        });
+        dispatch(action)
+        navigate("/dat-hang-thanh-cong")
     }
 
     return (
@@ -53,16 +67,15 @@ function PlaceOrder() {
                 <div className="bg-app-1">
                     <div className="container py-8">
                         <ToastContainer/>
-                        <div className="flex flex-row gap-6">
-                            <div className="basis-2/3">
-                                <Information user={user}
-                                             address={address} setAddress={setAddress}
+                        <div className="flex flex-wrap flex-row gap-6">
+                            <div className="basis-[65%]">
+                                <Information user={user} address={address} setAddress={setAddress}
                                              paymentMethod={paymentMethod} setPaymentMethod={setPaymentMethod}
                                              shippingMethod={shippingMethod} setShippingMethod={setShippingMethod}
                                 />
                             </div>
-                            <div className="basis-1/3 flex flex-col gap-6">
-                                <div className="rounded-md shadow bg-white">
+                            <div className="flex-1 flex flex-wrap flex-col gap-6">
+                                <div className="rounded-md shadow-md bg-white">
                                     <div
                                         className="flex items-center justify-between px-5 pt-3.5 pb-3 rounded-t-md border-b border-border-1 ">
                                         <div className="flex items-center gap-2">
@@ -71,45 +84,52 @@ function PlaceOrder() {
                                         </div>
                                     </div>
                                     <div className="px-5 border-b border-border-1">
-                                        {items.map((item, index) => (
-                                            <div key={index}
-                                                 className={`${index < items.length - 1 && 'border-b'}  border-border-1 pt-3 pb-5`}>
-                                                <Link to={`/cua-hang/${item.product.shop?.slug}`}
-                                                      className="flex items-center gap-2 font-semibold text-md mb-3 transition-all text-black-2 hover:text-primary">
-                                                    <Icon.UilShop className="w-[20px] h-[20px]"/>
-                                                    <p className="line-clamp-1">{item.product.shop?.shopName}</p>
+                                        {list.map((order, index) => (
+                                            <div key={order.shop.id}
+                                                 className={`${index < list.length - 1 && 'border-b'}  border-border-1 py-5`}>
+                                                <Link to={`/cua-hang/${order.shop?.slug}`}
+                                                      className="max-w-max flex items-center gap-2 font-semibold text-md transition-all text-black hover:text-primary">
+                                                    <Icon.UilStore className="w-[20px] h-[20px]"/>
+                                                    {/*<img alt={""} className="w-[20px] h-auto rounded-md"*/}
+                                                    {/*     src={order.shop.shopLogo || NotFoundImage}/>*/}
+                                                    <p className="line-clamp-1">{order.shop?.shopName}</p>
                                                 </Link>
-                                                <div className="flex gap-3">
-                                                    <Link to={`/san-pham/${item.product.slug}`}
-                                                          className="block min-w-[70px] max-w-[70px] min-h-[70px] max-h-[70px] overflow-hidden rounded-md">
-                                                        <img alt={""} className="w-[70px] h-auto rounded-md"
-                                                             src={item.product?.images?.length > 0 ? item.product.images[0].url : NotFoundImage}/>
-                                                    </Link>
-                                                    <div className="">
-                                                        <div>
-                                                            <Link to={`/san-pham/${item.product.slug}`}
-                                                                  className="text-md font-medium line-clamp-1 mb-1 transition-all hover:text-primary-hover">
-                                                                {item.product.name}
-                                                            </Link>
-                                                            {item.variant &&
-                                                                <p className="mb-1 px-3 font-semibold text-sm bg-primary-bg rounded-full text-primary min-w-max max-w-max">
-                                                                    {item.variant?.options.map(o => o.name).join(" + ")}
-                                                                </p>
-                                                            }
-                                                        </div>
-                                                        <div className="flex justify-between items-center">
-                                                            <div className="flex items-end gap-3">
-                                                                <p className="text-base text-primary font-bold">
-                                                                    {formatCurrency(item.product.deal.finalPrice)}
-                                                                </p>
-                                                                <p className="text-[.85rem] text-black-1 font-semibold line-through">
-                                                                    {formatCurrency(item.product.deal.price)}
-                                                                </p>
+                                                {order.items.map(item => (
+                                                    <div key={item.id} className="flex gap-3 pt-4">
+                                                        <Link to={`/san-pham/${item.product.slug}`}
+                                                              className="block min-w-[70px] max-w-[70px] min-h-[70px] max-h-[70px] overflow-hidden rounded-md">
+                                                            <img alt={""} className="w-[70px] h-auto rounded-md"
+                                                                 src={item.product?.images?.length > 0 ? item.product.images[0].url : NotFoundImage}/>
+                                                        </Link>
+                                                        <div className="">
+                                                            <div>
+                                                                <Link to={`/san-pham/${item.product.slug}`}
+                                                                      className="text-tiny font-medium line-clamp-1 mb-1 transition-all hover:text-primary-hover">
+                                                                    {item.product.name}
+                                                                </Link>
+                                                                {item.variant &&
+                                                                    <p className="mb-1 px-3 font-bold text-sm bg-primary-bg rounded-full text-primary min-w-max max-w-max">
+                                                                        <span
+                                                                            className="relative top-[1px] select-none">
+                                                                            {item.variant?.options.map(o => o.name).join(" + ")}
+                                                                        </span>
+                                                                    </p>
+                                                                }
                                                             </div>
-                                                            <p className="text-primary-hover font-bold text-base">x{item.quantity}</p>
+                                                            <div className="flex justify-between items-center">
+                                                                <div className="flex items-end gap-3">
+                                                                    <p className="text-base text-primary font-bold">
+                                                                        {formatCurrency(item.product.deal.finalPrice)}
+                                                                    </p>
+                                                                    <p className="text-[.85rem] text-black-1 font-semibold line-through">
+                                                                        {formatCurrency(item.product.deal.price)}
+                                                                    </p>
+                                                                </div>
+                                                                <p className="text-primary-hover font-bold text-base">x{item.quantity}</p>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
+                                                ))}
                                             </div>
                                         ))}
                                     </div>
@@ -125,7 +145,7 @@ function PlaceOrder() {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="rounded-md shadow bg-white">
+                                <div className="rounded-md shadow-md bg-white">
                                     <div className="p-5">
                                         <div className="flex justify-between items-center pb-3">
                                             <p className="font-bold text-md">Tiền hàng</p>
@@ -184,8 +204,11 @@ const Information = (props) => {
             .then(res => {
                 if (res.data.message === 'User address is empty')
                     setAddresses([])
-                else
+                else {
+                    const defaultAddress = res.data.filter(a => a.isDefault);
+                    if (defaultAddress.length > 0) setAddress(defaultAddress[0])
                     setAddresses(res.data)
+                }
             })
             .catch(err => {
                 if (err.status === 403) navigate("/dang-nhap")
@@ -195,7 +218,7 @@ const Information = (props) => {
 
     return (
         <div className="flex flex-col gap-6">
-            <div className="rounded-md shadow bg-white">
+            <div className="rounded-md shadow-md bg-white">
                 <div
                     className="flex items-center justify-between px-5 pt-3.5 pb-3 rounded-t-md border-b border-border-1 ">
                     <div className="flex items-center gap-2">
@@ -210,6 +233,11 @@ const Information = (props) => {
                     </div>
                 </div>
                 <div className="px-5">
+                    {addresses.length <= 0 &&
+                        <div className="text-center font-bold text-base py-10 text-black-1">
+                            Chưa thêm địa chỉ nhận hàng
+                        </div>
+                    }
                     {addresses.map((item, index) => (
                         <div key={index}
                              className={`${index < addresses.length - 1 && 'border-b border-border-1'} py-5 flex gap-6 items-center`}>
@@ -255,7 +283,7 @@ const Information = (props) => {
                     ))}
                 </div>
             </div>
-            <div className="rounded-md shadow bg-white">
+            <div className="rounded-md shadow-md bg-white">
                 <div
                     className="flex items-center justify-between px-5 pt-3.5 pb-3 rounded-t-md border-b border-border-1">
                     <div className="flex items-center gap-2">
@@ -300,7 +328,7 @@ const Information = (props) => {
                     </div>
                 </div>
             </div>
-            <div className="rounded-md shadow bg-white">
+            <div className="rounded-md shadow-md bg-white">
                 <div
                     className="flex items-center justify-between px-5 pt-3.5 pb-3 rounded-t-md border-b border-border-1">
                     <div className="flex items-center gap-2">
@@ -311,7 +339,7 @@ const Information = (props) => {
                 <div className="p-5">
                     <fieldset id="paymentMethod">
                         <label htmlFor="radio4"
-                               className={`flex gap-2 items-center py-2.5 px-1.5 rounded-md transition-all duration-400 ${paymentMethod !== 'cod' ? 'bg-secondary-bg' : 'bg-white shadow'}`}>
+                               className={`flex gap-2 items-center py-2.5 px-1.5 rounded-md transition-all duration-400 ${paymentMethod !== 'cod' ? 'bg-secondary-bg' : 'bg-white shadow-md'}`}>
                             <Radio
                                 id="radio4"
                                 size={"small"}
@@ -326,7 +354,7 @@ const Information = (props) => {
                             </div>
                         </label>
                         <label htmlFor="radio5"
-                               className={`mt-6 flex gap-2 items-center py-2.5 px-1.5 rounded-md transition-all duration-400 ${paymentMethod !== 'depot' ? 'bg-secondary-bg' : 'bg-white shadow'}`}>
+                               className={`mt-6 flex gap-2 items-center py-2.5 px-1.5 rounded-md transition-all duration-400 ${paymentMethod !== 'depot' ? 'bg-secondary-bg' : 'bg-white shadow-md'}`}>
                             <Radio
                                 id="radio5"
                                 size={"small"}

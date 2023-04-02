@@ -29,6 +29,7 @@ const Button = () => {
 const Menu = ({user, shop}) => {
     const dispatch = useDispatch();
     const handleSignOut = async (e) => {
+        e.preventDefault();
         dispatch(await logout());
     }
 
@@ -62,30 +63,30 @@ const Menu = ({user, shop}) => {
                     <div className="py-3 px-4 border-b-[1px] border-[#eee] flex flex-col gap-4">
                         {user.isShop && shop.slug &&
                             <Link to={`/cua-hang/${shop.slug}`}
-                                  className="flex items-center justify-start gap-3 text-tiny transition-all hover:text-primary-hover">
+                                  className="flex items-center justify-start gap-3 text-tiny transition-all hover:text-primary">
                                 <Icon.UilStore className="w-[20px] h-[20px]"/> Shop của tôi
                             </Link>
                         }
                         <Link to="/nguoi-dung/thong-tin"
-                              className="flex items-center justify-start gap-3 text-tiny transition-all hover:text-primary-hover">
+                              className="flex items-center justify-start gap-3 text-tiny transition-all hover:text-primary">
                             <Icon.UilUserSquare className="w-[20px] h-[20px]"/> Tài khoản của tôi
                         </Link>
                         <Link to="/nguoi-dung/don-dat-hang"
-                              className="flex items-center justify-start gap-3 text-tiny transition-all hover:text-primary-hover">
-                            <Icon.UilCreditCardSearch className="w-[20px] h-[20px]"/> Tra cứu hóa đơn
+                              className="flex items-center justify-start gap-3 text-tiny transition-all hover:text-primary">
+                            <Icon.UilCreditCardSearch className="w-[20px] h-[20px]"/> Đơn đặt hàng
                         </Link>
                         <Link to="/nguoi-dung/yeu-thich"
-                              className="flex items-center justify-start gap-3 text-tiny transition-all hover:text-primary-hover">
+                              className="flex items-center justify-start gap-3 text-tiny transition-all hover:text-primary">
                             <Icon.UilHeart className="w-[20px] h-[20px]"/> Yêu thích
                         </Link>
                         <Link to="/nguoi-dung/doi-mat-khau"
-                              className="flex items-center justify-start gap-3 text-tiny transition-all hover:text-primary-hover">
+                              className="flex items-center justify-start gap-3 text-tiny transition-all hover:text-primary">
                             <Icon.UilLock className="w-[20px] h-[20px]"/> Đổi mật khẩu
                         </Link>
                     </div>
                     <div className="py-3 px-4">
                         <button onClick={handleSignOut}
-                                className="flex items-center justify-start gap-3 text-tiny transition-all hover:text-primary-hover">
+                                className="flex items-center justify-start gap-3 text-tiny transition-all hover:text-red">
                             <Icon.UilSignout className="w-[20px] h-[20px]"/> Đăng xuất
                         </button>
                     </div>

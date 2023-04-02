@@ -7,7 +7,7 @@ import {ToastContainer} from "react-toastify";
 
 function Products() {
     const [products, setProducts] = useState([]);
-    const [pagination, setPagination] = useState({page: 1, size: 10, loaded: false});
+    const [pagination, setPagination] = useState({page: 0, size: 10, loaded: false});
 
     useEffect(() => {
         if (pagination.loaded) return;

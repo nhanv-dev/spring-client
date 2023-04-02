@@ -12,9 +12,6 @@ export const initializeCart = async () => {
             };
         }).catch(err => {
             console.log(err)
-            // action = {
-            //     type: types.user.CHECK_TOKEN_FAILED,
-            // };
         });
 
     return {...action}
