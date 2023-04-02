@@ -17,6 +17,7 @@ const Shop = lazy(() => import('../pages/web/shop'));
 const Cart = lazy(() => import('../pages/web/cart'));
 const Order = lazy(() => import('../pages/web/order'));
 const PlaceOrder = lazy(() => import('../pages/web/place-order'));
+const PlaceOrderSuccess = lazy(() => import('../pages/web/place-order-success'));
 
 const routes = [
     {path: '/', exact: true, component: Home},
@@ -35,6 +36,7 @@ const routes = [
 const authRoutes = [
     {path: '/dang-ky-ban-hang', exact: true, component: SalesRegister, replaceTo: '/dang-nhap'},
     {path: '/dat-hang', exact: true, component: PlaceOrder, replaceTo: '/dang-nhap'},
+    {path: '/dat-hang-thanh-cong', exact: true, component: PlaceOrderSuccess, replaceTo: '/dang-nhap'},
     {path: '/nguoi-dung/dia-chi', exact: true, component: UserAddresses, replaceTo: '/dang-nhap'},
     {path: '/nguoi-dung/don-dat-hang', exact: true, component: Order, replaceTo: '/dang-nhap'},
     {path: '/nguoi-dung/doi-mat-khau', exact: true, component: ChangingPassword, replaceTo: '/dang-nhap'},

@@ -1,9 +1,8 @@
 import {useEffect, useState} from "react";
-import {useParams, useSearchParams} from "react-router-dom";
+import {useSearchParams} from "react-router-dom";
 import Layout from "../../../components/web/layout";
 import Helmet from "../../../components/common/helmet";
 import ProductCard from "../../../components/web/product-card";
-import SidebarCategory from "../../../components/web/sidebar-category";
 import {publicRequest} from "../../../util/request-method";
 import CustomPagination from "../../../components/web/custom-pagination";
 import {Grid} from "@mui/material";
