@@ -5,7 +5,6 @@ export const initializeCart = async () => {
     let action = {type: types.user.CHECK_TOKEN_FAILED};
     await protectedRequest().get(`/cart`)
         .then(res => {
-            console.log(res)
             action = {
                 type: types.cart.INITIALIZE_CART,
                 payload: {...res.data}

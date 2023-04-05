@@ -5,7 +5,7 @@ import {PayloadContext} from "./index";
 import * as Icon from "@iconscout/react-unicons";
 import ModalOption from "./ModalOption";
 import {similarArray} from "../../../util/array";
-import {toast} from 'react-toastify';
+import toast from "react-hot-toast";
 
 function TabOption() {
     const {payload, setPayload} = useContext(PayloadContext);

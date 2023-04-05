@@ -27,23 +27,25 @@ function Home() {
         <Helmet title="Depot - Trang chủ">
             <Layout>
                 <div className="bg-app-1 py-10">
-                    <div className="container">
-                        <Grid container spacing={2}>
-                            {items?.map((item, index) => (
-                                <Grid item xl={12 / 6} md={12 / 4} xs={12 / 2} key={index}
-                                      className="min-h-full">
-                                    <ProductCard item={item}/>
-                                </Grid>
-                            ))}
-                        </Grid>
-                        <div className="flex items-center justify-center w-full mt-10">
-                            {parseInt(totalPages) &&
-                                <CustomPagination count={parseInt(totalPages)}
-                                                  page={parseInt(page)}
-                                                  handleChange={setPage}/>
-                            }
+                    {items.length > 0 &&
+                        <div className="container">
+                            <Grid container spacing={2}>
+                                {items?.map((item, index) => (
+                                    <Grid item xl={12 / 6} md={12 / 4} xs={12 / 2} key={index}
+                                          className="min-h-full">
+                                        <ProductCard item={item}/>
+                                    </Grid>
+                                ))}
+                            </Grid>
+                            <div className="flex items-center justify-center w-full mt-10">
+                                {parseInt(totalPages) &&
+                                    <CustomPagination count={parseInt(totalPages)}
+                                                      page={parseInt(page)}
+                                                      handleChange={setPage}/>
+                                }
+                            </div>
                         </div>
-                    </div>
+                    }
                 </div>
             </Layout>
         </Helmet>

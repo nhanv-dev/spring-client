@@ -1,5 +1,4 @@
 import Router, {Loader} from "./router/Router";
-import 'react-toastify/dist/ReactToastify.css';
 import {useDispatch, useSelector} from "react-redux";
 import {useEffect, useState} from "react";
 import {validateToken} from "./redux/actions/userActions";

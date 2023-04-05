@@ -19,7 +19,20 @@ export function formatSmallDate(date) {
     const options = {year: 'numeric', month: 'long', day: 'numeric'};
     return new Date(date).toLocaleDateString('vi-VN', options).toString();
 }
-
+export function formatMediumDate(date) {
+    if (!date) return null;
+    const options = {
+        year: "numeric",
+        month: "numeric",
+        day: "numeric",
+        hour: "numeric",
+        minute: "numeric",
+        second: "numeric",
+        hour12: false,
+        timeZone: "America/Los_Angeles",
+    };
+    return new Intl.DateTimeFormat("en-US", options).format(new Date(date));
+}
 export function formatLongDate(date) {
     if (!date) return null;
     const options = {

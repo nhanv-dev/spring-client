@@ -112,7 +112,7 @@ function Shop({shop}) {
                                          className="scroll-smooth w-full flex gap-[12px] items-center justify-start w-full overflow-hidden p-3">
                                         {products?.map((product, index) => (
                                             <div key={index}
-                                                 className="rounded-md border-none hover:shadow-xl shadow-[#4b5563]">
+                                                 className="max-w-[140px] rounded-md border-none hover:shadow-xl shadow-[#4b5563]">
                                                 <MinimalProductCard item={product}/>
                                             </div>
                                         ))}

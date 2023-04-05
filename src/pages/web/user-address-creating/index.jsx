@@ -2,8 +2,8 @@ import React, {useEffect, useState} from 'react';
 import axios from "axios";
 import * as Icon from "@iconscout/react-unicons";
 import Modal from "./Modal";
-import {ToastContainer, toast} from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
+import toast from "react-hot-toast";
+import ToastCustom from "../../../components/common/toast-custom";
 
 function CreateAddress({show, setShow, addNewAddress}) {
     const [city, setCity] = useState([]);
@@ -65,7 +65,7 @@ function CreateAddress({show, setShow, addNewAddress}) {
 
     return (
         <>
-            <ToastContainer/>
+            <ToastCustom/>
             <div
                 className={`${show ? 'visible opacity-100' : 'invisible opacity-0'} z-[50] fixed top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]`}>
                 <div className="container">
@@ -104,7 +104,8 @@ function CreateAddress({show, setShow, addNewAddress}) {
                                         </p>
                                         <Icon.UilAngleDown className="w-[18px] h-[18px] min-w-[18px] min-h-[18px]"/>
                                     </button>
-                                    <Modal list={city} show={openCity} setShow={setOpenCity} name="Chọn tỉnh thành" select={setSelectCity}/>
+                                    <Modal list={city} show={openCity} setShow={setOpenCity} name="Chọn tỉnh thành"
+                                           select={setSelectCity}/>
                                 </div>
                             </div>
                             <div className="flex items-center gap-8 mb-5">

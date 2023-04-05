@@ -5,6 +5,8 @@ import NotFoundImage from "../../../assets/images/image-not-found.jpg";
 import {removeFromCart, selectCartItem, unSelectCartItem, updateQuantity} from "../../../redux/actions/cartActions";
 import {useDispatch} from "react-redux";
 import Checkbox from "@mui/material/Checkbox";
+import * as types from "../../../redux/constants/ActionType";
+import toast from "react-hot-toast";
 
 function CartItem({item}) {
     const dispatch = useDispatch();
@@ -12,6 +14,11 @@ function CartItem({item}) {
     const handleDelete = async (item) => {
         const action = await removeFromCart(item);
         dispatch(action)
+        if (action.type === types.cart.REMOVE_CART_ITEM) {
+            toast.success("Đã xóa sản phẩm khỏi giỏ hàng.")
+        } else {
+            toast.error("Vui lòng thử lại sau.")
+        }
     }
     const handleUpdateQuantity = async (quantity) => {
         if (quantity <= 0) quantity = 1;

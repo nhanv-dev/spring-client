@@ -3,7 +3,7 @@ import Helmet from "../../../components/common/helmet";
 import {useSelector} from "react-redux";
 import {Link, useNavigate} from "react-router-dom";
 import * as Icon from "@iconscout/react-unicons";
-import {protectedRequest} from "../../../util/request-method";
+import {protectedRequest, publicRequest} from "../../../util/request-method";
 import OrderBlock from "./OrderBlock";
 import UserLayout from "../../../components/web/user-layout";
 
@@ -11,28 +11,38 @@ function Order() {
     const navigate = useNavigate();
     const user = useSelector(state => state.user);
     const [orders, setOrders] = useState([]);
+    const [orderStatus, setOrderStatus] = useState([]);
 
     useEffect(() => {
-        if (!user.token) console.log(user);
+        publicRequest().get(`/order-status`)
+            .then(res => {
+                setOrderStatus(res.data)
+            })
+            .catch(err => {
+                setOrderStatus([])
+            })
+    }, [])
+
+    useEffect(() => {
+        if (!user.token) navigate("/dang-nhap");
         protectedRequest().get(`/users/${user.id}/orders`)
             .then(res => {
-                console.log(res)
                 setOrders(res.data)
             })
             .catch(err => {
                 setOrders([])
             })
-    }, [user])
+    }, [navigate, user])
 
     const reset = () => {
-        console.log("reset")
-        if (!user.accessToken) console.log(user);
-        protectedRequest().get("/orders/user")
+        if (!user.token) navigate("/dang-nhap");
+        protectedRequest().get(`/users/${user.id}/orders`)
             .then(res => {
-                setOrders(res.data.orders)
-            }).catch(error => {
-
-        })
+                setOrders(res.data)
+            })
+            .catch(err => {
+                setOrders([])
+            })
     }
 
     return (
@@ -40,30 +50,16 @@ function Order() {
             <UserLayout>
                 <div className="mb-5 shadow rounded-md bg-white">
                     <div className="flex justify-between items-center">
-                        <Link to=""
-                              className="text-center flex-1 font-medium text-md py-3 hover:text-primary-hover rounded-md transition-all">
-                            Đang xử lý
-                        </Link>
-                        <Link to=""
-                              className="text-center flex-1 font-medium text-md py-3 hover:text-primary-hover rounded-md transition-all">
-                            Chờ thanh toán
-                        </Link>
-                        <Link to=""
-                              className="text-center flex-1 font-medium text-md py-3 hover:text-primary-hover rounded-md transition-all">
-                            Đang giao
-                        </Link>
-                        <Link to=""
-                              className="text-center flex-1 font-medium text-md py-3 hover:text-primary-hover rounded-md transition-all">
-                            Đã hủy
-                        </Link>
-                        <Link to=""
-                              className="text-center flex-1 font-medium text-md py-3 hover:text-primary-hover rounded-md transition-all">
-                            Đã nhận hàng
-                        </Link>
-                        <Link to=""
-                              className="text-center flex-1 font-medium text-md py-3 hover:text-primary-hover rounded-md transition-all">
-                            Trả hàng/Hoàn tiền
-                        </Link>
+                        <button
+                            className="text-center flex-1 font-medium text-black-2 text-md py-3 hover:bg-primary-bg hover:text-primary rounded-md transition-all">
+                            Tất cả
+                        </button>
+                        {orderStatus.map(status => (
+                            <button key={status.id}
+                                    className="text-center flex-1 font-medium text-black-2 text-md py-3 hover:bg-primary-bg hover:text-primary rounded-md transition-all">
+                                {status.description}
+                            </button>
+                        ))}
                     </div>
                 </div>
                 <div className="mb-5 shadow rounded-md bg-[#fff] py-3 px-3">

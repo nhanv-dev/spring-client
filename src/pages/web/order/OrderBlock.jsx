@@ -87,11 +87,11 @@ function OrderBlock({order, reset}) {
                                                     <p className="text-primary-hover font-semibold text-base">
                                                         {formatCurrency(item.finalPrice)}
                                                     </p>
-                                                    <p className="text-primary-hover font-semibold text-base">
+                                                    <div className="text-primary-hover font-semibold text-base">
                                                         <p className="font-bold text-base text-red">
                                                             x{item.quantity}
                                                         </p>
-                                                    </p>
+                                                    </div>
                                                 </div>
                                                 <div className="flex items-center gap-3 mt-0.5">
                                                     {item.isEvaluated ?

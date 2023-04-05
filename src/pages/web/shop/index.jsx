@@ -36,7 +36,7 @@ function Shop() {
     if (loading) return <Loader/>
 
     return (
-        <Helmet title={`Depot - ${shop ? shop.name : 'Cửa hàng'}`}>
+        <Helmet title={`Depot - ${shop ? shop.shopName : 'Cửa hàng'}`}>
             <Layout>
                 <div>
                     <div className="pb-6 bg-app-1">
