@@ -1,10 +1,10 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {Link} from "react-router-dom";
-import {Swiper, SwiperSlide} from 'swiper/react';
-import {Navigation, Thumbs} from 'swiper';
+// import {Swiper, SwiperSlide} from 'swiper/react';
+// import {Navigation, Thumbs} from 'swiper';
 import * as SolidIcon from '@iconscout/react-unicons-solid';
 import * as Icon from '@iconscout/react-unicons';
-import ProductCard from "../../../components/web/product-card";
+// import ProductCard from "../../../components/web/product-card";
 import DefaultShopImage from '../../../assets/images/default-shop.png';
 import {formatBetweenDate, formatToK} from "../../../util/format";
 import {publicRequest} from "../../../util/request-method";
