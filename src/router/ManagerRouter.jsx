@@ -6,6 +6,7 @@ const Home = lazy(() => import('../pages/shop/home'));
 const Products = lazy(() => import('../pages/shop/products'));
 const ProductCreating = lazy(() => import('../pages/shop/product-creating'));
 const ProductUpdating = lazy(() => import('../pages/shop/product-updating'));
+const UpdateShopProfile = lazy(() => import('../pages/shop/update-shop-profile'));
 
 function ManagerRouter() {
     const routes = [
@@ -14,6 +15,7 @@ function ManagerRouter() {
         {path: '/san-pham', exact: true, component: Products, replaceTo: '/dang-nhap'},
         {path: '/san-pham/dang-ban', exact: true, component: ProductCreating, replaceTo: '/dang-nhap'},
         {path: '/san-pham/:id', exact: true, component: ProductUpdating, replaceTo: '/dang-nhap'},
+        {path: '/thong-tin', exact: true, component: UpdateShopProfile, replaceTo: '/dang-nhap'},
     ];
 
     return (
