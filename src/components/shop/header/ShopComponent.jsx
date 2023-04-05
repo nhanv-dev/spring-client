@@ -2,8 +2,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {Link} from "react-router-dom";
 import * as Icon from "@iconscout/react-unicons";
 import {logout} from "../../../redux/actions/userActions";
-
-const image = "https://external-preview.redd.it/4PE-nlL_PdMD5PrFNLnjurHQ1QKPnCvg368LTDnfM-M.png?auto=webp&s=ff4c3fbc1cce1a1856cff36b5d2a40a6d02cc1c3";
+import DefaultShop from "../../../assets/images/default-shop.png";
 
 function ShopComponent(props) {
     const dispatch = useDispatch();
@@ -15,10 +14,10 @@ function ShopComponent(props) {
 
     return (
         <>
-            {shop &&
+            {shop?.id &&
                 <div className="relative group ">
                     <Link to="/kenh-ban-hang/thong-tin" className="relative outline-none gap-1 flex items-center">
-                        <div style={{backgroundImage: `url(${shop?.avatar || image})`}}
+                        <div style={{backgroundImage: `url(${shop?.shopLogo || DefaultShop})`}}
                              className="bg-cover bg-center w-[42px] h-[42px] text-black border-primary border-[2px] rounded-full"/>
                     </Link>
                     <div
@@ -29,14 +28,14 @@ function ShopComponent(props) {
                             <div
                                 className="flex items-center justify-start gap-3 border-b-[1px] border-[#eee] py-3 px-4">
                                 <Link to="/kenh-ban-hang/thong-tin"
-                                      style={{backgroundImage: `url(${shop?.avatar || image})`}}
+                                      style={{backgroundImage: `url(${shop?.shopLogo || DefaultShop})`}}
                                       className="bg-cover min-w-[42px] min-h-[42px] rounded-full border-2 border-primary"/>
                                 <div className="flex flex-col overflow-hidden w-full">
                                     <Link to="/kenh-ban-hang/thong-tin"
                                           className="w-[120px] text-base text-primary-hover line-clamp-1 transition-all">
-                                        {shop?.name}
+                                        {shop?.shopName}
                                     </Link>
-                                    <Link to="/nguoi-dung/thong-tin"
+                                    <Link to="/kenh-ban-hang/thong-tin"
                                           className="font-medium text-sm hover:text-primary flex items-center justify-start gap-2 transition-all">
                                         <Icon.UilEditAlt className="w-[16px] h-[16px]"/> Chỉnh sửa tài khoản
                                     </Link>

@@ -6,8 +6,7 @@ function PrivateRouter({replaceTo}) {
     const user = useSelector(state => state.user);
 
     return (user?.token) ?
-        <Outlet/> :
-        <Navigate to={replaceTo} replace={true}/>;
+        <Outlet/> : <Navigate to={replaceTo} replace={true}/>;
 }
 
 export default PrivateRouter;

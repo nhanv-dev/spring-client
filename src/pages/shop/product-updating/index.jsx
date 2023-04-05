@@ -6,10 +6,11 @@ import TabProduct from "./TabProduct";
 import TabDescription from "./TabDescription";
 import TabOption from "./TabOption";
 import {protectedRequest} from "../../../util/request-method";
-import {toast, ToastContainer} from "react-toastify";
-import {useNavigate, useParams} from "react-router-dom";
-import {UilArrowLeft} from "@iconscout/react-unicons";
+import {toast} from "react-hot-toast";
+import {Link, useNavigate, useParams} from "react-router-dom";
+import {UilArrowLeft, UilArrowRight} from "@iconscout/react-unicons";
 import {Loader} from "../../../router/Router";
+import ToastCustom from "../../../components/common/toast-custom";
 
 export const PayloadContext = createContext({});
 
@@ -63,32 +64,14 @@ function ProductUpdating() {
         console.log(data)
         protectedRequest().post("/shops/products", data)
             .then(res => {
-                toast.success('Cập nhật sản phẩm thành công', {
-                    position: "top-right",
-                    autoClose: 800,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: "light",
-                });
+                toast.success('Cập nhật sản phẩm thành công');
                 setTimeout(() => {
-                    navigate("/kenh-ban-hang/san-pham")
-                }, 1400)
+                    toast.dismiss();
+                    navigate("/kenh-ban-hang/san-pham");
+                }, 1000)
             })
             .catch(err => {
-                console.log(err)
-                toast.error('Đăng bán sản phẩm thất bại', {
-                    position: "top-right",
-                    autoClose: 2000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: "light",
-                });
+                toast.error('Cập nhật sản phẩm thất bại');
             })
     }
 
@@ -98,13 +81,18 @@ function ProductUpdating() {
     return (
         <Helmet title="Depot - Cập nhật sản phẩm">
             <Layout>
-                <ToastContainer className="font-medium text-md"/>
-                <div className="mb-3">
+                <ToastCustom/>
+                <div className="mb-3 flex justify-between items-center gap-3">
                     <button onClick={() => navigate(-1)}
-                            className="font-medium text-base flex items-center gap-1 justify-start transition-all hover:text-primary text-black">
+                            className="font-semibold text-md flex items-center gap-1 justify-start transition-all hover:text-primary text-black">
                         <UilArrowLeft className="w-[20px] h-[20px]"/>
                         Quay lại
                     </button>
+                    <Link to={`/san-pham/${payload?.product?.slug}`} target="_blank"
+                          className="font-semibold text-md flex items-center gap-1 justify-start transition-all hover:text-primary text-black">
+                        Xem sản phẩm
+                        <UilArrowRight className="w-[20px] h-[20px]"/>
+                    </Link>
                 </div>
                 <PayloadContext.Provider value={{payload, setPayload}}>
                     <Box className="rounded-md bg-white shadow-md mb-6">

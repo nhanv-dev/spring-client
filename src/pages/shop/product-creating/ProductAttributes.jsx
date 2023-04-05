@@ -1,7 +1,6 @@
 import * as Icon from "@iconscout/react-unicons";
 import {formatToSlug} from "../../../util/format";
 
-
 function ProductAttributes({attributes, setAttributes}) {
 
     function handleAddAttribute() {

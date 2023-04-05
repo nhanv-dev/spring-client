@@ -1,10 +1,10 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {Link} from "react-router-dom";
-import {Swiper, SwiperSlide} from 'swiper/react';
-import {Navigation, Thumbs} from 'swiper';
+// import {Swiper, SwiperSlide} from 'swiper/react';
+// import {Navigation, Thumbs} from 'swiper';
 import * as SolidIcon from '@iconscout/react-unicons-solid';
 import * as Icon from '@iconscout/react-unicons';
-import ProductCard from "../../../components/web/product-card";
+// import ProductCard from "../../../components/web/product-card";
 import DefaultShopImage from '../../../assets/images/default-shop.png';
 import {formatBetweenDate, formatToK} from "../../../util/format";
 import {publicRequest} from "../../../util/request-method";
@@ -112,7 +112,7 @@ function Shop({shop}) {
                                          className="scroll-smooth w-full flex gap-[12px] items-center justify-start w-full overflow-hidden p-3">
                                         {products?.map((product, index) => (
                                             <div key={index}
-                                                 className="rounded-md border-none hover:shadow-xl shadow-[#4b5563]">
+                                                 className="max-w-[140px] rounded-md border-none hover:shadow-xl shadow-[#4b5563]">
                                                 <MinimalProductCard item={product}/>
                                             </div>
                                         ))}

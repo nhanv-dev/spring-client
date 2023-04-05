@@ -3,7 +3,7 @@ import Layout from "../../../components/shop/layout";
 import Helmet from "../../../components/common/helmet";
 import {protectedRequest} from "../../../util/request-method";
 import ProductTable from "./ProductTable";
-import {ToastContainer} from "react-toastify";
+import ToastCustom from "../../../components/common/toast-custom";
 
 function Products() {
     const [products, setProducts] = useState([]);
@@ -33,7 +33,7 @@ function Products() {
     return (
         <Helmet title="Depot - Quản lý sản phẩm">
             <Layout>
-                <ToastContainer className="font-medium text-md"/>
+                <ToastCustom/>
                 <div className="w-full p-5 bg-white rounded-md mb-5 shadow">
                     <p className="font-bold text-base text-black">
                         Quản lý sản phẩm

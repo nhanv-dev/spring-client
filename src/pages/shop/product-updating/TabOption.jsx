@@ -5,12 +5,12 @@ import {PayloadContext} from "./index";
 import * as Icon from "@iconscout/react-unicons";
 import ModalOption from "./ModalOption";
 import {similarArray} from "../../../util/array";
-import {toast} from 'react-toastify';
+import toast from "react-hot-toast";
 
 function TabOption() {
     const {payload, setPayload} = useContext(PayloadContext);
-    const [attributes, setAttributes] = useState([...payload?.attributes]);
-    const [variants, setVariants] = useState([...payload?.variants]);
+    const [attributes, setAttributes] = useState(payload?.attributes ? [...payload?.attributes] : []);
+    const [variants, setVariants] = useState(payload?.variants ? [...payload?.variants] : []);
     const [selectedVariant, setSelectedVariant] = useState(null);
 
     useEffect(() => {
@@ -77,16 +77,7 @@ const Variant = ({attributes, selectedVariant, setSelectedVariant, variants, set
             return similarArray(v.options, variant.options)
         })
         if (similarOptions.length > 0) {
-            toast.error('Đã tồn tại phiên bản này', {
-                position: "top-right",
-                autoClose: 2000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "light",
-            });
+            toast.error('Đã tồn tại phiên bản này');
             return;
         }
         setVariants(prev => {

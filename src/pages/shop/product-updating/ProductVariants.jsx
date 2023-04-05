@@ -1,5 +1,5 @@
 import * as Icon from "@iconscout/react-unicons";
-import {toast} from "react-toastify";
+import toast from "react-hot-toast";
 import Tooltip from "@mui/material/Tooltip";
 
 function ProductVariants(props) {
@@ -7,16 +7,7 @@ function ProductVariants(props) {
 
     function handleAddVariant() {
         if (attributes.length <= 0) {
-            toast.error('Chưa có tùy chọn nào', {
-                position: "top-right",
-                autoClose: 2000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "light",
-            });
+            toast.error('Chưa có tùy chọn nào');
             return;
         }
         setVariants(prev => [

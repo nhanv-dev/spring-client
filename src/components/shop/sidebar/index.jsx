@@ -10,8 +10,8 @@ function Sidebar() {
                                     icon={<Icon.UilEstate className={"w-[20px]"}/>}/>
                     <NavigationLink to="/kenh-ban-hang/san-pham" title="Sản phẩm"
                                     icon={<Icon.UilApps className={"w-[20px]"}/>}/>
-                    {/*<NavigationLink to="/kenh-ban-hang/danh-muc" title="Danh mục"*/}
-                    {/*                icon={<Icon.UilApps className={"w-[20px]"}/>}/>*/}
+                    <NavigationLink to="/kenh-ban-hang/don-dat-hang" title="Đơn đặt hàng"
+                                    icon={<Icon.UilInvoice className={"w-[20px]"}/>}/>
                     <NavigationLink to="/kenh-ban-hang/file" title="Báo cáo"
                                     icon={<Icon.UilFileGraph className={"w-[20px]"}/>}/>
                     <NavigationLink to="/kenh-ban-hang/thong-ke" title="Thống kê"

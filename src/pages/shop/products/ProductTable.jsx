@@ -16,7 +16,7 @@ import React, {useEffect, useState} from "react";
 import {protectedRequest} from "../../../util/request-method";
 import Images from "./Images";
 import Tooltip from "@mui/material/Tooltip";
-import {toast} from "react-toastify";
+import {toast} from "react-hot-toast";
 import {Pagination, PaginationItem} from "@mui/material";
 
 const headers = [
@@ -114,16 +114,7 @@ export default function ProductTable({products, pagination, setPagination}) {
     const handleDeleteProduct = (id) => {
         protectedRequest().delete(`/shops/products/${id}`)
             .then(res => {
-                toast.success('Xóa sản phẩm thành công', {
-                    position: "top-right",
-                    autoClose: 800,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: "light",
-                });
+                toast.success('Xóa sản phẩm thành công');
                 setPagination(prev => ({...prev, loaded: false}))
             })
     }
@@ -169,16 +160,10 @@ export default function ProductTable({products, pagination, setPagination}) {
                 </div>
                 <Pagination
                     count={pagination.totalPages}
-                    page={pagination.page}
-                    onChange={handleChangePage}
+                    page={pagination.page + 1}
+                    onChange={(e, newPage) => handleChangePage(e, newPage - 1)}
                     showFirstButton
                     showLastButton
-                    renderItem={(item) => (
-                        <PaginationItem
-
-                            {...item}
-                        />
-                    )}
                 />
             </div>
             <div className="overflow-auto">

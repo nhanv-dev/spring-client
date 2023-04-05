@@ -3,13 +3,14 @@ import Helmet from "../../../components/common/helmet";
 import Layout from "../../../components/web/layout";
 import {Link, useNavigate} from "react-router-dom";
 import {protectedRequest} from "../../../util/request-method";
-import {toast, ToastContainer} from 'react-toastify';
+import toast from "react-hot-toast";
 import {useDispatch, useSelector} from "react-redux";
 import {formatCurrency} from "../../../util/format";
 import NotFoundImage from "../../../assets/images/image-not-found.jpg";
 import * as Icon from '@iconscout/react-unicons';
 import {Radio} from "@mui/material";
 import {placeOrder} from "../../../redux/actions/orderActions";
+import ToastCustom from "../../../components/common/toast-custom";
 
 function PlaceOrder() {
     const navigate = useNavigate();
@@ -66,7 +67,7 @@ function PlaceOrder() {
             <Layout>
                 <div className="bg-app-1">
                     <div className="container py-8">
-                        <ToastContainer/>
+                        <ToastCustom/>
                         <div className="flex flex-wrap flex-row gap-6">
                             <div className="basis-[65%]">
                                 <Information user={user} address={address} setAddress={setAddress}

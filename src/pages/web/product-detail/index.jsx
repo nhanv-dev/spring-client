@@ -12,6 +12,9 @@ import Comment from "./Comment";
 import {similarArray} from "../../../util/array";
 import {addToCart} from "../../../redux/actions/cartActions";
 import {UilAngleRightB} from "@iconscout/react-unicons";
+import * as types from '../../../redux/constants/ActionType';
+import toast from "react-hot-toast";
+import ToastCustom from "../../../components/common/toast-custom";
 
 
 function ProductDetail() {
@@ -54,12 +57,19 @@ function ProductDetail() {
             productId: product.id,
             variantId: selectedVariant?.id
         }
-        dispatch(await addToCart(payload));
+        const action = await addToCart(payload);
+        dispatch(action);
+        if (action.type === types.cart.ADD_CART_ITEM) {
+            toast.success("Đã thêm sản phẩm vào giỏ hàng.")
+        } else {
+            toast.error("Vui lòng thử lại sau.")
+        }
     }
 
     return (
         <Helmet title={`Depot - ${product?.name}`}>
             <Layout>
+                <ToastCustom/>
                 <div className="bg-app-1 pb-10">
                     <div className="container">
                         <div

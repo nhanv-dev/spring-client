@@ -6,8 +6,9 @@ import TabProduct from "./TabProduct";
 import TabDescription from "./TabDescription";
 import TabOption from "./TabOption";
 import {protectedRequest} from "../../../util/request-method";
-import {toast, ToastContainer} from "react-toastify";
+import {toast} from "react-hot-toast";
 import {useNavigate} from "react-router-dom";
+import ToastCustom from "../../../components/common/toast-custom";
 
 export const PayloadContext = createContext({});
 
@@ -52,38 +53,21 @@ function ProductCreating() {
         }
         protectedRequest().post("/shops/products", data)
             .then(res => {
-                toast.success('Đăng bán sản phẩm thành công', {
-                    position: "top-right",
-                    autoClose: 1000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: "light",
-                });
+                toast.success('Đăng bán sản phẩm thành công');
                 setTimeout(() => {
-                    navigate("/kenh-ban-hang/san-pham")
+                    toast.dismiss();
+                    navigate("/kenh-ban-hang/san-pham");
                 }, 1000)
             })
             .catch(err => {
-                toast.error('Đăng bán sản phẩm thất bại', {
-                    position: "top-right",
-                    autoClose: 2000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: "light",
-                });
+                toast.error('Đăng bán sản phẩm thất bại');
             })
     }
 
     return (
         <Helmet title="Depot - Đăng bán sản phẩm">
             <Layout>
-                <ToastContainer className="font-medium text-md"/>
+                <ToastCustom/>
                 <PayloadContext.Provider value={{payload, setPayload}}>
                     <Box className="rounded-md bg-white shadow-md mb-6">
                         <Tabs value={value} onChange={(event, newValue) => setValue(newValue)}

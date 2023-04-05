@@ -4,12 +4,12 @@ function Info({shop}) {
 
     return (
         <div className="container">
-            <div className="bg-white rounded-[5px] mb-6 px-4 pt-2 pb-4">
+            <div className="bg-white rounded-md mb-6 px-4 pt-2 pb-4">
                <span className="font-medium text-md italic ">
                    "{shop.slogan || "Mang đến không gian sống tiện nghi hơn"}"
                </span>
             </div>
-            <div className="bg-white rounded-[5px] mb-6">
+            <div className="bg-white rounded-md mb-6">
                 <h5 className="px-4 pt-3 pb-4 border-b-[1px] border-[#e8e8e8] font-medium text-base">Hoạt động</h5>
                 <div className="px-4 py-3">
                     <div className="mb-3">
@@ -26,7 +26,7 @@ function Info({shop}) {
                     </div>
                 </div>
             </div>
-            <div className="bg-white rounded-[5px]">
+            <div className="bg-white rounded-md">
                 <h5 className="px-4 pt-3 pb-4 border-b-[1px] border-[#e8e8e8] font-medium text-base">Thông tin Shop</h5>
                 <div className="px-4 py-3">
                     <div className="mb-3">

@@ -24,7 +24,6 @@ const userReducers = (state = initialState(), action) => {
             removeItem("user")
             removeItem("cart")
             return {}
-
         default:
             return state
     }

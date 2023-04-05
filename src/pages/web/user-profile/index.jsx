@@ -1,10 +1,8 @@
 import React, {useState} from 'react';
-import Layout from "../../../components/web/layout";
 import Helmet from "../../../components/common/helmet";
 import {
     UilUser, UilCalling, UilEnvelopeEdit
 } from '@iconscout/react-unicons'
-import UserSidebar from "../../../components/web/manage-user-sidebar";
 import {publicRequest} from "../../../util/request-method";
 import {useNavigate} from "react-router-dom";
 import UserLayout from "../../../components/web/user-layout";

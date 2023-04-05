@@ -1,7 +1,7 @@
 import React from "react";
 import {BrowserRouter, Link, Route, Routes} from "react-router-dom";
 import UserRouter from "./UserRouter";
-import ManagerRouter from "./ManagerRouter";
+import ShopRouter from "./ShopRouter";
 import AdminRouter from "./AdminRouter";
 import PageNotFound from '../assets/images/404-errors.png';
 
@@ -13,7 +13,7 @@ function Router() {
                 <Routes>
                     <Route exact path="/*" element={<UserRouter/>}/>
                     <Route exact path="/quan-tri/*" element={<AdminRouter/>}/>
-                    <Route exact path="/kenh-ban-hang/*" element={<ManagerRouter/>}/>
+                    <Route exact path="/kenh-ban-hang/*" element={<ShopRouter/>}/>
                 </Routes>
             </BrowserRouter>
         </React.Suspense>
