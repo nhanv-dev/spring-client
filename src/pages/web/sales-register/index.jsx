@@ -2,49 +2,56 @@ import React, {useEffect, useState} from 'react';
 import Helmet from "../../../components/common/helmet";
 import {Link, useNavigate} from "react-router-dom";
 import Logo from "../../../assets/images/logo.png";
-import {
-    UilAt,
-    UilEye,
-    UilEyeSlash,
-    UilKeyholeCircle,
-    UilLocationPoint,
-    UilMapMarker,
-    UilPhone,
-    UilStore
-} from '@iconscout/react-unicons'
-import {login} from "../../../redux/actions/userActions";
-import {useDispatch, useSelector} from "react-redux";
-import * as Icon from "@iconscout/react-unicons";
+import * as Icon from '@iconscout/react-unicons'
+import {UilAt, UilHistory, UilLocationPoint, UilPhone, UilStore} from '@iconscout/react-unicons'
+import {useSelector} from "react-redux";
 import Modal from "../user-address-creating/Modal";
 import axios from "axios";
 import {protectedRequest} from "../../../util/request-method";
+import ToastCustom from "../../../components/common/toast-custom";
+import {toast} from "react-hot-toast";
 
 function SalesRegister() {
-    const dispatch = useDispatch();
+    const {user, shop} = useSelector(state => state);
     const navigate = useNavigate();
     const [shopName, setShopName] = useState("");
-    const [email, setEmail] = useState("");
-    const [phoneNumber, setPhoneNumber] = useState("");
-    const [address, setAddress] = useState("");
+    const [shopEmail, setShopEmail] = useState("");
+    const [shopPhone, setShopPhone] = useState("");
+    const [addressDetail, setAddressDetail] = useState("");
     const [city, setCity] = useState();
     const [district, setDistrict] = useState();
     const [wards, setWards] = useState();
     const [warehouse, setWarehouse] = useState();
+    const [salesRegister, setSalesRegister] = useState(null);
+
+    useEffect(() => {
+        if (salesRegister && salesRegister.status === 'CONFIRMED') navigate("/kenh-ban-hang")
+    }, [navigate, salesRegister])
+
+    useEffect(() => {
+        if (!user || !user.token) return navigate("/");
+        protectedRequest().get(`/sales-register/users/${user.id}`)
+            .then(res => {
+                setSalesRegister(res.data)
+            })
+            .catch(err => {
+                setSalesRegister(null)
+            })
+    }, [navigate, user])
 
     async function handleSubmit(e) {
         e.preventDefault();
         const payload = {
-            shopName, email, phoneNumber, address,
-            warehouse: warehouse?.name,
+            shopName, shopEmail, shopPhone, addressDetail,
+            warehouseRegionName: warehouse?.name,
             city: city?.name,
             district: district?.name,
             wards: wards?.name,
         }
-        console.log(payload)
         protectedRequest().post("/sales-register", payload)
             .then(res => {
-                console.log(res)
-                // navigate("/")
+                toast.success('Đăng ký bán hàng thành công!')
+                setSalesRegister(res.data)
             })
             .catch(err => {
                 console.log(err)
@@ -53,6 +60,7 @@ function SalesRegister() {
 
     return (
         <Helmet title="Depot - Đăng ký bán hàng">
+            <ToastCustom/>
             <div className="relative">
                 <div className="container max-w-[1200px] pt-[60px] pb-[60px]">
                     <div className="flex">
@@ -75,73 +83,242 @@ function SalesRegister() {
                             </div>
                         </div>
                         <div className="w-1/2 relative bg-cover bg-center z-50 pl-[120px]">
-                            <div className="flex items-end font-semibold text-[1.4rem] gap-3 mb-3">
-                                Đăng ký ngay
-                            </div>
-                            <form onSubmit={handleSubmit}>
-                                <div className="mb-5">
-                                    <label htmlFor="shopName"
-                                           className="block font-semibold text-tiny text-black-1 mb-2">
-                                        Tên cửa hàng / thương hiệu
-                                    </label>
-                                    <div
-                                        className="bg-white flex items-center px-3 rounded-md border border-border h-[40px] w-full shadow-md">
-                                        <div className="flex items-center gap-3 w-full">
-                                            <div className="flex items-center justify-center w-[20px] h-[20px]">
-                                                <UilStore className="w-full h-full text-gray"/>
-                                            </div>
-                                            <input id="shopName" type="text" value={shopName}
-                                                   onChange={(e) => setShopName(e.target.value)}
-                                                   className="flex-1 focus:outline-none text-md font-medium text-black-1"/>
+                            {salesRegister ?
+                                <>
+                                    <div className="mb-5">
+                                        <div className="flex items-center gap-5 justify-between">
+                                            <p className="font-semibold text-xl">
+                                                Đơn đăng ký bán hàng
+                                            </p>
+                                            {salesRegister.status === 'PENDING' &&
+                                                <p className="px-3 py-1 text-tiny font-bold text-danger bg-danger-bg rounded-full flex items-center justify-center gap-1">
+                                                    < UilHistory className={"w-[18px] h-[18px]"}/> Đang chờ xác nhận
+                                                </p>
+                                            }
                                         </div>
                                     </div>
-                                </div>
-                                <div className="mb-5">
-                                    <label htmlFor="email" className="block font-semibold text-tiny text-black-1 mb-2">
-                                        Địa chỉ email (dành cho cửa hàng)
-                                    </label>
-                                    <div
-                                        className="bg-white flex items-center px-3 rounded-md border border-border h-[40px] w-full shadow-md">
-                                        <div className="flex items-center gap-3 w-full">
-                                            <div className="flex items-center justify-center w-[20px] h-[20px]">
-                                                <UilAt className="w-full h-full text-gray"/>
+                                    <div className="mb-5">
+                                        <div
+                                            className="block font-semibold text-tiny text-black-1 mb-2">
+                                            Tên cửa hàng / thương hiệu
+                                        </div>
+                                        <div
+                                            className="bg-white flex items-center px-3 rounded-md border border-border h-[40px] w-full shadow-md">
+                                            <div className="flex items-center gap-3 w-full">
+                                                <div className="flex items-center justify-center w-[20px] h-[20px]">
+                                                    <UilPhone className="w-full h-full text-gray"/>
+                                                </div>
+                                                <div
+                                                    className="flex-1 focus:outline-none text-md font-medium text-black-1">
+                                                    {salesRegister.shopName}
+                                                </div>
                                             </div>
-                                            <input id="email" type="email" value={email}
-                                                   onChange={(e) => setEmail(e.target.value)}
-                                                   className="flex-1 focus:outline-none text-md font-medium text-black-1"/>
                                         </div>
                                     </div>
-                                </div>
-                                <div className="mb-5">
-                                    <label htmlFor="phoneNumber"
-                                           className="block font-semibold text-tiny text-black-1 mb-2">
-                                        Số điện thoại
-                                    </label>
-                                    <div
-                                        className="bg-white flex items-center px-3 rounded-md border border-border h-[40px] w-full shadow-md">
-                                        <div className="flex items-center gap-3 w-full">
-                                            <div className="flex items-center justify-center w-[20px] h-[20px]">
-                                                <UilPhone className="w-full h-full text-gray"/>
+                                    <div className="mb-5">
+                                        <div
+                                            className="block font-semibold text-tiny text-black-1 mb-2">
+                                            Địa chỉ email
+                                        </div>
+                                        <div
+                                            className="bg-white flex items-center px-3 rounded-md border border-border h-[40px] w-full shadow-md">
+                                            <div className="flex items-center gap-3 w-full">
+                                                <div className="flex items-center justify-center w-[20px] h-[20px]">
+                                                    <UilPhone className="w-full h-full text-gray"/>
+                                                </div>
+                                                <div
+                                                    className="flex-1 focus:outline-none text-md font-medium text-black-1">
+                                                    {salesRegister.shopEmail}
+                                                </div>
                                             </div>
-                                            <input id="phoneNumber" type="number" value={phoneNumber}
-                                                   onChange={(e) => setPhoneNumber(e.target.value)}
-                                                   className="flex-1 focus:outline-none text-md font-medium text-black-1"/>
                                         </div>
                                     </div>
-                                </div>
-                                <div className="mb-5">
-                                    <Address
-                                        handleCity={setCity} handleDistrict={setDistrict} handleWard={setWards}
-                                        address={address} setAddress={setAddress} handleWarehouse={setWarehouse}
-                                    />
-                                </div>
-                                <div className="w-full">
-                                    <button type="submit"
-                                            className="w-full bg-primary h-[40px] rounded-md text-tiny font-medium text-white">
+                                    <div className="mb-5">
+                                        <div
+                                            className="block font-semibold text-tiny text-black-1 mb-2">
+                                            Số điện thoại
+                                        </div>
+                                        <div
+                                            className="bg-white flex items-center px-3 rounded-md border border-border h-[40px] w-full shadow-md">
+                                            <div className="flex items-center gap-3 w-full">
+                                                <div className="flex items-center justify-center w-[20px] h-[20px]">
+                                                    <UilPhone className="w-full h-full text-gray"/>
+                                                </div>
+                                                <div
+                                                    className="flex-1 focus:outline-none text-md font-medium text-black-1">
+                                                    {salesRegister.shopPhone}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="mb-5">
+                                        <div
+                                            className="block font-semibold text-tiny text-black-1 mb-2">
+                                            Khu vực kho hàng
+                                        </div>
+                                        <div
+                                            className="bg-white flex items-center px-3 rounded-md border border-border h-[40px] w-full shadow-md">
+                                            <div className="flex items-center gap-3 w-full">
+                                                <div className="flex items-center justify-center w-[20px] h-[20px]">
+                                                    <UilPhone className="w-full h-full text-gray"/>
+                                                </div>
+                                                <div
+                                                    className="flex-1 focus:outline-none text-md font-medium text-black-1">
+                                                    {salesRegister.warehouseRegionName}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="mb-5">
+                                        <p className="font-semibold text-xl">
+                                            Địa chỉ cửa hàng offline
+                                        </p>
+                                    </div>
+                                    <div className="mb-5">
+                                        <div
+                                            className="block font-semibold text-tiny text-black-1 mb-2">
+                                            Thành phố / Tỉnh
+                                        </div>
+                                        <div
+                                            className="bg-white flex items-center px-3 rounded-md border border-border h-[40px] w-full shadow-md">
+                                            <div className="flex items-center gap-3 w-full">
+                                                <div className="flex items-center justify-center w-[20px] h-[20px]">
+                                                    <UilPhone className="w-full h-full text-gray"/>
+                                                </div>
+                                                <div
+                                                    className="flex-1 focus:outline-none text-md font-medium text-black-1">
+                                                    {salesRegister.city}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="mb-5">
+                                        <div
+                                            className="block font-semibold text-tiny text-black-1 mb-2">
+                                            Quận / Huyện
+                                        </div>
+                                        <div
+                                            className="bg-white flex items-center px-3 rounded-md border border-border h-[40px] w-full shadow-md">
+                                            <div className="flex items-center gap-3 w-full">
+                                                <div className="flex items-center justify-center w-[20px] h-[20px]">
+                                                    <UilPhone className="w-full h-full text-gray"/>
+                                                </div>
+                                                <div
+                                                    className="flex-1 focus:outline-none text-md font-medium text-black-1">
+                                                    {salesRegister.district}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="mb-5">
+                                        <div
+                                            className="block font-semibold text-tiny text-black-1 mb-2">
+                                            Phường / Xã
+                                        </div>
+                                        <div
+                                            className="bg-white flex items-center px-3 rounded-md border border-border h-[40px] w-full shadow-md">
+                                            <div className="flex items-center gap-3 w-full">
+                                                <div className="flex items-center justify-center w-[20px] h-[20px]">
+                                                    <UilPhone className="w-full h-full text-gray"/>
+                                                </div>
+                                                <div
+                                                    className="flex-1 focus:outline-none text-md font-medium text-black-1">
+                                                    {salesRegister.wards}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="mb-0">
+                                        <div
+                                            className="block font-semibold text-tiny text-black-1 mb-2">
+                                            Địa chỉ chi tiết
+                                        </div>
+                                        <div
+                                            className="bg-white flex items-center px-3 rounded-md border border-border h-[40px] w-full shadow-md">
+                                            <div className="flex items-center gap-3 w-full">
+                                                <div className="flex items-center justify-center w-[20px] h-[20px]">
+                                                    <UilPhone className="w-full h-full text-gray"/>
+                                                </div>
+                                                <div
+                                                    className="flex-1 focus:outline-none text-md font-medium text-black-1">
+                                                    {salesRegister.addressDetail}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </> :
+                                <>
+                                    <div className="flex items-end font-semibold text-[1.4rem] gap-3 mb-3">
                                         Đăng ký ngay
-                                    </button>
-                                </div>
-                            </form>
+                                    </div>
+                                    <form onSubmit={handleSubmit}>
+                                        <div className="mb-5">
+                                            <label htmlFor="shopName"
+                                                   className="block font-semibold text-tiny text-black-1 mb-2">
+                                                Tên cửa hàng / thương hiệu
+                                            </label>
+                                            <div
+                                                className="bg-white flex items-center px-3 rounded-md border border-border h-[40px] w-full shadow-md">
+                                                <div className="flex items-center gap-3 w-full">
+                                                    <div className="flex items-center justify-center w-[20px] h-[20px]">
+                                                        <UilStore className="w-full h-full text-gray"/>
+                                                    </div>
+                                                    <input id="shopName" type="text" value={shopName}
+                                                           onChange={(e) => setShopName(e.target.value)}
+                                                           className="flex-1 focus:outline-none text-md font-medium text-black-1"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="mb-5">
+                                            <label htmlFor="shopEmail"
+                                                   className="block font-semibold text-tiny text-black-1 mb-2">
+                                                Địa chỉ email (dành cho cửa hàng)
+                                            </label>
+                                            <div
+                                                className="bg-white flex items-center px-3 rounded-md border border-border h-[40px] w-full shadow-md">
+                                                <div className="flex items-center gap-3 w-full">
+                                                    <div className="flex items-center justify-center w-[20px] h-[20px]">
+                                                        <UilAt className="w-full h-full text-gray"/>
+                                                    </div>
+                                                    <input id="shopEmail" type="email" value={shopEmail}
+                                                           onChange={(e) => setShopEmail(e.target.value)}
+                                                           className="flex-1 focus:outline-none text-md font-medium text-black-1"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="mb-5">
+                                            <label htmlFor="shopPhone"
+                                                   className="block font-semibold text-tiny text-black-1 mb-2">
+                                                Số điện thoại
+                                            </label>
+                                            <div
+                                                className="bg-white flex items-center px-3 rounded-md border border-border h-[40px] w-full shadow-md">
+                                                <div className="flex items-center gap-3 w-full">
+                                                    <div className="flex items-center justify-center w-[20px] h-[20px]">
+                                                        <UilPhone className="w-full h-full text-gray"/>
+                                                    </div>
+                                                    <input id="shopPhone" type="number" value={shopPhone}
+                                                           onChange={(e) => setShopPhone(e.target.value)}
+                                                           className="flex-1 focus:outline-none text-md font-medium text-black-1"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="mb-5">
+                                            <Address
+                                                handleCity={setCity} handleDistrict={setDistrict} handleWard={setWards}
+                                                addressDetail={addressDetail} setAddressDetail={setAddressDetail}
+                                                handleWarehouse={setWarehouse}
+                                            />
+                                        </div>
+                                        <div className="w-full">
+                                            <button type="submit"
+                                                    className="w-full bg-primary h-[40px] rounded-md text-tiny font-medium text-white">
+                                                Đăng ký ngay
+                                            </button>
+                                        </div>
+                                    </form>
+                                </>
+                            }
                         </div>
                     </div>
                 </div>
@@ -194,10 +371,11 @@ function SalesRegister() {
                 </div>
             </div>
         </Helmet>
-    );
+    )
+        ;
 }
 
-const Address = ({handleWarehouse, handleCity, handleDistrict, handleWard, address, setAddress}) => {
+const Address = ({handleWarehouse, handleCity, handleDistrict, handleWard, addressDetail, setAddressDetail}) => {
     const [warehouse, setWarehouse] = useState([]);
     const [city, setCity] = useState([]);
     const [district, setDistrict] = useState([]);
@@ -332,7 +510,7 @@ const Address = ({handleWarehouse, handleCity, handleDistrict, handleWard, addre
                 </div>
             </div>
             <div className="mb-5">
-                <label htmlFor="phoneNumber"
+                <label htmlFor="shopPhone"
                        className="block font-semibold text-tiny text-black-1 mb-2">
                     Địa chỉ chi tiết
                 </label>
@@ -342,9 +520,9 @@ const Address = ({handleWarehouse, handleCity, handleDistrict, handleWard, addre
                         <div className="flex items-center justify-center w-[20px] h-[20px]">
                             <UilLocationPoint className="w-full h-full text-gray"/>
                         </div>
-                        <input id="phoneNumber" type="text" value={address}
+                        <input id="shopPhone" type="text" value={addressDetail}
                                onChange={(e) => {
-                                   setAddress(e.target.value)
+                                   setAddressDetail(e.target.value)
                                }}
                                className="flex-1 focus:outline-none text-md font-medium text-black-1"/>
                     </div>

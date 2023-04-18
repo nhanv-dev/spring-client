@@ -1,9 +1,8 @@
 import React from "react";
-import {BrowserRouter, Link, Route, Routes} from "react-router-dom";
+import {BrowserRouter, Link, Route, Routes, useNavigate} from "react-router-dom";
 import UserRouter from "./UserRouter";
 import ShopRouter from "./ShopRouter";
 import AdminRouter from "./AdminRouter";
-import PageNotFound from '../assets/images/404-errors.png';
 
 function Router() {
 
@@ -21,16 +20,16 @@ function Router() {
 }
 
 export function NotFound() {
+    const navigate = useNavigate();
     return (
-        <div className="w-[100vw] h-[100vh] overflow-hidden flex items-center justify-center">
-            <div className="w-[600px]">
-                <img
-                    src={'https://www.dpmarketingcommunications.com/wp-content/uploads/2016/11/404-Page-Featured-Image.png'}
-                    alt="404" className="w-full"/>
-                <Link to={"/trang-chu"} className="block mx-auto w-max px-6 py-2 rounded-md bg-primary-bg text-primary font-semibold">
-                    Quay lại trang chủ
-                </Link>
-            </div>
+        <div className="w-[100vw] h-[100vh] overflow-hidden flex flex-col items-center justify-center">
+            <img
+                src={'https://1.bp.blogspot.com/-W_8l-L7BARo/Xs0wlcD8GcI/AAAAAAAAJhQ/H5ztSXUAVYIKy2cEynjAOMd1M9qicizcgCLcBGAsYHQ/s1600/404.png'}
+                alt="404" className="w-[500px] mb-10"/>
+            <button onClick={() => navigate(-1)}
+                    className="block mx-auto w-max px-6 py-2 rounded-md bg-primary-bg text-primary font-semibold">
+                Quay lại
+            </button>
         </div>
     )
 }

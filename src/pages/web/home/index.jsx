@@ -15,7 +15,7 @@ function Home() {
 
 
     useEffect(() => {
-        publicRequest().get(`/products?page=${page}`)
+        publicRequest().get(`/products?page=${page - 1}`)
             .then(res => {
                 setItems(res.data.content)
                 setTotalPages(res.data.totalPages)

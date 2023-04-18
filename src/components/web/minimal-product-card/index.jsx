@@ -4,7 +4,7 @@ import {formatCurrency} from "../../../util/format";
 function MinimalProductCard({item}) {
 
     return (
-        <div className="cursor-pointer relative group w-full rounded-md bg-white rounded-md p-2 min-w-[135px]">
+        <div className="cursor-pointer relative group w-full rounded-md bg-white p-2 min-w-[135px] h-[220px]">
             <Link to={`/san-pham/${item.slug}`} className="w-full flex items-center justify-center mb-2">
                 <img src={item.images[0]?.url || imageNotFound} alt={item.name} className="rounded-md"/>
             </Link>

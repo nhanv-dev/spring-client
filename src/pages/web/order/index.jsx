@@ -6,6 +6,7 @@ import * as Icon from "@iconscout/react-unicons";
 import {protectedRequest, publicRequest} from "../../../util/request-method";
 import OrderBlock from "./OrderBlock";
 import UserLayout from "../../../components/web/user-layout";
+import ToastCustom from "../../../components/common/toast-custom";
 
 function Order() {
     const navigate = useNavigate();
@@ -48,16 +49,17 @@ function Order() {
     return (
         <Helmet title="Depot - Đơn đặt hàng">
             <UserLayout>
+                <ToastCustom/>
                 <div className="mb-5 shadow rounded-md bg-white">
-                    <div className="flex justify-between items-center">
+                    <div className="flex justify-between items-center font-semibold text-black-2 text-md">
                         <button
-                            className="text-center flex-1 font-medium text-black-2 text-md py-3 hover:bg-primary-bg hover:text-primary rounded-md transition-all">
+                            className="text-center flex-1 py-3 hover:bg-primary-bg hover:text-primary rounded-md transition-all">
                             Tất cả
                         </button>
                         {orderStatus.map(status => (
                             <button key={status.id}
-                                    className="text-center flex-1 font-medium text-black-2 text-md py-3 hover:bg-primary-bg hover:text-primary rounded-md transition-all">
-                                {status.description}
+                                    className="text-center flex-1 py-3 hover:bg-primary-bg hover:text-primary rounded-md transition-all">
+                                {status.title}
                             </button>
                         ))}
                     </div>

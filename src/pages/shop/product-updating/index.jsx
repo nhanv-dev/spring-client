@@ -34,15 +34,14 @@ function ProductUpdating() {
     function formatVariants(variants) {
         if (!variants) return null;
         return [...variants].map(v => {
-            const attributeHash = v.options.map(o => o.name).join("_")
-            const skuUser = v.options.map(o => o.name).join(" + ")
+            const attributeHash = v.options.map(o => o.name).join(" + ")
             const deal = {
                 price: v.price,
                 finalPrice: v.finalPrice,
                 discountPercent: v.discountPercent,
             }
             return {
-                deal, skuUser, attributeHash, options: v.options, quantity: v.quantity
+                deal, attributeHash, options: v.options, quantity: v.quantity
             }
         })
     }
@@ -62,7 +61,7 @@ function ProductUpdating() {
             variants: formatVariants(payload.variants),
         }
         console.log(data)
-        protectedRequest().post("/shops/products", data)
+        protectedRequest().put(`/shops/products/${data.id}`, data)
             .then(res => {
                 toast.success('Cập nhật sản phẩm thành công');
                 setTimeout(() => {

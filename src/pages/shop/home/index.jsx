@@ -5,12 +5,16 @@ import {protectedRequest} from "../../../util/request-method";
 import {useSelector} from "react-redux";
 import DefaultShop from "../../../assets/images/default-shop.png";
 import DefaultShopBg from "../../../assets/images/default-shop-bg.png";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import * as Icon from "@iconscout/react-unicons";
 import StarRating from "../../../components/common/star-rating";
 import {formatBetweenDate} from "../../../util/format";
+import ProfileShopUpdating from "./ProfileShopUpdating";
+import ToastCustom from "../../../components/common/toast-custom";
+import {toast} from "react-hot-toast";
 
 function Home() {
+    const navigate = useNavigate()
     const {shop} = useSelector(state => state);
     const [shopDetail, setShopDetail] = useState({});
 
@@ -18,17 +22,31 @@ function Home() {
         if (!shop?.id) return;
         protectedRequest().get(`/shops/${shop.id}`)
             .then(res => {
-                console.log(res)
                 setShopDetail(res.data)
             })
             .catch(err => {
                 setShopDetail({})
             })
     }, [shop])
+    const handleUpdateShop = async (data) => {
+        protectedRequest().put(`/shops/${shop.id}`, data)
+            .then(res => {
+                console.log(res)
+                if (res.status === 200) {
+                    toast.success("Cập nhật thông tin cửa hàng thành công")
+                    setShopDetail(res.data)
+                }
+            })
+            .catch(err => {
+                toast.error("Cập nhật thông tin cửa hàng thất bại")
+                console.log(err)
+            })
 
+    }
     return (
         <Helmet title="Depot - Kênh bán hàng">
             <Layout>
+                <ToastCustom/>
                 <div className="bg-white rounded-md mb-6">
                     <div className="relative border-b border-b-border-1 flex items-center justify-center h-[300px]">
                         <img className="p-3" alt="background shop"
@@ -177,80 +195,8 @@ function Home() {
                         </div>
                     </div>
                     <div className="basis-1/3 bg-white rounded-md p-5">
-                        <div className="flex items-center justify-end">
-                            <Link to={"/kenh-ban-hang/thong-tin"} className="font-medium text-tiny text-black-2">
-                                Chỉnh sửa
-                            </Link>
-                        </div>
-                        {shop?.slogan &&
-                            <span className="font-medium text-md italic mb-3">
-                                "{shopDetail.slogan}"
-                            </span>
-                        }
-                        <div
-                            className="px-3 font-medium text-tiny text-black-2 mb-3">
-                            <span>Đường dẫn của shop: </span>
-                            <Link to={`/cua-hang/${shopDetail.slug}`}
-                                  className="outline-none text-primary hover:underline transition-all">
-                                {window.location.origin}/cua-hang/{shopDetail.slug}
-                            </Link>
-                        </div>
-                        <h5 className="py-2 px-3 mb-3 bg-app-1 rounded-md flex items-center font-medium text-base">
-                            Hoạt động
-                        </h5>
-                        <div className="px-3">
-                            <div className="mb-3 flex items-center gap-3 justify-between">
-                                <span className="text-black-2 font-medium text-md">Thời gian hoạt động: </span>
-                                <span
-                                    className="text-black-2 font-medium text-md"> {formatBetweenDate(shopDetail.createdAt)}</span>
-                            </div>
-                            <div className="mb-3 flex items-center gap-3 justify-between">
-                                <span className="text-black-2 font-medium text-md">Thời gian phản hồi: </span>
-                                <span className="text-black-2 font-medium text-md">
-                                {shop.responseRate ? `${shop.responseRate}%` : 'Đang cập nhật'}
-                            </span>
-                            </div>
-                            <div className="mb-3 flex items-center gap-3 justify-between">
-                                <span className="text-black-2 font-medium text-md">Tỉ lệ phản hồi: </span>
-                                <span className="text-black-2 font-medium text-md">
-                                {shop.responseRate ? `${shop.responseRate}%` : 'Đang cập nhật'}
-                            </span>
-                            </div>
-                        </div>
-                        <h5 className="py-2 px-3 mb-3 bg-app-1 rounded-md flex items-center font-medium text-base">
-                            Thông tin cửa hàng
-                        </h5>
-                        <div className="px-3">
-                            <div className="mb-3 flex items-center gap-3 justify-between">
-                                <span className="text-md font-medium text-black-2">Địa chỉ kho hàng: </span>
-                                <span
-                                    className="text-md font-medium text-black-2">{shopDetail.warehouseRegionName}</span>
-                            </div>
-                            <div className="mb-3 flex items-center gap-3 justify-between">
-                                <span className="text-md font-medium text-black-2">Thành phố: </span>
-                                <span className="text-md font-medium text-black-2">{shopDetail.city}</span>
-                            </div>
-                            <div className="mb-3 flex items-center gap-3 justify-between">
-                                <span className="text-md font-medium text-black-2">Quận: </span>
-                                <span className="text-md font-medium text-black-2">{shopDetail.district}</span>
-                            </div>
-                            <div className="mb-3 flex items-center gap-3 justify-between">
-                                <span className="text-md font-medium text-black-2">Phường: </span>
-                                <span className="text-md font-medium text-black-2">{shopDetail.wards}</span>
-                            </div>
-                            <div className="mb-3 flex items-center gap-3 justify-between">
-                                <span className="text-md font-medium text-black-2">Địa chỉ chi tiết: </span>
-                                <span className="text-md font-medium text-black-2">{shopDetail.addressDetail}</span>
-                            </div>
-                            <div className="mb-3 flex items-center gap-3 justify-between">
-                                <span className="text-md font-medium text-black-2">Email: </span>
-                                <span className="text-md font-medium text-black-2">{shopDetail.shopEmail}</span>
-                            </div>
-                            <div className="mb-3 flex items-center gap-3 justify-between">
-                                <span className="text-md font-medium text-black-2">Số điện thoại: </span>
-                                <span className="text-md font-medium text-black-2">{shopDetail.shopPhone}</span>
-                            </div>
-                        </div>
+                        <ProfileShopUpdating shopDetail={shopDetail} setShopDetail={setShopDetail}
+                                             handleUpdateShop={handleUpdateShop}/>
                     </div>
                 </div>
             </Layout>

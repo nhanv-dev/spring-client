@@ -10,7 +10,7 @@ import toast from "react-hot-toast";
 
 function CartItem({item}) {
     const dispatch = useDispatch();
-
+    console.log(item)
     const handleDelete = async (item) => {
         const action = await removeFromCart(item);
         dispatch(action)
@@ -59,12 +59,25 @@ function CartItem({item}) {
                 </div>
             </div>
             <div className="min-w-[100px] flex flex-col justify-center items-end">
-                <p className="line-clamp-1 font-bold text-base text-primary">
-                    {formatCurrency(item.product.deal.finalPrice)}
-                </p>
-                <p className="line-clamp-1 font-bold text-tiny text-gray line-through">
-                    {formatCurrency(item.product.deal.price)}
-                </p>
+                {item.variant ?
+                    <>
+                        <p className="line-clamp-1 font-bold text-base text-primary">
+                            {formatCurrency(item.variant.deal.finalPrice)}
+                        </p>
+                        <p className="line-clamp-1 font-bold text-tiny text-gray line-through">
+                            {formatCurrency(item.variant.deal.price)}
+                        </p>
+                    </> :
+                    <>
+                        <p className="line-clamp-1 font-bold text-base text-primary">
+                            {formatCurrency(item.product.deal.finalPrice)}
+                        </p>
+                        <p className="line-clamp-1 font-bold text-tiny text-gray line-through">
+                            {formatCurrency(item.product.deal.price)}
+                        </p>
+                    </>
+                }
+
             </div>
             <div className="flex items-center justify-center gap-1 py-1 px-2.5 bg-secondary-bg rounded-md h-max">
                 <button onClick={() => handleUpdateQuantity(item.quantity - 1)}
@@ -81,7 +94,10 @@ function CartItem({item}) {
             </div>
             <div className="min-w-[100px] flex justify-center">
                 <p className="line-clamp-1 font-semibold text-base text-primary">
-                    {formatCurrency(item.product.deal.finalPrice * item.quantity)}
+                    {item.variant ?
+                        <> {formatCurrency(item.variant.deal.finalPrice * item.quantity)}</> :
+                        <> {formatCurrency(item.product.deal.finalPrice * item.quantity)}</>
+                    }
                 </p>
             </div>
             <div className="flex items-center justify-end gap-3">

@@ -17,7 +17,9 @@ import {protectedRequest} from "../../../util/request-method";
 import Images from "./Images";
 import Tooltip from "@mui/material/Tooltip";
 import {toast} from "react-hot-toast";
-import {Pagination, PaginationItem} from "@mui/material";
+import {Pagination} from "@mui/material";
+import ImageNotFound from '../../../assets/images/image-not-found.jpg';
+
 
 const headers = [
     {
@@ -194,7 +196,7 @@ export default function ProductTable({products, pagination, setPagination}) {
                                         <div className={`${headers[index++].class} font-medium text-tiny`}>
                                             <div className="flex items-start gap-3">
                                                 <Link to={`/san-pham/${product.slug}`} className="block">
-                                                    <img src={product.images[0]?.url} alt={i}
+                                                    <img src={product.images[0]?.url || ImageNotFound} alt={i}
                                                          className="rounded-md w-[50px] min-w-[50px]"/>
                                                 </Link>
                                                 <Link to={`/san-pham/${product.slug}`} className={"line-clamp-2"}>

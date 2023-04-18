@@ -9,10 +9,10 @@ export const placeOrder = async (payload) => {
         const items = order.items.map(item => {
             let deal = item.product.deal;
             if (item.variant) {
-                totalPrice += item.variant.deal.finalPrice;
+                totalPrice += item.variant.deal.finalPrice * item.quantity;
                 deal = item.variant.deal;
             } else {
-                totalPrice += item.product.deal.finalPrice;
+                totalPrice += item.product.deal.finalPrice * item.quantity;
             }
             cartItems.push(item.id)
             return {...item, cartItemId: item.id, ...deal, isEvaluated: false}

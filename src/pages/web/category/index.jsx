@@ -39,7 +39,7 @@ function Home() {
     }, [slug])
 
     useEffect(() => {
-        publicRequest().get(`/products/category/${slug}?page=${page}`)
+        publicRequest().get(`/products/category/${slug}?page=${page - 1}`)
             .then(res => {
                 setItems(res.data.content)
                 setTotalPages(res.data.totalPages)

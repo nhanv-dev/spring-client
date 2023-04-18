@@ -6,10 +6,9 @@ function Product({shop}) {
     const [products, setProducts] = useState([]);
     useEffect(() => {
         if (!shop) return;
-        publicRequest().get(`/products/shop/${shop.id}`)
+        publicRequest().get(`/products/shops/${shop.id}`)
             .then(res => {
-                console.log(res)
-                setProducts(res.data.products);
+                setProducts([...res.data.content]);
             })
             .catch(err => {
                 setProducts([]);
@@ -19,9 +18,9 @@ function Product({shop}) {
     return (
         <div className="container">
             <div className="grid grid-cols-6 gap-3">
-                {products?.map((product, index) => {
+                {products?.map((product) => {
                     return (
-                        <ProductCard key={index} product={product}/>
+                        <ProductCard key={product.id} item={product}/>
                     )
                 })}
             </div>

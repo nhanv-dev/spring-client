@@ -11,9 +11,7 @@ function ProductCard({item}) {
         <div className="relative block w-full min-h-full shadow-sm bg-white rounded-md hover:shadow-xl transition-all">
             <Link to={`/san-pham/${item.slug}`}
                   className="block absolute left-0 right-0 top-0 bottom-0 bg-[transparent] z-10"/>
-            <div className="rounded-t-md h-[200px] relative">
-                <img src={item?.images?.length > 0 ? item.images[0].url : ImageNotFound} alt="product"
-                     className="rounded-t-md h-full"/>
+            <div className="rounded-t-md h-[200px] relative bg-cover bg-center" style={{backgroundImage:`url(${item?.images?.length > 0 ? item.images[0].url : ImageNotFound})`}}>
                 <div className="absolute top-0 left-0 rounded-tl-md overflow-hidden">
                     <img src={"https://salt.tikicdn.com/ts/upload/5d/4c/f7/0261315e75127c2ff73efd7a1f1ffdf2.png"}
                          alt={"astra"} className="h-[17px] min-h-[17px]"/>
@@ -29,7 +27,7 @@ function ProductCard({item}) {
                 </p>
                 <div className="mb-0.5">
                     {
-                        item.deal ?
+                        item.deal?.discount > 0 ?
                             <div className="flex items-end justify-start gap-3">
                                 <p className="font-semibold text-base text-red">
                                     {formatCurrency(item.deal.finalPrice)}
@@ -38,7 +36,7 @@ function ProductCard({item}) {
                                     -{item.deal.discountPercent}%
                                 </p>
                             </div> :
-                            <p className="font-semibold text-base text-black-1">
+                            <p className="font-semibold text-base text-primary">
                                 {formatCurrency(item.deal.price)}
                             </p>
                     }

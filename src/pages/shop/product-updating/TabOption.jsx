@@ -148,9 +148,9 @@ const Variant = ({attributes, selectedVariant, setSelectedVariant, variants, set
                     return (
                         <div key={i} className="flex items-center justify-between gap-5 flex-wrap mb-5">
                             <p className="rounded-md font-semibold text-md text-black-1">
-                                {attribute.name || `Thuộc tính ${i + 1}`}
+                                {attribute?.name || `Thuộc tính ${i + 1}`}
                             </p>
-                            {(attribute.name && attribute.options.length > 0) ?
+                            {(attribute.name && attribute.options?.length > 0) ?
                                 <div className="min-w-[180px] relative">
                                     <button onClick={() => {
                                         setShow(attribute.attributeId)

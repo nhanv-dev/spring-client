@@ -23,7 +23,6 @@ function Shop() {
     useEffect(() => {
         publicRequest().get(`/shops/slug/${slug}`)
             .then(res => {
-                console.log(res)
                 setShop(res.data);
                 setLoading(false);
             })
@@ -46,12 +45,12 @@ function Shop() {
                                     <img alt="background" className="w-auto h-[150px]"
                                          src={shop.shopBackground || DefaultShopBg}/>
                                 </div>
-                                <div className="flex gap-3 py-4 px-6 border-b-2 border-[#e7e8ea]">
+                                <div className="flex gap-3 py-4 px-6 border-b-2 border-border-1">
                                     <div
                                         className="flex items-center justify-center rounded-full w-[90px] h-[90px] overflow-hidden border-[3px] border-primary">
                                         <img src={shop.shopLogo || DefaultShop} alt="avatar" className="w-full"/>
                                     </div>
-                                    <div className="flex gap-4 border-r-2 border-[#e7e8ea] pr-4">
+                                    <div className="flex gap-4 border-r-2 border-border-1 pr-4">
                                         <div className="flex-1">
                                             <h5 className="max-w-[250px] font-bold text-black text-lg line-clamp-1 break-words"
                                                 title={shop.shopName}>
@@ -97,47 +96,47 @@ function Shop() {
                                         </div>
                                     </div>
                                     <div className="flex-1 flex items-center justify-between">
-                                        <div className="flex-1 relative py-1 border-r-[2px] border-[#e7e8ea]">
-                                            <div className="flex items-center gap-3 justify-center mb-1">
-                                                <Icon.UilShop
-                                                    className="relative top-[-.5px] w-[20px] h-[20px] fill-black-1"/>
+                                        <div className="flex-1 relative py-1 border-r-[2px] border-border-1">
+                                            <div className="flex items-center gap-2 justify-center mb-1">
+                                                <Icon.UilStore
+                                                    className="relative top-[-.5px] w-[22px] h-[22px] fill-black-1"/>
                                                 <span
-                                                    className="font-medium text-[#0f62fe] text-[.95rem]">{formatBetweenDate(shop.createdAt)}</span>
+                                                    className="font-semibold text-primary text-md">{formatBetweenDate(shop.createdAt)}</span>
                                             </div>
-                                            <p className="text-center font-medium text-md text-black-1">
+                                            <p className="text-center font-bold text-md text-black-2">
                                                 Bán hàng trên Shopio
                                             </p>
                                         </div>
-                                        <div className="flex-1 relative py-1 border-r-[2px] border-[#e7e8ea]">
-                                            <div className="flex items-center gap-3 justify-center mb-1">
+                                        <div className="flex-1 relative py-1 border-r-[2px] border-border-1">
+                                            <div className="flex items-center gap-2 justify-center mb-1">
                                                 <Icon.UilArchive
-                                                    className="relative top-[-.5px] w-[20px] h-[20px] fill-black-1"/>
+                                                    className="relative top-[-.5px] w-[22px] h-[22px] fill-black-1"/>
                                                 <span
-                                                    className="font-medium text-[#0f62fe] text-[.95rem]">{shop.amountProducts}</span>
+                                                    className="font-semibold text-primary text-md">{shop.productTotal || 0}</span>
                                             </div>
-                                            <p className="text-center font-medium text-md text-black-1">
+                                            <p className="text-center font-bold text-md text-black-2">
                                                 Sản phẩm
                                             </p>
                                         </div>
-                                        <div className="flex-1 relative py-1 border-r-[2px] border-[#e7e8ea]">
-                                            <div className="flex items-center gap-3 justify-center mb-1">
-                                                <Icon.UilCommentAltChartLines
-                                                    className="relative top-[-.5px] w-[20px] h-[20px] fill-black-1"/>
+                                        <div className="flex-1 relative py-1 border-r-[2px] border-border-1">
+                                            <div className="flex items-center gap-2 justify-center mb-1">
+                                                <Icon.UilCommentAltLines
+                                                    className="relative top-[-.5px] w-[22px] h-[22px] fill-black-1"/>
                                                 <span
-                                                    className="font-medium text-[#0f62fe] text-[.95rem]">{shop.responseRate}%</span>
+                                                    className="font-semibold text-primary text-md">{shop.responseRate ? `${shop.responseRate}%`: 'Đang cập nhật'}</span>
                                             </div>
-                                            <p className="text-center font-medium text-md text-black-1">
+                                            <p className="text-center font-bold text-md text-black-2">
                                                 Tỉ lệ phản hồi
                                             </p>
                                         </div>
                                         <div className="flex-1 relative py-1">
-                                            <div className="flex items-center gap-3 justify-center mb-1">
+                                            <div className="flex items-center gap-2 justify-center mb-1">
                                                 <Icon.UilHistory
-                                                    className="relative top-[-.5px] w-[20px] h-[20px] fill-black-1"/>
+                                                    className="relative top-[-.5px] w-[22px] h-[22px] fill-black-1"/>
                                                 <span
-                                                    className="font-medium text-[#0f62fe] text-[.95rem]">{shop.responseTime}</span>
+                                                    className="font-semibold text-primary text-md">{shop.responseTime ? `${shop.responseTime}%`: 'Đang cập nhật'}</span>
                                             </div>
-                                            <p className="text-center font-medium text-md text-black-1">
+                                            <p className="text-center font-bold text-md text-black-2">
                                                 Thời gian phản hồi
                                             </p>
                                         </div>

@@ -1,19 +1,12 @@
 import {Link} from "react-router-dom";
 import {formatCurrency, formatLongDate, formatMediumDate} from "../../../util/format";
-import {
-    UilArrowUp, UilBan, UilCheck,
-    UilCheckCircle,
-    UilCircle,
-    UilMinus,
-    UilPlus,
-    UilPlusCircle,
-    UilSearch
-} from "@iconscout/react-unicons";
+import {UilArrowRight, UilArrowUp, UilBan, UilEye, UilMinus, UilPlus, UilSearch} from "@iconscout/react-unicons";
 import TablePagination from "@mui/material/TablePagination";
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import {Pagination} from "@mui/material";
 import ImageNotFound from "../../../assets/images/image-not-found.jpg";
-import {protectedRequest} from "../../../util/request-method";
+import StatusStepper from "../order/StatusStepper";
+import StatusBadge from "../order/StatusBadge";
 
 const headers = [
     {
@@ -21,15 +14,8 @@ const headers = [
         label: 'Mã đơn hàng',
         sortable: true,
         align: 'start',
-        class: 'flex-1 min-w-[200px] max-w-[200px] text-left',
+        class: 'flex-1 min-w-[130px] max-w-[130px] text-left',
         headerClass: 'pl-[42px]',
-    },
-    {
-        name: 'phoneNumber',
-        label: 'Số điện thoại',
-        sortable: true,
-        align: 'start',
-        class: 'flex-1 min-w-[200px] max-w-[200px] text-left',
     },
     {
         name: 'isPublic',
@@ -66,6 +52,13 @@ const headers = [
         align: 'end',
         class: 'flex-1 min-w-[150px] max-w-[150px] text-end',
     },
+    {
+        name: '',
+        label: 'Thao tác',
+        sortable: false,
+        align: 'end',
+        class: 'min-w-[100px] max-w-[100px] text-end',
+    },
 ];
 const TableHead = () => {
 
@@ -99,12 +92,9 @@ const TableHead = () => {
         </div>
     )
 }
-export default function OrderTable({orderStatus, orders, pagination, setPagination}) {
-    const [expanded, setExpanded] = useState([84]);
+export default function OrderTable({orderStatus, orders, setOrders, pagination, setPagination}) {
+    const [expanded, setExpanded] = useState([19]);
 
-    useEffect(() => {
-        // setExpanded([])
-    }, [pagination, setPagination])
     const handleChangePage = (event, newPage) => {
         event.preventDefault();
         setPagination(prev => ({...prev, page: newPage, loaded: false}))
@@ -122,17 +112,10 @@ export default function OrderTable({orderStatus, orders, pagination, setPaginati
         else setExpanded(prev => ([...prev.filter(i => i !== id)]))
     }
 
-    const confirmOrder = (id) => {
-        protectedRequest().put(``)
-    }
-    const cancelOrder = (id) => {
-
-    }
-
     if (!pagination.loaded) {
         return (
             <div className="flex w-full items-center justify-center">
-                <p className="font-semibold text-lg">
+                <p className="font-semibold text-base">
                     Đang load...
                 </p>
             </div>
@@ -164,11 +147,14 @@ export default function OrderTable({orderStatus, orders, pagination, setPaginati
                 <TableHead/>
                 <div className="mb-3 w-full">
                     {orders.length === 0 &&
-                        <div className="my-10 text-center font-bold text-lg">Không tìm thấy sản phẩm nào</div>
+                        <div className="my-10 text-center font-bold text-base">Không tìm thấy sản phẩm nào</div>
                     }
                     {orders.map((order) => {
                         const expandOrder = expanded.filter(i => i === order.id);
                         let index = 0;
+                        if (order?.statusHistory?.length < 4) {
+                            console.log(order.statusHistory)
+                        }
                         return (
                             <div key={order.id} className="w-full border-b border-b-border-1 border-dashed">
                                 <div
@@ -191,16 +177,7 @@ export default function OrderTable({orderStatus, orders, pagination, setPaginati
                                             </div>
                                         </div>
                                         <div className={`${headers[index++].class} font-medium text-tiny`}>
-                                            <div
-                                                className="font-semibold">
-                                                {order.address.phoneNumber}
-                                            </div>
-                                        </div>
-                                        <div className={`${headers[index++].class} font-medium text-tiny`}>
-                                            <div
-                                                className="select-none text-success bg-success-bg max-w-max min-w-max px-3 py-1 text-center font-semibold text-sm rounded-full">
-                                                {order.orderStatus.description}
-                                            </div>
+                                            <StatusBadge orderStatus={order.orderStatus}/>
                                         </div>
                                         <div
                                             className={`${headers[index++].class} font-semibold text-base text-primary`}>
@@ -212,10 +189,17 @@ export default function OrderTable({orderStatus, orders, pagination, setPaginati
                                         </div>
 
                                         <div className={`${headers[index++].class} font-medium text-tiny`}>
-                                            {formatLongDate(order.updatedAt)}
+                                            {formatMediumDate(order.updatedAt)}
                                         </div>
                                         <div className={`${headers[index++].class} font-medium text-tiny`}>
                                             {formatMediumDate(order.createdAt)}
+                                        </div>
+                                        <div
+                                            className={`${headers[index++].class} font-medium text-tiny flex justify-end items-center`}>
+                                            <Link to={`/kenh-ban-hang/don-dat-hang/${order.id}`}
+                                                  className="rounded-full flex items-center justify-center w-[26px] h-[26px] min-w-[26px] min-h-[26px] bg-primary-bg text-primary">
+                                                <UilArrowRight className={"w-[18px] h-[18px]"}/>
+                                            </Link>
                                         </div>
                                     </div>
                                     <div
@@ -225,7 +209,7 @@ export default function OrderTable({orderStatus, orders, pagination, setPaginati
                                                 <div className="w-full bg-white rounded-md mb-5 overflow-hidden p-3">
                                                     {order.items.map(item => (
                                                         <div key={item.id}
-                                                             className="relative flex flex-wrap items-start justify-between gap-8 p-3">
+                                                             className="hover:bg-app-1 transition-all rounded-md relative flex flex-wrap items-start justify-between gap-8 p-3">
                                                             {item.product.isDeleted &&
                                                                 <div
                                                                     className="absolute left-0 top-0 right-0 bottom-0 bg-[rgba(255,255,255,0.6)] z-0 rounded-md">
@@ -233,49 +217,94 @@ export default function OrderTable({orderStatus, orders, pagination, setPaginati
                                                                         className="absolute left-[50%] top-[50%] translate-x-[-50%] z-10 translate-y-[-50%]">
                                                                         <p className="font-semibold text-danger flex items-center gap-2 bg-danger-bg py-2 px-3 rounded-md text-md z-10">
                                                                             <UilBan
-                                                                                className={"w-[18px] h-[18px]"}/> Sản
-                                                                            phẩm đã bị xóa
+                                                                                className={"w-[18px] h-[18px]"}/>
+                                                                            Sản phẩm đã bị xóa
                                                                         </p>
                                                                     </div>
                                                                 </div>
                                                             }
                                                             <div className="flex-1 flex items-start gap-2">
-                                                                <div className="rounded-md border border-border-1">
+                                                                <div
+                                                                    className="rounded-md border border-border-1">
                                                                     <img alt="product"
-                                                                         className="w-[60px] h-[60px] rounded-md"
+                                                                         className="w-[70px] h-[70px] min-w-[70px] min-h-[70px] rounded-md"
                                                                          src={item?.product?.images?.length > 0 ? item?.product?.images[0]?.url : ImageNotFound}/>
                                                                 </div>
-                                                                <Link to={`/san-pham/${item.product.slug}`}
-                                                                      className="pt-1 font-medium text-tiny min-w-[300px] max-w-[500px] line-clamp-2">
-                                                                    {item.product.name}
-                                                                </Link>
+                                                                <div className="min-w-[300px] max-w-[500px]">
+                                                                    <Link to={`/san-pham/${item.product.slug}`}
+                                                                          title={item.product.name}
+                                                                          className=" font-medium text-tiny max-w-full line-clamp-2 leading-6">
+                                                                        {item.product.name}
+                                                                    </Link>
+                                                                    <div
+                                                                        className="flex items-end gap-2 text-black-2 font-medium text-tiny">
+                                                                        <span className="font-medium text-tiny">
+                                                                           Giá bán hiện tại:
+                                                                        </span>
+                                                                        <span
+                                                                            className="text-danger font-bold text-base">
+                                                                             {formatCurrency(item.product.deal.finalPrice)}
+                                                                        </span>
+                                                                    </div>
+                                                                    <div
+                                                                        className="pt-1 flex items-end gap-6 text-black-2 font-medium text-tiny">
+                                                                        <div
+                                                                            className="font-medium text-tiny min-w-max">
+                                                                            Hiện có <span
+                                                                            className="font-semibold text-danger text-base">
+                                                                                        {item.product.quantity}
+                                                                                    </span> sản phẩm
+                                                                        </div>
+                                                                        {item.variant &&
+                                                                            <div>
+                                                                                <div
+                                                                                    className="font-medium text-tiny min-w-max">
+                                                                                    Phiên bản có <span
+                                                                                    className="font-semibold text-danger text-base"> {item.variant.quantity} </span> sản
+                                                                                    phẩm
+                                                                                </div>
+                                                                            </div>
+                                                                        }
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                             <div
-                                                                className="flex items-end gap-2 text-black-2 font-medium text-tiny">
-                                                                <span className="font-medium text-tiny">
-                                                                   Giá bán:
-                                                                </span>
-                                                                <span className="text-danger font-bold text-base">
-                                                                     {formatCurrency(item.finalPrice)}
-                                                                </span>
-                                                            </div>
-                                                            <div
-                                                                className="flex items-end gap-2 text-black-2 font-medium text-tiny">
-                                                                <span className="font-medium text-tiny">
-                                                                    Số lượng đặt:
-                                                                </span>
-                                                                <span className="text-danger font-bold text-base">
-                                                                    {item.quantity}
-                                                                </span>
-                                                            </div>
-                                                            <div
-                                                                className="flex items-end gap-2 text-black-2 font-medium text-tiny">
-                                                                <span className="font-medium text-tiny">
-                                                                    Tồn kho:
-                                                                </span>
-                                                                <span className="text-danger font-bold text-base">
-                                                                    {item.product.quantity}
-                                                                </span>
+                                                                className="flex items-center justify-end w-full gap-8">
+                                                                {item.variant &&
+                                                                    <div
+                                                                        className="w-[200px] justify-end min-w-max flex items-end gap-2">
+                                                                        <div
+                                                                            className="font-medium text-tiny leading-6">
+                                                                            Phiên bản:
+                                                                        </div>
+                                                                        <div
+                                                                            className="text-danger font-bold text-base leading-6">
+                                                                            {item.variant.attributeHash}
+                                                                        </div>
+                                                                    </div>
+                                                                }
+                                                                <div
+                                                                    className="w-[200px] justify-end min-w-max flex items-end gap-2">
+                                                                    <div
+                                                                        className="font-medium text-tiny leading-6">
+                                                                        Số lượng đặt:
+                                                                    </div>
+                                                                    <div
+                                                                        className="text-danger font-bold text-base leading-6">
+                                                                        {item.quantity}
+                                                                    </div>
+                                                                </div>
+                                                                <div
+                                                                    className="w-[200px] justify-end min-w-max flex items-end gap-2">
+                                                                    <div
+                                                                        className="font-medium text-tiny leading-6">
+                                                                        Giá đặt mua:
+                                                                    </div>
+                                                                    <div
+                                                                        className="text-danger font-bold text-base leading-6">
+                                                                        {formatCurrency(item.finalPrice)}
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     ))}
@@ -290,71 +319,41 @@ export default function OrderTable({orderStatus, orders, pagination, setPaginati
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div className="flex gap-5 flex-wrap mb-8">
+                                                <div className="flex gap-5 flex-wrap mb-10">
                                                     <div className="basis-5/12 p-5 bg-white rounded-md">
-                                                        <div>
-                                                            {orderStatus.map(status => {
-                                                                const active = status.id === order.orderStatus.id;
-                                                                return (
-                                                                    <div key={status.id}
-                                                                         className="gap-5 flex items-start mb-3">
-                                                                        <div className="mt-1">
-                                                                            {active ?
-                                                                                <UilCheck
-                                                                                    className={"text-success rounded-full w-[16px] h-[16px]"}/> :
-                                                                                <UilCircle
-                                                                                    className={" rounded-full w-[16px] h-[16px]"}/>
-                                                                            }
-                                                                        </div>
-                                                                        <div>
-                                                                            <div className="font-medium text-md">
-                                                                                {status.description}
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                )
-                                                            })}
-                                                        </div>
+                                                        <StatusStepper order={order} orderStatus={orderStatus}
+                                                                       setOrders={setOrders}/>
                                                     </div>
                                                     <div className="flex-1">
-                                                        <div className=" mb-3 p-5 bg-white rounded-md">
-                                                            <div className="font-medium mb-3">
+                                                        <div className="p-5 bg-white rounded-md">
+                                                            <div className="font-semibold text-base">
                                                                 Thông tin nhận hàng
                                                             </div>
-                                                            <div className="mb-5 font-medium text-md">
+                                                            <div className="mt-5 font-medium text-md">
                                                                 Tên người nhận: {order.address.customerName}
                                                             </div>
                                                             <div className="flex items-center gap-10">
-                                                                <div className="mb-5 font-medium text-md">
+                                                                <div className="mt-5 font-medium text-md">
                                                                     SĐT: {order.address.phoneNumber}
                                                                 </div>
-                                                                <div className="mb-5 font-medium text-md">
+                                                                <div className="mt-5 font-medium text-md">
                                                                     Email: {order.address.email}
                                                                 </div>
                                                             </div>
-                                                            <div className="mb-5 font-medium text-md">
+                                                            <div className="mt-5 font-medium text-md">
                                                                 Khu
                                                                 vực: {order.address.city}, {order.address.wards}, {order.address.district}
                                                             </div>
-                                                            <div className="mb-5 font-medium text-md">
+                                                            <div className="mt-5 font-medium text-md">
                                                                 Địa chỉ chi tiết: {order.address.addressDetail}
                                                             </div>
-                                                            <div>
-                                                                <p className="mb-1 font-medium text-md">Ghi chú từ người mua:</p>
-                                                                <div className="rounded-md p-3 bg-app-1 font-medium text-md">
-                                                                    {order.note}
+                                                            {order.note &&
+                                                                <div className={"mt-5"}>
+                                                                    <p className="font-medium text-md">
+                                                                        Ghi chú từ người mua: <span>{order.note}</span>
+                                                                    </p>
                                                                 </div>
-                                                            </div>
-                                                        </div>
-                                                        <div className="flex flex-wrap gap-3 items-center justify-end">
-                                                            <button onClick={() => cancelOrder(order.id)}
-                                                                    className="min-w-max bg-danger text-white rounded outline-none px-3 py-2 font-medium text-md">
-                                                                Hủy đơn hàng
-                                                            </button>
-                                                            <button onClick={() => confirmOrder(order.id)}
-                                                                    className="min-w-max bg-primary text-white rounded outline-none px-3 py-2 font-medium text-md">
-                                                                Xác nhận đơn hàng
-                                                            </button>
+                                                            }
                                                         </div>
                                                     </div>
                                                 </div>

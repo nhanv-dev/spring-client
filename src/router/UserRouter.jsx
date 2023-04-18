@@ -52,8 +52,8 @@ function UserRouter() {
                 <Route key={route.path} exact={route.exact} path={route.path} element={<route.component/>}/>
             ))}
             {authRoutes.map(route => (
-                <Route key={route.path} exact={route.exact}
-                       path={route.path} element={<PrivateRouter exact={route.exact} replaceTo={route.replaceTo}/>}>
+                <Route key={route.path} exact={route.exact} path={route.path}
+                       element={<PrivateRouter exact={route.exact} replaceTo={route.replaceTo}/>}>
                     <Route exact path='' element={<route.component/>}/>
                 </Route>
             ))}

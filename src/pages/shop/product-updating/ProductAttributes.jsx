@@ -98,8 +98,9 @@ function ProductAttributes({attributes, setAttributes}) {
                                                        className="rounded-md p-2 text-black-1 font-medium text-md w-full outline-none"/>
                                             </div>
                                         </div>
-                                        <p className="mb-2 text-md font-semibold">Các tùy chọn
-                                            ({attribute.options.length})</p>
+                                        <p className="mb-2 text-md font-semibold">
+                                            Các tùy chọn
+                                            ({attribute.options?.length})</p>
                                         <div className="flex flex-wrap items-center justify-start gap-5">
                                             {attribute.options?.map((option, i) => (
                                                 <div key={i}
