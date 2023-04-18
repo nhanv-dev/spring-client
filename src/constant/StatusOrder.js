@@ -1,0 +1,8 @@
+export const ORDER_PENDING = 'PENDING'
+export const ORDER_CONFIRMED = 'CONFIRMED'
+export const ORDER_SHIPPING = 'SHIPPING'
+export const ORDER_COMPLETED = 'COMPLETED'
+export const ORDER_CANCELLED = 'CANCELLED'
+
+
+

@@ -14,12 +14,14 @@ function App() {
     useEffect(() => {
         const localUser = getItem("user");
         if (!user?.token && !localUser?.token) return setLoading(false);
+
         const login = async () => {
             const action = await validateToken();
             dispatch(action);
             if (action.type === types.user.CHECK_TOKEN_SUCCESS) dispatch(await initializeCart());
             return false;
         }
+
         login()
             .then((loading) => setLoading(loading))
             .catch(err => setLoading(false))

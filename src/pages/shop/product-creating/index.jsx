@@ -24,7 +24,7 @@ function ProductCreating() {
 
     function formatVariants(variants) {
         return [...variants].map(v => {
-            const attributeHash = v.options.map(o => o.name).join("_")
+            const attributeHash = v.options.map(o => o.name).join(" + ")
             const skuUser = v.options.map(o => o.name).join(" + ")
             const deal = {
                 price: v.price,

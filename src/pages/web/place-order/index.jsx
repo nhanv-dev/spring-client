@@ -119,12 +119,24 @@ function PlaceOrder() {
                                                             </div>
                                                             <div className="flex justify-between items-center">
                                                                 <div className="flex items-end gap-3">
-                                                                    <p className="text-base text-primary font-bold">
-                                                                        {formatCurrency(item.product.deal.finalPrice)}
-                                                                    </p>
-                                                                    <p className="text-[.85rem] text-black-1 font-semibold line-through">
-                                                                        {formatCurrency(item.product.deal.price)}
-                                                                    </p>
+                                                                    {item.variant ?
+                                                                        <>
+                                                                            <p className="text-base text-primary font-bold">
+                                                                                {formatCurrency(item.variant.deal.finalPrice)}
+                                                                            </p>
+                                                                            <p className="text-[.85rem] text-black-1 font-semibold line-through">
+                                                                                {formatCurrency(item.variant.deal.price)}
+                                                                            </p>
+                                                                        </> :
+                                                                        <>
+                                                                            <p className="text-base text-primary font-bold">
+                                                                                {formatCurrency(item.product.deal.finalPrice)}
+                                                                            </p>
+                                                                            <p className="text-[.85rem] text-black-1 font-semibold line-through">
+                                                                                {formatCurrency(item.product.deal.price)}
+                                                                            </p>
+                                                                        </>
+                                                                    }
                                                                 </div>
                                                                 <p className="text-primary-hover font-bold text-base">x{item.quantity}</p>
                                                             </div>

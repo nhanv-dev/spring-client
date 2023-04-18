@@ -24,14 +24,17 @@ function ProductDetail() {
     const [selectedOptions, setSelectedOptions] = useState([]);
     const [quantity, setQuantity] = useState(1);
     const [selectedVariant, setSelectedVariant] = useState(null);
+    const [success, setSuccess] = useState(false);
 
     useEffect(() => {
         publicRequest().get(`/products/slug/${slug}`)
             .then(res => {
                 setProduct(res.data)
+                setSuccess(true);
+                console.log(res.data)
             })
             .catch(err => {
-
+                setSuccess(false)
             })
     }, [slug])
 
@@ -67,55 +70,68 @@ function ProductDetail() {
     }
 
     return (
-        <Helmet title={`Depot - ${product?.name}`}>
+        <Helmet title={`Depot - ${product?.name || 'Not found'} `}>
             <Layout>
                 <ToastCustom/>
                 <div className="bg-app-1 pb-10">
-                    <div className="container">
-                        <div
-                            className="py-5 text-tiny font-medium text-black-2 flex items-center justify-start gap-2">
-                            <Link to={"/trang-chu"} className="hover:text-primary transition-all">
-                                Trang Chủ
-                            </Link>
-                            {product?.category &&
-                                <>
-                                    <UilAngleRightB className={"w-[16px] h-[16px]"}/>
-                                    <Link to={`/danh-muc/${product.category.slug}`}
-                                          className="hover:text-primary transition-all">
-                                        {product.category.title}
-                                    </Link>
-                                </>
-                            }
-                            {product?.subCategory &&
-                                <>
-                                    <UilAngleRightB className={"w-[16px] h-[16px]"}/>
-                                    <Link
-                                        to={`/danh-muc/${product.subCategory.slug}`}
-                                        className="hover:text-primary transition-all">
-                                        {product.subCategory.title}
-                                    </Link>
-                                </>
-                            }
-                            <UilAngleRightB className={"w-[16px] h-[16px]"}/>
-                            <p className="line-clamp-1">{product?.name}</p>
-                        </div>
-                        <Overview product={product}
-                                  quantity={quantity}
-                                  updateQuantity={updateQuantity}
-                                  handleAddToCart={handleAddToCart}
-                                  selectedVariant={selectedVariant}
-                                  selectedOptions={selectedOptions}
-                                  setSelectedOptions={setSelectedOptions}
-                        />
-                        <div className="flex flex-wrap justify-between mt-6 max-w-full gap-6 pb-6">
-                            {product?.shop && <Shop shop={product.shop}/>}
-                            <div className="flex-1">
-                                <ProductDescription product={product}/>
-                                <Comment product={product}/>
+                    {success ?
+                        <div className="container">
+                            <div
+                                className="py-5 text-tiny font-medium text-black-2 flex items-center justify-start gap-2">
+                                <Link to={"/trang-chu"} className="hover:text-primary transition-all">
+                                    Trang Chủ
+                                </Link>
+                                {product?.category &&
+                                    <>
+                                        <UilAngleRightB className={"w-[16px] h-[16px]"}/>
+                                        <Link to={`/danh-muc/${product.category.slug}`}
+                                              className="hover:text-primary transition-all">
+                                            {product.category.title}
+                                        </Link>
+                                    </>
+                                }
+                                {product?.subCategory &&
+                                    <>
+                                        <UilAngleRightB className={"w-[16px] h-[16px]"}/>
+                                        <Link
+                                            to={`/danh-muc/${product.subCategory.slug}`}
+                                            className="hover:text-primary transition-all">
+                                            {product.subCategory.title}
+                                        </Link>
+                                    </>
+                                }
+                                <UilAngleRightB className={"w-[16px] h-[16px]"}/>
+                                <p className="line-clamp-1">{product?.name}</p>
+                            </div>
+                            <Overview product={product}
+                                      quantity={quantity}
+                                      updateQuantity={updateQuantity}
+                                      handleAddToCart={handleAddToCart}
+                                      selectedVariant={selectedVariant}
+                                      selectedOptions={selectedOptions}
+                                      setSelectedOptions={setSelectedOptions}
+                            />
+                            <div className="flex flex-wrap justify-between mt-6 max-w-full gap-6 pb-6">
+                                {product?.shop && <Shop shop={product.shop}/>}
+                                <div className="flex-1">
+                                    <ProductDescription product={product}/>
+                                    <Comment product={product}/>
+                                </div>
+                            </div>
+                            <Comment product={product}/>
+                            <Footer product={product}/>
+                        </div> :
+                        <div className="container">
+                            <div className=" py-10 h-[600px] flex flex-col items-center justify-center">
+                                <img className="w-[500px] mb-8"
+                                     src={"https://1.bp.blogspot.com/-W_8l-L7BARo/Xs0wlcD8GcI/AAAAAAAAJhQ/H5ztSXUAVYIKy2cEynjAOMd1M9qicizcgCLcBGAsYHQ/s1600/404.png"}
+                                     alt={"product not found"}/>
+                                <div className="text-center font-bold text-xl">
+                                    Sản phẩm không tồn tại hoặc đã dừng bán.
+                                </div>
                             </div>
                         </div>
-                        <Footer product={product}/>
-                    </div>
+                    }
                 </div>
             </Layout>
         </Helmet>

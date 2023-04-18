@@ -6,14 +6,35 @@ import {Link} from "react-router-dom";
 import Feedback from "./Feedback";
 import CancelOrder from "./CancelOrder";
 import DefaultShop from '../../../assets/images/default-shop.png';
+import {
+    ORDER_CANCELLED,
+    ORDER_COMPLETED,
+    ORDER_CONFIRMED,
+    ORDER_PENDING,
+    ORDER_SHIPPING
+} from "../../../constant/StatusOrder";
 
 function OrderBlock({order, reset}) {
     const [show, setShow] = useState(false)
     const [showFeedback, setShowFeedback] = useState(false);
     const [active, setActive] = useState(null);
+    const [items, setItems] = useState([]);
+
+    useEffect(() => {
+        setItems(order.items);
+    }, [order])
     const handleShowFeedback = (item) => {
         setActive(item);
         setShowFeedback(true)
+    }
+
+    const handleSetItem = (id) => {
+        setItems(prev => {
+            return [...prev].map(item => {
+                if (item.id === id) return {...item, isEvaluated: true}
+                return {...item};
+            })
+        })
     }
     return (
         <div className="relative">
@@ -53,63 +74,72 @@ function OrderBlock({order, reset}) {
                                 </div>
                             </div>
                         </div>
-                        <div className="flex flex-col items-end">
+                        <div className="flex flex-col items-end gap-3">
                             <StatusOrder orderStatus={order.orderStatus}/>
                             <p className="font-medium text-sm text-black-2">
                                 Đặt hàng {formatLongDate(order.createdAt)}
                             </p>
                         </div>
                     </div>
-                    {order.items.map((item) => (
+                    {items.map((item) => (
                         <div key={item.id} className="w-full">
-                            <div className={`py-3 border-t border-border-1`}>
-                                <div className="flex items-center gap-3 justify-between">
-                                    <div className="flex items-start gap-3">
+                            <div className={`py-5 border-t border-border-1`}>
+                                <div className="flex items-start gap-5 justify-between">
+                                    <div className="flex-1 flex items-start gap-3">
                                         <div className="border border-border-1 rounded-md">
                                             <Link className="block w-[80px] h-[80px] bg-cover bg-center rounded-md"
                                                   to={`/san-pham/${item.product.slug}`}
                                                   style={{backgroundImage: `url(${item.product.images?.length > 0 ? item.product.images[0].url : ImageNotFound})`}}>
                                             </Link>
                                         </div>
-                                        <div className="max-w-[600px]">
+                                        <div className="w-full max-w-full">
                                             <Link to={`/san-pham/${item.product.slug}`}
-                                                  className="font-medium text-tiny line-clamp-2 leading-6 transition-all hover:text-primary-hover">
-                                                {item.variant?.options?.length > 0 &&
-                                                    <span
-                                                        className="py-1 px-3 mr-3 min-w-max text-[12px] font-bold bg-primary-bg text-primary rounded-full">
-                                                        {item.variant?.options.map(o => o.name).join(" + ")}
-                                                    </span>
+                                                  className="font-semibold text-black-2 text-md line-clamp-2 leading-6 transition-all hover:text-primary">
+                                                {item.variant?.attributeHash &&
+                                                    <div
+                                                        className="inline-flex items-center justify-center px-3 py-0.5 h-[20px] min-w-max mr-1.5 text-sm font-extrabold bg-primary-bg text-primary rounded-full">
+                                                        <p className="relative top-[.5px]">
+                                                            {item.variant?.attributeHash}
+                                                        </p>
+                                                    </div>
                                                 }
                                                 {item.product.name}
                                             </Link>
-                                            <div className="flex flex-wrap items-center gap-6">
-                                                <div className="min-w-[120px] flex items-center justify-start gap-3">
-                                                    <p className="text-primary-hover font-semibold text-base">
-                                                        {formatCurrency(item.finalPrice)}
-                                                    </p>
-                                                    <div className="text-primary-hover font-semibold text-base">
-                                                        <p className="font-bold text-base text-red">
-                                                            x{item.quantity}
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                                <div className="flex items-center gap-3 mt-0.5">
+                                            {(order.orderStatus.status === ORDER_COMPLETED) &&
+                                                <div>
                                                     {item.isEvaluated ?
-                                                        <p className="font-semibold text-sm text-primary">
+                                                        <p className="font-semibold text-sm text-rating">
                                                             Đã đánh giá
                                                         </p> :
-                                                        <button onClick={() => handleShowFeedback(item)}
-                                                                className="font-semibold text-sm text-primary hover:underline transition-all">
-                                                            Đánh giá
-                                                        </button>
+                                                        <>
+                                                            <button onClick={() => handleShowFeedback(item)}
+                                                                    className="font-bold text-sm text-primary hover:underline transition-all">
+                                                                Đánh giá
+                                                            </button>
+                                                            <Feedback showFeedback={showFeedback}
+                                                                      setShowFeedback={setShowFeedback}
+                                                                      item={active} handleSetItem={handleSetItem}/>
+                                                        </>
                                                     }
                                                 </div>
-                                            </div>
+                                            }
                                         </div>
                                     </div>
-                                    <p className="text-red font-semibold text-lg">
-                                        {formatCurrency(item.finalPrice * item.quantity)}
-                                    </p>
+                                    <div className="min-w-[300px] max-w-[300px] flex items-center justify-end gap-3">
+                                        <div className="min-w-max flex-1 flex items-center justify-start gap-3">
+                                            <p className="text-primary-hover font-semibold text-lg">
+                                                {formatCurrency(item.finalPrice)}
+                                            </p>
+                                            <div className="text-primary-hover font-semibold text-base">
+                                                <p className="font-bold text-base text-red relative top-[1px]">
+                                                    x{item.quantity}
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <p className="min-w-[130px] max-w-[130px] text-red font-bold text-lg text-end">
+                                            {formatCurrency(item.finalPrice * item.quantity)}
+                                        </p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -140,18 +170,17 @@ function OrderBlock({order, reset}) {
                             </span>
                         </p>
                     </div>
-                    <Feedback showFeedback={showFeedback} setShowFeedback={setShowFeedback} item={active}/>
                 </div>
             </div>
-            <div className="p-5 flex items-center justify-end gap-6 border-t border-border-1">
-                <CancelOrder show={show} setShow={setShow} order={order} reset={reset}/>
-                {order.status !== 'Cancel' &&
+            {(order.orderStatus.status !== ORDER_CANCELLED && order.orderStatus.status !== ORDER_SHIPPING && order.orderStatus.status !== ORDER_COMPLETED) &&
+                <div className="p-5 flex items-center justify-end gap-6 border-t border-border-1">
+                    <CancelOrder show={show} setShow={setShow} order={order} reset={reset}/>
                     <button onClick={() => setShow(true)}
-                            className="text-tiny font-semibold text-white bg-red px-3 py-1.5 rounded-md">
+                            className="text-tiny font-bold text-danger bg-danger-bg px-3 py-2 rounded-md">
                         Hủy đơn hàng
                     </button>
-                }
-            </div>
+                </div>
+            }
         </div>
     );
 }
@@ -171,19 +200,35 @@ const NotFound = () => {
 const StatusOrder = ({orderStatus}) => {
     return (
         <div className="h-[24px]">
-            {orderStatus.status === "PENDING" &&
-                <div className="flex items-center gap-2 font-medium text-md text-[#26aa99]">
-                    <Icon.UilSpinnerAlt className="w-[16px] h-[16px]"/>
-                    {orderStatus.description}
+            {orderStatus.status === ORDER_PENDING &&
+                <div
+                    className="flex items-center gap-2 font-bold text-sm text-warning rounded-full bg-warning-bg px-2.5 py-1">
+                    {orderStatus.title}
                 </div>
             }
-            {orderStatus.status === "CANCELLED" &&
-                <>
-                    <div className="flex items-center gap-2 font-medium text-md text-primary">
-                        <Icon.UilSpinnerAlt className="w-[16px] h-[16px]"/>
-                        Đã hủy
-                    </div>
-                </>
+            {orderStatus.status === ORDER_CONFIRMED &&
+                <div
+                    className="flex items-center gap-2 font-bold text-sm text-info rounded-full bg-info-bg px-2.5 py-1">
+                    {orderStatus.title}
+                </div>
+            }
+            {orderStatus.status === ORDER_SHIPPING &&
+                <div
+                    className="flex items-center gap-2 font-bold text-sm text-info rounded-full bg-info-bg px-2.5 py-1">
+                    {orderStatus.title}
+                </div>
+            }
+            {orderStatus.status === ORDER_COMPLETED &&
+                <div
+                    className="flex items-center gap-2 font-bold text-sm text-info rounded-full bg-info-bg px-2.5 py-1">
+                    {orderStatus.title}
+                </div>
+            }
+            {orderStatus.status === ORDER_CANCELLED &&
+                <div
+                    className="flex items-center gap-2 font-bold text-sm text-info rounded-full bg-info-bg px-2.5 py-1">
+                    {orderStatus.title}
+                </div>
             }
         </div>
     )

@@ -2,7 +2,7 @@ import {Link} from "react-router-dom";
 import Logo from "../../../assets/images/logo.png";
 import * as Icon from "@iconscout/react-unicons";
 import {useSelector} from "react-redux";
-import ShopComponent from "./ShopComponent";
+import AdminComponent from "./AdminComponent";
 
 function Header() {
     const user = useSelector(state => state.user);
@@ -15,18 +15,18 @@ function Header() {
                 </Link>
                 <div className="flex justify-end items-center gap-10 flex-1 pr-3">
                     <div className="flex items-center justify-center gap-6">
-                        <Link to="/kenh-ban-hang/dang-ban"
+                        <Link to="/kenh-ban-hang/don-ban-hang"
                               className="flex items-center justify-center gap-1.5 text-black-1 transition-all hover:text-primary-hover text-md font-semibold">
-                            <Icon.UilArchive className="w-[20px] h-[20px]"/>
-                            Đơn đăng ký bán hàng
+                            <Icon.UilMessage className="w-[20px] h-[20px]"/>
+                            Đơn bán hàng
                         </Link>
                         <Link to="/kenh-ban-hang/dang-ban"
                               className="flex items-center justify-center gap-1.5 text-black-1 transition-all hover:text-primary-hover text-md font-semibold">
                             <Icon.UilMessage className="w-[20px] h-[20px]"/>
-                            Tin nhắn
+                            Thông báo
                         </Link>
                     </div>
-                    <ShopComponent user={user}/>
+                    <AdminComponent user={user}/>
                 </div>
             </div>
         </div>

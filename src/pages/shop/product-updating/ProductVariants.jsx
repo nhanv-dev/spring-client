@@ -101,7 +101,7 @@ function ProductVariants(props) {
                     </div>
                     {variants?.map((variant, index) => (
                         <div key={index}
-                             className={`${selectedVariant === variant ? 'bg-primary-bg' : variant.options.length < attributes.length ? 'bg-[#FFDDDD]' : ''} text-black-1 py-4 px-6 flex items-center gap-6 max-w-full border-t border-dashed border-border-1 transition-all`}>
+                             className={`${selectedVariant === variant ? 'bg-primary-bg' : variant?.options?.length < attributes?.length ? 'bg-[#FFDDDD]' : ''} text-black-1 py-4 px-6 flex items-center gap-6 max-w-full border-t border-dashed border-border-1 transition-all`}>
                             {variant.options.length < attributes.length ?
                                 <div className="font-medium text-sm min-w-[20px]">
                                     <Tooltip title="Chưa thêm đủ các option cho phiên bản này" followCursor>

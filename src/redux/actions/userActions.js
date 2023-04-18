@@ -6,9 +6,10 @@ export const login = async (payload) => {
     await publicRequest().post("/auth/sign-in", payload)
         .then(res => {
             action.payload = {...res.data};
-            action.type = types.user.USER_LOGIN_SUCCESS
+            action.type = types.user.USER_LOGIN_SUCCESS;
         }).catch(err => {
             action.type = types.user.USER_LOGIN_FAILED;
+            action.error = err.response?.data || 'Password invalid';
         })
     return {...action}
 }
@@ -17,14 +18,6 @@ export const logout = async () => {
         type: types.user.USER_LOGOUT,
     }
 }
-
-export const register = async (payload) => {
-    const res = await publicRequest().post("/auth/register", payload);
-    return {
-        type: types.user.USER_REGISTER, payload, res
-    }
-}
-
 export const validateToken = async () => {
     let action = {type: types.user.CHECK_TOKEN_FAILED};
     await protectedRequest().get("/auth/token-valid")
