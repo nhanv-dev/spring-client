@@ -1,8 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import * as Icon from "@iconscout/react-unicons";
+import {UilStar} from "@iconscout/react-unicons";
 import ImageNotFound from "../../../assets/images/image-not-found.jpg";
 import {formatCurrency, formatLongDate, formatToK} from "../../../util/format";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import Feedback from "./Feedback";
 import CancelOrder from "./CancelOrder";
 import DefaultShop from '../../../assets/images/default-shop.png';
@@ -13,8 +14,13 @@ import {
     ORDER_PENDING,
     ORDER_SHIPPING
 } from "../../../constant/StatusOrder";
+import {protectedRequest} from "../../../util/request-method";
+import {toast} from "react-hot-toast";
+import {useSelector} from "react-redux";
 
-function OrderBlock({order, reset}) {
+function OrderBlock({order, setOrders}) {
+    const user = useSelector(state => state.user);
+    const navigate = useNavigate();
     const [show, setShow] = useState(false)
     const [showFeedback, setShowFeedback] = useState(false);
     const [active, setActive] = useState(null);
@@ -36,6 +42,23 @@ function OrderBlock({order, reset}) {
             })
         })
     }
+
+    const handleSubmit = (order, note) => {
+        const data = {orderId: order.id, note}
+        protectedRequest().post(`/users/${user.id}/orders/${order.id}/cancel-order`, data)
+            .then(res => {
+                setOrders(prev => {
+                    return [...prev].map(o => (o.id === res.data.id ? res.data : o))
+                })
+                toast.success("Bạn đã hủy đơn hàng thành công");
+            })
+            .catch((err) => {
+                toast.error("Bạn đã hủy đơn hàng thất bại")
+                if (err.status === 403) navigate("/dang-nhap")
+            })
+        setShow(false)
+    }
+
     return (
         <div className="relative">
             <div className="px-5">
@@ -106,10 +129,11 @@ function OrderBlock({order, reset}) {
                                                 {item.product.name}
                                             </Link>
                                             {(order.orderStatus.status === ORDER_COMPLETED) &&
-                                                <div>
+                                                <div className="mt-2">
                                                     {item.isEvaluated ?
-                                                        <p className="font-semibold text-sm text-rating">
-                                                            Đã đánh giá
+                                                        <p className="font-semibold text-sm text-rating flex items-center justify-center max-w-max gap-1">
+                                                            <UilStar className={"w-[16px] h-[16px]"}/>
+                                                            <span className="relative top-[1.5px]">Đã đánh giá</span>
                                                         </p> :
                                                         <>
                                                             <button onClick={() => handleShowFeedback(item)}
@@ -144,90 +168,98 @@ function OrderBlock({order, reset}) {
                             </div>
                         </div>
                     ))}
-                    <div className="flex flex-col items-end justify-center gap-2 border-t border-border-1 py-2.5">
-                        <p className="flex flex-wrap gap-2 items-center justify-between">
-                            <span className="text-md font-semibold text-black-1">
-                                Tạm tính:
-                            </span>
-                            <span className="font-bold text-base text-black-1 min-w-[200px] text-end">
-                                {formatCurrency(order.totalPrice)}
-                            </span>
-                        </p>
-                        <p className="flex flex-wrap gap-2 items-center justify-between">
-                            <span className="text-md font-semibold text-black-1">
-                               Phí vận chuyển:
-                            </span>
-                            <span className="font-bold text-base text-black-1 min-w-[200px] text-end">
-                                {formatCurrency(0)}
-                            </span>
-                        </p>
-                        <p className="flex flex-wrap gap-2 items-center justify-between">
-                            <span className="text-md font-semibold text-black-1">
-                                Tổng tiền:
-                            </span>
-                            <span className="font-bold text-xl text-red min-w-[200px] text-end">
-                                {formatCurrency(order.totalPrice)}
-                            </span>
-                        </p>
-                    </div>
+
                 </div>
             </div>
-            {(order.orderStatus.status !== ORDER_CANCELLED && order.orderStatus.status !== ORDER_SHIPPING && order.orderStatus.status !== ORDER_COMPLETED) &&
-                <div className="p-5 flex items-center justify-end gap-6 border-t border-border-1">
-                    <CancelOrder show={show} setShow={setShow} order={order} reset={reset}/>
-                    <button onClick={() => setShow(true)}
-                            className="text-tiny font-bold text-danger bg-danger-bg px-3 py-2 rounded-md">
-                        Hủy đơn hàng
-                    </button>
+            <div className={"p-5 bg-[#FFFEFB]  border-t border-border-1 border-dashed"}>
+                <div
+                    className="mb-5 flex flex-col items-end justify-center gap-2">
+                    <p className="flex flex-wrap gap-2 items-center justify-between">
+                        <span className="text-md font-semibold text-black-1">
+                            Tạm tính:
+                        </span>
+                        <span className="font-bold text-base text-black-1 min-w-[200px] text-end">
+                            {formatCurrency(order.totalPrice)}
+                        </span>
+                    </p>
+                    <p className="flex flex-wrap gap-2 items-center justify-between">
+                        <span className="text-md font-semibold text-black-1">
+                           Phí vận chuyển:
+                        </span>
+                        <span className="font-bold text-base text-black-1 min-w-[200px] text-end">
+                            {formatCurrency(0)}
+                        </span>
+                    </p>
+                    <p className="flex flex-wrap gap-2 items-center justify-between">
+                        <span className="text-md font-semibold text-black-1">
+                            Tổng tiền:
+                        </span>
+                        <span className="font-bold text-xl text-red min-w-[200px] text-end">
+                            {formatCurrency(order.totalPrice)}
+                        </span>
+                    </p>
                 </div>
-            }
+                <div className="flex items-center justify-end gap-4">
+                    <button
+                        className="text-tiny font-bold text-primary bg-primary-bg border border-primary-bg px-5 py-1.5 rounded">
+                        Liên hệ người bán
+                    </button>
+                    {(order.orderStatus.status !== ORDER_CANCELLED && order.orderStatus.status !== ORDER_SHIPPING && order.orderStatus.status !== ORDER_COMPLETED) &&
+                        <>
+                            <CancelOrder show={show} setShow={setShow} order={order} handleSubmit={handleSubmit}/>
+                            <button onClick={() => setShow(true)}
+                                    className="text-tiny font-bold text-black-2 border px-5 py-1.5 rounded bg-white">
+                                Hủy đơn hàng
+                            </button>
+                        </>
+                    }
+                </div>
+            </div>
         </div>
     );
 }
 
-
-const NotFound = () => {
-    return (
-        <div className="h-[130px] flex items-center justify-center">
-            <h5 className="font-medium text-lg flex flex-col items-center justify-center gap-3">
-                Không tìm thấy dữ liệu
-                <Icon.UilSpinnerAlt/>
-            </h5>
-        </div>
-    )
-}
-
 const StatusOrder = ({orderStatus}) => {
     return (
-        <div className="h-[24px]">
+        <div className="">
             {orderStatus.status === ORDER_PENDING &&
                 <div
-                    className="flex items-center gap-2 font-bold text-sm text-warning rounded-full bg-warning-bg px-2.5 py-1">
-                    {orderStatus.title}
+                    className="flex items-center gap-2 font-bold text-sm text-warning rounded-full bg-warning-bg px-5 py-1">
+                    <p className="relative top-[0.5px]">
+                        {orderStatus.title}
+                    </p>
                 </div>
             }
             {orderStatus.status === ORDER_CONFIRMED &&
                 <div
-                    className="flex items-center gap-2 font-bold text-sm text-info rounded-full bg-info-bg px-2.5 py-1">
-                    {orderStatus.title}
+                    className="flex items-center gap-2 font-bold text-sm text-info rounded-full bg-info-bg px-5 py-1">
+                    <p className="relative top-[0.5px]">
+                        {orderStatus.title}
+                    </p>
                 </div>
             }
             {orderStatus.status === ORDER_SHIPPING &&
                 <div
-                    className="flex items-center gap-2 font-bold text-sm text-info rounded-full bg-info-bg px-2.5 py-1">
-                    {orderStatus.title}
+                    className="flex items-center gap-2 font-bold text-sm text-info rounded-full bg-info-bg px-5 py-1">
+                    <p className="relative top-[0.5px]">
+                        {orderStatus.title}
+                    </p>
                 </div>
             }
             {orderStatus.status === ORDER_COMPLETED &&
                 <div
-                    className="flex items-center gap-2 font-bold text-sm text-info rounded-full bg-info-bg px-2.5 py-1">
-                    {orderStatus.title}
+                    className="flex items-center gap-2 font-bold text-sm text-info rounded-full bg-info-bg px-5 py-1">
+                    <p className="relative top-[0.5px]">
+                        {orderStatus.title}
+                    </p>
                 </div>
             }
             {orderStatus.status === ORDER_CANCELLED &&
                 <div
-                    className="flex items-center gap-2 font-bold text-sm text-info rounded-full bg-info-bg px-2.5 py-1">
-                    {orderStatus.title}
+                    className="flex items-center gap-2 font-bold text-sm text-danger rounded-full bg-danger-bg px-5 py-1">
+                    <p className="relative top-[0.5px]">
+                        {orderStatus.title}
+                    </p>
                 </div>
             }
         </div>

@@ -1,19 +1,18 @@
 import {useEffect, useState} from 'react';
 import Layout from "../../../components/admin/layout";
 import Helmet from "../../../components/common/helmet";
-import SalesRegisterTable from "./SalesRegisterTable";
 import {protectedRequest} from "../../../util/request-method";
-import ToastCustom from "../../../components/common/toast-custom";
+import ShopTable from "./ShopTable";
 
 function SalesRegister() {
-    const [salesRegisters, setSalesRegisters] = useState([]);
+    const [shops, setShops] = useState([]);
     const [pagination, setPagination] = useState({page: 0, size: 10, loaded: false});
 
     useEffect(() => {
         if (pagination.loaded) return;
-        protectedRequest().get(`/sales-register?page=${pagination.page}&size=${pagination.size}`)
+        protectedRequest().get("/shops")
             .then(res => {
-                setSalesRegisters(res.data.content);
+                setShops(res.data.content);
                 setPagination({
                     size: res.data.size,
                     page: res.data.number,
@@ -24,18 +23,19 @@ function SalesRegister() {
                 });
             })
             .catch(err => {
-                setSalesRegisters([]);
-                setPagination(prev => ({...prev, loaded: true}))
+                setShops([])
             })
     }, [pagination])
 
     return (
         <Helmet title="Depot - Quản trị - Đơn bán hàng">
             <Layout>
-                <ToastCustom/>
-                <div className="bg-white p-5 rounded-md">
-                    <SalesRegisterTable salesRegisters={salesRegisters} setSalesRegisters={setSalesRegisters}
-                                        pagination={pagination} setPagination={setPagination}/>
+                <div className="flex gap-6">
+                    <div className="flex-1 bg-white p-5 rounded-md h-max">
+                    </div>
+                    <div className="max-w-[1100px] bg-white p-5 rounded-md">
+                        <ShopTable shops={shops} pagination={pagination} setPagination={setPagination}/>
+                    </div>
                 </div>
             </Layout>
         </Helmet>

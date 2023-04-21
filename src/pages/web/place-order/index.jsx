@@ -3,7 +3,6 @@ import Helmet from "../../../components/common/helmet";
 import Layout from "../../../components/web/layout";
 import {Link, useNavigate} from "react-router-dom";
 import {protectedRequest} from "../../../util/request-method";
-import toast from "react-hot-toast";
 import {useDispatch, useSelector} from "react-redux";
 import {formatCurrency} from "../../../util/format";
 import NotFoundImage from "../../../assets/images/image-not-found.jpg";
@@ -91,54 +90,43 @@ function PlaceOrder() {
                                                 <Link to={`/cua-hang/${order.shop?.slug}`}
                                                       className="max-w-max flex items-center gap-2 font-semibold text-md transition-all text-black hover:text-primary">
                                                     <Icon.UilStore className="w-[20px] h-[20px]"/>
-                                                    {/*<img alt={""} className="w-[20px] h-auto rounded-md"*/}
-                                                    {/*     src={order.shop.shopLogo || NotFoundImage}/>*/}
                                                     <p className="line-clamp-1">{order.shop?.shopName}</p>
                                                 </Link>
                                                 {order.items.map(item => (
                                                     <div key={item.id} className="flex gap-3 pt-4">
                                                         <Link to={`/san-pham/${item.product.slug}`}
-                                                              className="block min-w-[70px] max-w-[70px] min-h-[70px] max-h-[70px] overflow-hidden rounded-md">
-                                                            <img alt={""} className="w-[70px] h-auto rounded-md"
+                                                              className="block min-w-[65px] max-w-[65px] min-h-[65px] max-h-[65px] overflow-hidden rounded-md border border-border-1">
+                                                            <img alt={""} className="w-full h-auto rounded-md"
                                                                  src={item.product?.images?.length > 0 ? item.product.images[0].url : NotFoundImage}/>
                                                         </Link>
-                                                        <div className="">
-                                                            <div>
+                                                        <div className="w-full">
+                                                            <div className="mb-2">
                                                                 <Link to={`/san-pham/${item.product.slug}`}
                                                                       className="text-tiny font-medium line-clamp-1 mb-1 transition-all hover:text-primary-hover">
                                                                     {item.product.name}
                                                                 </Link>
+
+                                                            </div>
+                                                            <div className="flex justify-between items-center gap-3 w-full">
                                                                 {item.variant &&
-                                                                    <p className="mb-1 px-3 font-bold text-sm bg-primary-bg rounded-full text-primary min-w-max max-w-max">
+                                                                    <p className="px-5 font-bold text-sm bg-primary-bg rounded-full text-primary min-w-max max-w-max">
                                                                         <span
                                                                             className="relative top-[1px] select-none">
-                                                                            {item.variant?.options.map(o => o.name).join(" + ")}
+                                                                            {item.variant.attributeHash}
                                                                         </span>
                                                                     </p>
                                                                 }
-                                                            </div>
-                                                            <div className="flex justify-between items-center">
-                                                                <div className="flex items-end gap-3">
+                                                                <div className="flex items-center gap-3 justify-end">
                                                                     {item.variant ?
-                                                                        <>
-                                                                            <p className="text-base text-primary font-bold">
-                                                                                {formatCurrency(item.variant.deal.finalPrice)}
-                                                                            </p>
-                                                                            <p className="text-[.85rem] text-black-1 font-semibold line-through">
-                                                                                {formatCurrency(item.variant.deal.price)}
-                                                                            </p>
-                                                                        </> :
-                                                                        <>
-                                                                            <p className="text-base text-primary font-bold">
-                                                                                {formatCurrency(item.product.deal.finalPrice)}
-                                                                            </p>
-                                                                            <p className="text-[.85rem] text-black-1 font-semibold line-through">
-                                                                                {formatCurrency(item.product.deal.price)}
-                                                                            </p>
-                                                                        </>
+                                                                        <p className="text-base text-danger font-bold">
+                                                                            {formatCurrency(item.variant.deal.finalPrice)}
+                                                                        </p> :
+                                                                        <p className="text-base text-primary font-bold">
+                                                                            {formatCurrency(item.product.deal.finalPrice)}
+                                                                        </p>
                                                                     }
+                                                                    <p className="text-primary font-bold text-base">x{item.quantity}</p>
                                                                 </div>
-                                                                <p className="text-primary-hover font-bold text-base">x{item.quantity}</p>
                                                             </div>
                                                         </div>
                                                     </div>

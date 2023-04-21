@@ -106,16 +106,7 @@ const Variant = ({attributes, selectedVariant, setSelectedVariant, variants, set
                     return similarArray(v.options, [...options, value])
                 })
                 if (similarOptions.length > 0) {
-                    toast.error('Đã tồn tại phiên bản này', {
-                        position: "top-right",
-                        autoClose: 2000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                        theme: "light",
-                    });
+                    toast.error('Đã tồn tại phiên bản này');
                     return {...prev};
                 }
                 return {...prev, options: [...options, value]};

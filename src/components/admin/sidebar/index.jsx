@@ -17,11 +17,10 @@ function Sidebar() {
                                     icon={<Icon.UilEstate className={"w-[20px]"}/>}/>
                     <NavigationLink to="/quan-tri/don-ban-hang" title="Đơn bán hàng"
                                     icon={<Icon.UilApps className={"w-[20px]"}/>}/>
-                    <NavigationLink to="/quan-tri/don-dat-hang" title="Đơn đặt hàng"
-                                    icon={<Icon.UilFileGraph className={"w-[20px]"}/>}/>
+                    <NavigationLink to="/quan-tri/cua-hang" title="Cửa hàng"
+                                    icon={<Icon.UilStore className={"w-[20px]"}/>}/>
                     <NavigationLink to="/quan-tri/thong-ke" title="Thống kê"
                                     icon={<Icon.UilChartGrowth className={"w-[20px]"}/>}/>
-
                 </div>
                 <div className="flex flex-col items-center gap-4 justify-end">
                     <button onClick={handleSignOut}

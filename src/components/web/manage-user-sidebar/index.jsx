@@ -67,7 +67,7 @@ function ManageUserSidebar() {
                     </div>
                 </div>
                 <div className="mb-2">
-                    <Link to="/nguoi-dung/don-hang" className="block font-semibold text-md mb-3 hover:text-primary transition-all">
+                    <Link to="/nguoi-dung/danh-gia" className="block font-semibold text-md mb-3 hover:text-primary transition-all">
                         Đánh giá của tôi
                     </Link>
                 </div>

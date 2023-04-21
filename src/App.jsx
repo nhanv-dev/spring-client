@@ -5,34 +5,42 @@ import {validateToken} from "./redux/actions/userActions";
 import {initializeCart} from "./redux/actions/cartActions";
 import {getItem} from "./util/localStorage";
 import * as types from './redux/constants/ActionType.js';
+import {isRole, ROLE_SHOP, ROLE_USER} from "./service/auth";
+import {initShop} from "./redux/actions/shopActions";
 
 function App() {
-    const {user} = useSelector(state => state);
-    const [loading, setLoading] = useState(true)
+    const user = useSelector(state => state.user);
+    const [loading, setLoading] = useState(true);
     const dispatch = useDispatch();
 
     useEffect(() => {
         const localUser = getItem("user");
-        if (!user?.token && !localUser?.token) return setLoading(false);
 
-        const login = async () => {
+        if (!localUser?.token) return setLoading(false);
+
+        const prepare = async () => {
             const action = await validateToken();
             dispatch(action);
-            if (action.type === types.user.CHECK_TOKEN_SUCCESS) dispatch(await initializeCart());
-            return false;
+            if (action.type === types.user.CHECK_TOKEN_SUCCESS) {
+                if (isRole(action.payload, ROLE_USER)) {
+                    const cart = await initializeCart();
+                    dispatch(cart);
+                }
+                if (isRole(action.payload, ROLE_SHOP)) {
+                    const shop = await initShop({userId: action.payload.id});
+                    dispatch(shop);
+                }
+            }
         }
 
-        login()
-            .then((loading) => setLoading(loading))
-            .catch(err => setLoading(false))
+        prepare()
+            .then(() => setLoading(false))
+            .catch(() => setLoading(false))
     }, [dispatch])
-
 
     if (loading) return <Loader/>
 
-    return (
-        <Router></Router>
-    );
+    return loading ? <Loader/> : <Router/>
 }
 
 export default App;

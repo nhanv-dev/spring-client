@@ -1,8 +1,8 @@
 import React from "react";
-import {BrowserRouter, Link, Route, Routes, useNavigate} from "react-router-dom";
-import UserRouter from "./UserRouter";
+import {BrowserRouter, Route, Routes, useNavigate} from "react-router-dom";
 import ShopRouter from "./ShopRouter";
 import AdminRouter from "./AdminRouter";
+import CommonRouter from "./CommonRouter";
 
 function Router() {
 
@@ -10,9 +10,10 @@ function Router() {
         <React.Suspense fallback={<Loader/>}>
             <BrowserRouter>
                 <Routes>
-                    <Route exact path="/*" element={<UserRouter/>}/>
-                    <Route exact path="/quan-tri/*" element={<AdminRouter/>}/>
-                    <Route exact path="/kenh-ban-hang/*" element={<ShopRouter/>}/>
+                    <Route path="/*" element={<CommonRouter/>}/>
+                    <Route path="/kenh-ban-hang/*" element={<ShopRouter/>}/>
+                    <Route path="/quan-tri/*" element={<AdminRouter/>}/>
+                    <Route path="*" element={<NotFound/>}/>
                 </Routes>
             </BrowserRouter>
         </React.Suspense>
