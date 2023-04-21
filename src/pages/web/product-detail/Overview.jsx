@@ -80,40 +80,56 @@ function Overview(props) {
                             </button>
                         </div>
                         <div className="p-5 pt-3 rounded-md bg-[#FAFAFA] mb-5">
-                            {selectedVariant ?
+                            {selectedVariant &&
                                 <div>
-                                    <p className="mb-1 text-[#778899] text-lg font-semibold opacity-80">
-                                        <span className="line-through">
-                                            {formatCurrency(selectedVariant.deal.price)}
-                                        </span>
-                                    </p>
-                                    <div className="flex items-center justify-start gap-5">
+                                    {selectedVariant.deal.discountPercent > 0 ?
+                                        <div>
+                                            <p className="mb-1 text-[#778899] text-lg font-semibold opacity-80">
+                                                <span className="line-through">
+                                                    {formatCurrency(selectedVariant.deal.price)}
+                                                </span>
+                                            </p>
+                                            <div className="flex items-center justify-start gap-5">
+                                                <p className="text-2xl font-extrabold text-red">
+                                                    {formatCurrency(selectedVariant.deal.finalPrice)}
+                                                </p>
+                                                <div
+                                                    className="mt-1 relative font-bold bg-red text-white px-3 rounded-md text-tiny">
+                                                    <p className="absolute left-[-6px] top-[50%] translate-y-[-50%] w-0 h-0 border-t-[8px] border-r-[8px] border-b-[8px] border-t-[transparent] border-r-red border-b-[transparent]"/>
+                                                    -{selectedVariant.deal.discountPercent}%
+                                                </div>
+                                            </div>
+                                        </div> :
                                         <p className="text-2xl font-extrabold text-red">
                                             {formatCurrency(selectedVariant.deal.finalPrice)}
                                         </p>
-                                        <div
-                                            className="mt-1 relative font-bold bg-red text-white px-3 rounded-md text-tiny">
-                                            <p className="absolute left-[-6px] top-[50%] translate-y-[-50%] w-0 h-0 border-t-[8px] border-r-[8px] border-b-[8px] border-t-[transparent] border-r-red border-b-[transparent]"/>
-                                            -{selectedVariant.deal.discountPercent}%
-                                        </div>
-                                    </div>
-                                </div> :
+                                    }
+                                </div>
+                            }
+                            {!selectedVariant &&
                                 <div>
-                                    <p className="mb-1 text-[#778899] text-lg font-semibold opacity-80">
-                                        <span className="line-through">
-                                            {formatCurrency(product.deal.price)}
-                                        </span>
-                                    </p>
-                                    <div className="flex items-center justify-start gap-5">
+                                    {product.deal.discountPercent > 0 ?
+                                        <div>
+                                            <p className="mb-1 text-[#778899] text-lg font-semibold opacity-80">
+                                                <span className="line-through">
+                                                    {formatCurrency(product.deal.price)}
+                                                </span>
+                                            </p>
+                                            <div className="flex items-center justify-start gap-5">
+                                                <p className="text-2xl font-extrabold text-red">
+                                                    {formatCurrency(product.deal.finalPrice)}
+                                                </p>
+                                                <div
+                                                    className="mt-1 relative font-bold bg-red text-white px-3 rounded-md text-tiny">
+                                                    <p className="absolute left-[-6px] top-[50%] translate-y-[-50%] w-0 h-0 border-t-[8px] border-r-[8px] border-b-[8px] border-t-[transparent] border-r-red border-b-[transparent]"/>
+                                                    -{product.deal.discountPercent}%
+                                                </div>
+                                            </div>
+                                        </div> :
                                         <p className="text-2xl font-extrabold text-red">
                                             {formatCurrency(product.deal.finalPrice)}
                                         </p>
-                                        <div
-                                            className="mt-1 relative font-bold bg-red text-white px-3 rounded-md text-tiny">
-                                            <p className="absolute left-[-6px] top-[50%] translate-y-[-50%] w-0 h-0 border-t-[8px] border-r-[8px] border-b-[8px] border-t-[transparent] border-r-red border-b-[transparent]"/>
-                                            -{product.deal.discountPercent}%
-                                        </div>
-                                    </div>
+                                    }
                                 </div>
                             }
                         </div>

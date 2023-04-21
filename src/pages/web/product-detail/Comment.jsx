@@ -186,7 +186,7 @@ const CommentItem = ({comment, extendClass}) => {
                 </div>
                 <div className="flex gap-6 mt-8">
                     <button
-                        className="flex items-center gap-1.5 px-5 py-1 rounded border-[2px] border-primary text-tiny text-primary font-medium">
+                        className="flex items-center gap-1.5 px-3 py-1 rounded border-[2px] border-primary text-tiny text-primary font-medium">
                         <Icon.UilThumbsUp className="w-[16px] h-[16px] relative top-[-1px]"/> Hữu ích
                     </button>
                     <button

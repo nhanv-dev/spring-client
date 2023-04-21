@@ -1,3 +1,4 @@
+import {memo} from "react";
 import {Link} from "react-router-dom";
 import * as Icon from "@iconscout/react-unicons";
 import {formatCurrency} from "../../../util/format";
@@ -10,7 +11,6 @@ import toast from "react-hot-toast";
 
 function CartItem({item}) {
     const dispatch = useDispatch();
-    console.log(item)
     const handleDelete = async (item) => {
         const action = await removeFromCart(item);
         dispatch(action)

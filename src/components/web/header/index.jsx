@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react"
 import {Link, useNavigate} from "react-router-dom";
 import Category from "./Category";
-import {protectedRequest, publicRequest} from "../../../util/request-method";
+import {publicRequest} from "../../../util/request-method";
 import UserComponent from "./UserComponent";
 import {useSelector} from "react-redux";
 import * as Icon from '@iconscout/react-unicons';
@@ -35,7 +35,7 @@ function Header() {
                                   className="cursor-pointer flex items-center justify-center gap-2 text-sm font-medium text-black">
                                 <span>Kênh người bán</span>
                             </Link>
-                            <Link to="/dang-ky-ban-hang"
+                            <Link to="/nguoi-dung/dang-ky-ban-hang"
                                   className="cursor-pointer flex items-center justify-center gap-2 text-sm font-medium text-black">
                                 <span>Bán hàng cùng Depot</span>
                             </Link>

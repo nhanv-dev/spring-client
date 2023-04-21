@@ -29,7 +29,6 @@ function SalesRegister() {
     }, [navigate, salesRegister])
 
     useEffect(() => {
-        if (!user || !user.token) return navigate("/");
         protectedRequest().get(`/sales-register/users/${user.id}`)
             .then(res => {
                 setSalesRegister(res.data)

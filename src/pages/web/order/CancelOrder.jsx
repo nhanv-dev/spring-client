@@ -1,26 +1,8 @@
 import React, {useState} from 'react';
 import * as Icon from "@iconscout/react-unicons";
-import {protectedRequest} from "../../../util/request-method";
-import {useNavigate} from "react-router-dom";
 
-function CancelOrder({show, setShow, order, reset}) {
+function CancelOrder({show, setShow, order, handleSubmit}) {
     const [note, setNote] = useState("");
-    const navigate = useNavigate();
-
-    const handleSubmit = (e) => {
-        e.preventDefault()
-        const data = {
-            orderId: order.id, note
-        }
-        protectedRequest().post("/orders/cancel", {data})
-            .then(res => {
-                reset()
-            })
-            .catch((err) => {
-                if (err.status === 403) navigate("/dang-nhap")
-            })
-        setShow(false)
-    }
 
     return (
         <>
@@ -30,7 +12,13 @@ function CancelOrder({show, setShow, order, reset}) {
             <div
                 className={`${show ? 'visible opacity-100' : 'invisible opacity-0'} transition-all min-w-[600px] max-w-[600px]  border border-border rounded-md z-[100] bg-white shadow-md fixed top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]`}>
                 <div className="p-5">
-                    <h5 className="font-medium text-lg mb-3">Bạn chắc chắn muốn hủy đơn hàng?</h5>
+                    <div className={"flex justify-between items-start mb-3"}>
+                        <h5 className="font-medium text-lg">Bạn chắc chắn muốn hủy đơn hàng?</h5>
+                        <button onClick={() => setShow(false)} type={"button"}
+                                className="flex items-center justify-center text-[#CDD2D4] rounded-full hover:text-red">
+                            <Icon.UilTimes className="w-[24px] h-[24px]"/>
+                        </button>
+                    </div>
                     <div className="mb-5">
                         <p className="font-medium text-md mb-2">Lý do:</p>
                         <textarea style={{resize: 'none'}}
@@ -38,17 +26,17 @@ function CancelOrder({show, setShow, order, reset}) {
                                   className="border border-border-1 w-full p-3 scroll-component rounded-md text-md font-medium text-black-2 h-[150px] outline-none"
                                   placeholder="Lý do hủy đơn đặt hàng"/>
                     </div>
-                    <div className="flex items-center gap-3 justify-end">
-                        <button onClick={handleSubmit}
-                                className="px-3 py-1.5 rounded-md text-tiny text-primary bg-primary-bg font-semibold">
+                    <div className="mt-3 flex items-center justify-center gap-3">
+                        <button onClick={() => setShow(false)}
+                                className="font-semibold text-tiny text-secondary bg-secondary-bg rounded-full py-2 px-8">
+                            Để sau
+                        </button>
+                        <button onClick={() => handleSubmit(order, note)}
+                                className="font-semibold text-tiny text-danger bg-danger-bg rounded-full py-2 px-8">
                             Hủy đơn hàng
                         </button>
                     </div>
                 </div>
-                <button onClick={() => setShow(false)}
-                        className="absolute z-[60] right-[-10px] top-[-10px] w-[26px] h-[26px] flex items-center justify-center bg-danger text-white rounded-full">
-                    <Icon.UilTimes className="w-[18px] h-[18px]"/>
-                </button>
             </div>
         </>
 

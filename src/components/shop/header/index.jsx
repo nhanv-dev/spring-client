@@ -8,11 +8,16 @@ function Header() {
     const user = useSelector(state => state.user);
 
     return (
-        <div className="fixed left-0 top-0 right-0 bg-white h-[75px] shadow-md z-50">
+        <div className="fixed left-0 top-0 right-0 bg-white h-[75px] max-h-[75px] shadow-md z-50">
             <div className="w-full h-full px-5 py-1 flex items-center gap-10">
-                <Link to="/kenh-ban-hang/trang-chu">
-                    <img className="h-[24px]" alt="logo" src={Logo}/>
-                </Link>
+                <div className={"flex items-end gap-3"}>
+                    <Link to="/kenh-ban-hang/trang-chu" className={"h-[26px] block"}>
+                        <img className="h-full" alt="logo" src={Logo}/>
+                    </Link>
+                    <p className={"select-none relative top-[1px] rounded flex items-center justify-center font-extrabold text-md text-primary px-3 h-[28px] bg-primary-bg "}>
+                        Kênh người bán
+                    </p>
+                </div>
                 <div className="flex justify-end items-center gap-10 flex-1 pr-3">
                     <div className="flex items-center justify-center gap-6">
                         <Link to="/kenh-ban-hang/san-pham/dang-ban"
