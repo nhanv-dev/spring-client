@@ -1,23 +1,24 @@
 import React, {useState} from 'react';
-import Layout from "../../../components/web/layout";
 import Helmet from "../../../components/common/helmet";
 import {UilEyeSlash, UilKeyholeCircle} from '@iconscout/react-unicons'
-import UserSidebar from "../../../components/web/manage-user-sidebar";
-import {publicRequest} from "../../../util/request-method";
+import {protectedRequest, publicRequest} from "../../../util/request-method";
 import {useNavigate} from "react-router-dom";
 import UserLayout from "../../../components/web/user-layout";
+import {useSelector} from "react-redux";
 
 function ChangingPassword() {
     const navigate = useNavigate();
+    const user = useSelector(state => state.user);
     const [oldPass, setOldPass] = useState("");
     const [newPass, setNewPass] = useState("");
     const [repeatPass, setRepeatPass] = useState("");
 
     const handleSubmit = async (e) => {
+        e.preventDefault();
         if (!oldPass || !newPass || !repeatPass) return;
-        publicRequest().post("/auth/changing-password", {oldPass, newPass, repeatPass})
+        protectedRequest().post(`/users/${user.id}/changing-password`, {oldPass, newPass})
             .then(res => {
-                if (res.status === 200) navigate("/thong-tin")
+                // if (res.status === 200) navigate("/thong-tin")
             })
             .catch(err => {
                 console.log(err)
@@ -32,7 +33,7 @@ function ChangingPassword() {
                     <div className="font-semibold text-xl gap-3 mb-5">
                         Đổi mật khẩu
                     </div>
-                    <form className="w-full max-w-[500px]" onClick={handleSubmit}>
+                    <form className="w-full max-w-[500px]" onSubmit={handleSubmit}>
                         <div className="mb-6 flex items-center gap-5 flex-wrap justify-start">
                             <label htmlFor="old-password"
                                    className="w-[150px] block font-semibold text-md text-black-1">
@@ -102,13 +103,13 @@ function ChangingPassword() {
                             </div>
                         </div>
 
-                        <div className="flex items-center justify-end gap-3">
+                        <div className="flex items-center justify-end gap-3 pt-8">
                             <button type="reset"
-                                    className="min-w-max px-5 bg-primary h-[40px] rounded-md text-tiny font-semibold text-primary bg-primary-bg">
-                                Reset
+                                    className="min-w-max px-6 py-1.5 rounded-md text-tiny font-semibold text-secondary bg-secondary-bg">
+                                Hủy
                             </button>
                             <button type="submit"
-                                    className="min-w-max px-5 bg-primary h-[40px] rounded-md text-tiny font-semibold text-primary bg-primary-bg">
+                                    className="min-w-max px-5 py-1.5 rounded-md text-tiny font-semibold text-danger bg-danger-bg">
                                 Đổi mật khẩu
                             </button>
                         </div>

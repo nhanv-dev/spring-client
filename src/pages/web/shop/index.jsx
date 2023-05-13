@@ -40,10 +40,8 @@ function Shop() {
                 <div className="pb-10 bg-app-1">
                     <div className="container pb-6">
                         <div className="bg-white rounded-b-[8px]">
-                            <div className="h-[200px] overflow-hidden flex items-center justify-center">
-                                <img alt="background" className="w-auto h-[150px]"
-                                     src={shop.shopBackground || DefaultShopBg}/>
-                            </div>
+                            <div className="h-[260px] overflow-hidden flex items-center justify-center bg-center bg-contain"
+                                 style={{backgroundImage: `url(${shop.shopBackground || DefaultShopBg})`}}/>
                             <div className="flex gap-3 py-4 px-6 border-b-2 border-border-1">
                                 <div
                                     className="flex items-center justify-center rounded-full w-[90px] h-[90px] overflow-hidden border-[3px] border-primary">
@@ -103,7 +101,7 @@ function Shop() {
                                                 className="font-semibold text-primary text-md">{formatBetweenDate(shop.createdAt)}</span>
                                         </div>
                                         <p className="text-center font-bold text-md text-black-2">
-                                            Bán hàng trên Shopio
+                                            Bán hàng trên Depot
                                         </p>
                                     </div>
                                     <div className="flex-1 relative py-1 border-r-[2px] border-border-1">

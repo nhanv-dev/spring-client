@@ -1,11 +1,13 @@
 import React, {useEffect, useState} from 'react';
 import * as Icon from "@iconscout/react-unicons";
-import Layout from "../../../components/web/layout";
 import Helmet from "../../../components/common/helmet";
 import {useSelector} from "react-redux";
-import {protectedRequest} from "../../../util/request-method";
 import CreateAddress from "../user-address-creating";
 import UserLayout from "../../../components/web/user-layout";
+import {toast} from "react-hot-toast";
+import UserAddressService from "../../../service/UserAddressService";
+
+const userAddressService = new UserAddressService();
 
 function UserAddress() {
     const user = useSelector(state => state.user);
@@ -13,7 +15,7 @@ function UserAddress() {
     const [addresses, setAddresses] = useState([]);
 
     useEffect(() => {
-        protectedRequest().get(`/users/${user.id}/addresses`)
+        userAddressService.getUserAddress({userId: user.id})
             .then(res => {
                 if (res.data?.message === "User address is empty") setAddresses([])
                 else {
@@ -23,38 +25,38 @@ function UserAddress() {
                 }
             })
             .catch(err => {
+                setAddresses([])
             })
     }, [user])
     const addNewAddress = async (payload) => {
-        const data = {
-            ...payload,
-            isDefault: false,
-            isDeleted: false
-        }
-        protectedRequest().post(`/users/${user.id}/addresses`, data)
+        const address = {...payload, isDefault: false, isDeleted: false}
+        userAddressService.addUserAddress({userId: user.id, address})
             .then(res => {
                 setAddresses(prev => ([res.data, ...prev]))
                 setShow(false)
+                toast.success("Thêm địa chỉ thành công.")
             })
             .catch(err => {
-                setShow(false)
+                toast.error("Thêm địa chỉ thất bại. Vui lòng thử lại sau.")
             })
     }
-    const handleDeleteAddress = async (id) => {
-        protectedRequest().delete(`/users/${user.id}/addresses/${id}`)
+    const handleDeleteAddress = async (addressId) => {
+        userAddressService.deleteUserAddress({userId: user.id, addressId})
             .then(res => {
                 setAddresses(prev => {
-                    const addresses = prev.filter(a => a.id !== id)
+                    const addresses = prev.filter(a => a.id !== addressId)
                     return [...addresses]
                 })
+                toast.success('Đã xóa địa chỉ thành công.')
             })
             .catch(err => {
+                toast.success('Xóa địa chỉ thất bại. Vui lòng thử lại sau.')
                 console.log(err)
             })
     }
     const handleSetDefault = async (payload) => {
-        const data = {...payload, isDefault: true, isDeleted: false}
-        protectedRequest().put(`/users/${user.id}/addresses/${payload.id}`, data)
+        const address = {...payload, isDefault: true, isDeleted: false}
+        userAddressService.setDefaultAddress({userId: user.id, address})
             .then(res => {
                 let list = addresses.filter(addresses => addresses.id !== res.data.id)
                     .map(address => {

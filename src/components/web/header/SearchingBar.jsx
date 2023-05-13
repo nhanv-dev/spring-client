@@ -1,9 +1,18 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import * as Icon from "@iconscout/react-unicons";
-import {useNavigate} from "react-router-dom";
+import {useNavigate, useSearchParams} from "react-router-dom";
 
-function SearchingBar(props) {
+function SearchingBar() {
     const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
+    const [search, setSearch] = useState("");
+    const [type, setType] = useState("");
+
+    useEffect(() => {
+        setSearch(searchParams.get("s"))
+        setType(searchParams.get("t"))
+    }, [searchParams])
+
     const handleSearch = (e) => {
         e.preventDefault();
         const {searching, type} = e.target;
@@ -15,13 +24,13 @@ function SearchingBar(props) {
             className="border-border-1 border flex-1 rounded-md min-h-[40px] h-[40px] flex bg-white items-center justify-center">
             <form onSubmit={handleSearch} className="flex item-center relative h-full w-full">
                 <div className="cursor-pointer">
-                    <OptionSearch/>
+                    <OptionSearch type={type}/>
                 </div>
                 <div className="relative">
                     <div
                         className="absolute w-[1px] h-[100%] top-[50%] translate-y-[-50%] bg-border-1"/>
                 </div>
-                <input type="text" name="searching"
+                <input type="text" name="searching" defaultValue={search}
                        className="px-3 w-[400px] text-[#666] bg-white text-tiny font-normal bg-white flex-1 focus-visible:outline-none"
                        placeholder="Bạn tìm gì hôm nay"/>
                 <div className="w-[60px] h-[40px] flex items-center justify-end">
@@ -35,13 +44,19 @@ function SearchingBar(props) {
     );
 }
 
-const OptionSearch = () => {
+const OptionSearch = ({type}) => {
     const [active, setActive] = useState(0);
     const options = [
         {value: 'tat-ca', label: 'Tất cả'},
         {value: 'san-pham', label: 'Sản phẩm'},
         {value: 'cua-hang', label: 'Cửa hàng'}
     ]
+    useEffect(() => {
+        if (!type) return;
+        const index = options.findIndex(option => option.value === type);
+        if (index !== -1) setActive(index);
+    }, [type])
+
     return (
         <div className="flex items-center justify-center h-full">
             <div className="group relative px-3 pt-1">
@@ -50,7 +65,6 @@ const OptionSearch = () => {
                         {options[active].label}
                     </p>
                     <input type="text" name="type" value={options[active].value} className="hidden" onChange={() => {
-
                     }}/>
                     <Icon.UilAngleDown className="w-[20px] h-[20px]"/>
                 </div>

@@ -1,5 +1,5 @@
 import React, {useContext, useEffect, useState} from 'react';
-import Images from "./Images";
+import Index from "../../../components/shop/upload-images";
 import ModalCategory from "./ModalCategory";
 import * as Icon from "@iconscout/react-unicons";
 import {PayloadContext} from "./index";
@@ -143,7 +143,7 @@ function TabProduct({handleSubmit}) {
         <div className="flex flex-wrap gap-6">
             <div className="w-4/12 min-h-full">
                 <div className="rounded-md bg-white p-5 shadow">
-                    <Images images={images} setImages={setImages}/>
+                    <Index images={images} setImages={setImages}/>
                 </div>
             </div>
             <div className="flex-1">

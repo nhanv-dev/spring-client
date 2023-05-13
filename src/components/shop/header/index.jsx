@@ -15,7 +15,7 @@ function Header() {
                         <img className="h-full" alt="logo" src={Logo}/>
                     </Link>
                     <p className={"select-none relative top-[1px] rounded flex items-center justify-center font-extrabold text-md text-primary px-3 h-[28px] bg-primary-bg "}>
-                        Kênh người bán
+                        Kênh bán hàng
                     </p>
                 </div>
                 <div className="flex justify-end items-center gap-10 flex-1 pr-3">

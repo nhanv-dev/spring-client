@@ -1,8 +1,8 @@
-import React, {lazy, useEffect} from 'react';
-import {Route, Routes, useNavigate} from "react-router-dom";
+import React, {lazy} from 'react';
+import {Route, Routes} from "react-router-dom";
 import {NotFound} from "./Router";
 import {useSelector} from "react-redux";
-import {isRole, ROLE_ADMIN} from "../service/auth";
+import {isRole, ROLE_ADMIN} from "../service/AuthService";
 import ProtectedRoute from "./ProtectedRoute";
 
 const Home = lazy(() => import('../pages/admin/home'));

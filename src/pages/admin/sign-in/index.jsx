@@ -5,7 +5,7 @@ import {Link, useNavigate} from "react-router-dom";
 import {UilAt, UilExclamationTriangle, UilEyeSlash, UilKeyholeCircle} from '@iconscout/react-unicons'
 import {login} from "../../../redux/actions/userActions";
 import {useDispatch, useSelector} from "react-redux";
-import {isRole, ROLE_ADMIN} from "../../../service/auth";
+import {isRole, ROLE_ADMIN} from "../../../service/AuthService";
 import {toast} from "react-hot-toast";
 import ToastCustom from "../../../components/common/toast-custom";
 

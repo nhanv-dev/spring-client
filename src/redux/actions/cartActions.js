@@ -16,11 +16,15 @@ export const initializeCart = async () => {
     return {...action}
 }
 export const addToCart = async (payload) => {
-    const res = await protectedRequest().post("/cart/items", payload)
-    const action = {
-        payload: {...res.data.data},
-        type: types.cart.ADD_CART_ITEM,
-    }
+    const action = {};
+    await protectedRequest().post("/cart/items", payload)
+        .then(res => {
+            action.payload = {...res.data.data}
+            action.type = types.cart.ADD_CART_ITEM
+        })
+        .catch(err => {
+            if (err.response.status === 401) action.type = types.user.USER_LOGIN_FAILED
+        });
     return {...action}
 }
 export const removeFromCart = async (payload) => {

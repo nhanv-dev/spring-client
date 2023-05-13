@@ -201,14 +201,14 @@ function OrderBlock({order, setOrders}) {
                 </div>
                 <div className="flex items-center justify-end gap-4">
                     <button
-                        className="text-tiny font-bold text-primary bg-primary-bg border border-primary-bg px-5 py-1.5 rounded">
+                        className="text-tiny font-bold text-primary bg-primary-bg border border-primary-bg px-5 py-1.5 rounded-md">
                         Liên hệ người bán
                     </button>
                     {(order.orderStatus.status !== ORDER_CANCELLED && order.orderStatus.status !== ORDER_SHIPPING && order.orderStatus.status !== ORDER_COMPLETED) &&
                         <>
                             <CancelOrder show={show} setShow={setShow} order={order} handleSubmit={handleSubmit}/>
                             <button onClick={() => setShow(true)}
-                                    className="text-tiny font-bold text-black-2 border px-5 py-1.5 rounded bg-white">
+                                    className="text-tiny font-semibold text-secondary border border-secondary-bg px-5 py-1.5 rounded-md bg-secondary-bg">
                                 Hủy đơn hàng
                             </button>
                         </>

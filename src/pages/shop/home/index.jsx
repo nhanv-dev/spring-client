@@ -12,9 +12,10 @@ import {formatBetweenDate} from "../../../util/format";
 import ProfileShopUpdating from "./ProfileShopUpdating";
 import ToastCustom from "../../../components/common/toast-custom";
 import {toast} from "react-hot-toast";
+import {getDownloadURL, ref, uploadBytesResumable} from "@firebase/storage";
+import {storage} from "../../../service/FirebaseService";
 
 function Home() {
-    const navigate = useNavigate()
     const {shop} = useSelector(state => state);
     const [shopDetail, setShopDetail] = useState({});
 
@@ -28,6 +29,7 @@ function Home() {
                 setShopDetail({})
             })
     }, [shop])
+
     const handleUpdateShop = async (data) => {
         protectedRequest().put(`/shops/${shop.id}`, data)
             .then(res => {
@@ -43,31 +45,57 @@ function Home() {
             })
 
     }
+
+    const handleUploadBackgroundImage = (e) => {
+        e.preventDefault();
+        const file = e.target.files[0];
+        uploadImage(file, "shopBackground");
+    }
+    const handleUploadLogoImage = (e) => {
+        e.preventDefault();
+        const file = e.target.files[0];
+        uploadImage(file, "shopLogo");
+    }
+    const uploadImage = (file, prop) => {
+        if (!file) return;
+        let loading = false;
+        const storageRef = ref(storage, `/files/${file.name}`);
+        const uploadTask = uploadBytesResumable(storageRef, file);
+        uploadTask.on("state_changed", () => {
+                if (!loading) {
+                    toast.loading("Đang lưu ảnh");
+                    loading = true;
+                }
+            }, () => {
+                toast.error("Xảy ra lỗi tại hệ thống")
+            },
+            () => {
+                getDownloadURL(uploadTask.snapshot.ref).then(url => {
+                    handleUpdateShop({...shopDetail, [prop]: url});
+                    toast.dismiss();
+                })
+            })
+    }
+
     return (
         <Helmet title="Depot - Kênh bán hàng">
             <Layout>
                 <ToastCustom/>
-                <div className="bg-white rounded-md mb-6">
-                    <div className="relative border-b border-b-border-1 flex items-center justify-center h-[300px]">
-                        <img className="p-3" alt="background shop"
-                             src={shopDetail.shopBackground || DefaultShopBg}/>
-
+                <div className="bg-white rounded-md mb-6 ">
+                    <div
+                        className="relative border-b border-b-border-1 flex items-center justify-center h-[300px] rounded-t-md bg-contain bg-white bg-no-repeat bg-center"
+                        style={{backgroundImage: `url(${shopDetail.shopBackground || DefaultShopBg})`}}>
                         <div className="absolute right-3 top-3 flex flex-col gap-3">
-                            <button className="rounded-full bg-primary-bg text-primary p-2">
+                            <label htmlFor={"backgroundImage"}
+                                   className="cursor-pointer rounded-full bg-primary-bg text-primary p-2">
                                 <Icon.UilImagePlus className={"w-[20px] h-[20px]"}/>
-                            </button>
+                            </label>
+                            <input accept="image/png, image/jpeg" id={"backgroundImage"} name={"backgroundImage"}
+                                   type={"file"} className="hidden" placeholder={"image"}
+                                   onChange={handleUploadBackgroundImage}/>
                             <button className="rounded-full bg-primary-bg text-primary p-2">
                                 <Icon.UilExpandRight className={"w-[20px] h-[20px]"}/>
                             </button>
-                        </div>
-                        <div className="absolute bottom-3 left-3">
-                            <div
-                                className="font-medium text-tiny text-black-2 bg-[rgba(255,255,255,.7)] backdrop-blur rounded px-2">
-                                <span>Đường dẫn của shop: </span>
-                                <Link to={`/cua-hang/${shopDetail.slug}`} className="outline-none text-primary">
-                                    {window.location.origin}/cua-hang/{shopDetail.slug}
-                                </Link>
-                            </div>
                         </div>
                     </div>
                     <div className="px-5 py-3">
@@ -78,9 +106,13 @@ function Home() {
                                     <img className="rounded-full w-[70px] h-[70px] object-cover" alt="avatar shop"
                                          src={shopDetail.shopLogo || DefaultShop}/>
                                     <div className="absolute right-[-4px] bottom-[-4px] flex flex-col gap-3">
-                                        <button className="rounded-full bg-primary-bg text-primary p-1 outline-none">
+                                        <label htmlFor={"logoImage"}
+                                               className="cursor-pointer rounded-full bg-primary-bg text-primary p-1 outline-none">
                                             <Icon.UilCamera className={"w-[20px] h-[20px]"}/>
-                                        </button>
+                                        </label>
+                                        <input accept="image/png, image/jpeg" id={"logoImage"} name={"logoImage"}
+                                               type={"file"} className="hidden" placeholder={"image"}
+                                               onChange={handleUploadLogoImage}/>
                                     </div>
                                 </div>
                                 <div>
@@ -103,7 +135,7 @@ function Home() {
                                         <Icon.UilShop
                                             className="relative top-[-.5px] w-[20px] h-[20px] fill-black-1"/>
                                         <span
-                                            className="font-medium text-primary text-md">{formatBetweenDate(shop.createdAt)}</span>
+                                            className="font-semibold text-primary text-base">{formatBetweenDate(shop.createdAt)}</span>
                                     </div>
                                     <p className="text-center font-medium text-tiny text-black-1">
                                         Bán hàng trên Depot
@@ -114,7 +146,7 @@ function Home() {
                                         <Icon.UilArchive
                                             className="relative top-[-.5px] w-[20px] h-[20px] fill-black-1"/>
                                         <span
-                                            className="font-medium text-primary text-md">{shop.amountProducts || 0}</span>
+                                            className="font-semibold text-primary text-base">{shop.productTotal || 0}</span>
                                     </div>
                                     <p className="text-center font-medium text-tiny text-black-1">
                                         Sản phẩm
@@ -125,7 +157,7 @@ function Home() {
                                         <Icon.UilCommentAltChartLines
                                             className="relative top-[-.5px] w-[20px] h-[20px] fill-black-1"/>
                                         <span
-                                            className="font-medium text-primary text-md">
+                                            className="font-semibold text-primary text-base">
                                             {shop.responseRate ? `${shop.responseRate}%` : 'Đang cập nhật'}
                                         </span>
                                     </div>
@@ -138,7 +170,7 @@ function Home() {
                                         <Icon.UilCommentAltChartLines
                                             className="relative top-[-.5px] w-[20px] h-[20px] fill-black-1"/>
                                         <span
-                                            className="font-medium text-primary text-md">
+                                            className="font-semibold text-primary text-base">
                                             {shop.responseRate ? `${shop.responseRate}%` : 'Đang cập nhật'}
                                         </span>
                                     </div>
@@ -151,7 +183,7 @@ function Home() {
                                         <Icon.UilHistory
                                             className="relative top-[-.5px] w-[20px] h-[20px] fill-black-1"/>
                                         <span
-                                            className="font-medium text-primary text-md">
+                                            className="font-semibold text-primary text-base">
                                             {shop.responseRate ? `${shop.responseRate}%` : 'Đang cập nhật'}
                                         </span>
                                     </div>
@@ -162,7 +194,7 @@ function Home() {
                             </div>
                         </div>
                     </div>
-                    <div className="px-5  border-t border-t-border-1">
+                    <div className="px-5 border-t border-t-border-1 flex items-center justify-between gap-3">
                         <div className="flex items-center gap-8">
                             <Link to={"/kenh-ban-hang/san-pham"}
                                   className="py-3.5 flex items-center gap-2 font-semibold text-md text-black-2 group hover:text-primary transition-all relative">
@@ -183,6 +215,12 @@ function Home() {
                                   className="py-3.5 flex items-center gap-2 font-semibold text-md text-black-2 group hover:text-primary transition-all relative">
                                 Xem sản phẩm
                                 <p className="opacity-0 group-hover:opacity-100 absolute w-full h-[3px] bg-primary rounded-full left-0 right-0 bottom-0 transition-all"></p>
+                            </Link>
+                        </div>
+                        <div className="font-medium text-tiny text-black-2">
+                            <span>Đường dẫn của shop: </span>
+                            <Link to={`/cua-hang/${shopDetail.slug}`} className="outline-none text-primary">
+                                {window.location.origin}/cua-hang/{shopDetail.slug}
                             </Link>
                         </div>
                     </div>

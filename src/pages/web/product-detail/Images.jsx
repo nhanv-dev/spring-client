@@ -14,10 +14,10 @@ function Images({images}) {
         <div className="mb-5 w-full">
             <div className="mb-5 w-full">
                 <div
-                    className="group relative w-full h-[450px] overflow-hidden border border-border rounded-[8px] flex items-center justify-center">
+                    className="group relative w-full h-[450px] overflow-hidden border border-border rounded-md flex items-center justify-center">
                     <div
                         style={{backgroundImage: `url(${(images && images[active]) ? images[active].url : ImageNotFound})`}}
-                        className="h-full bg-cover bg-center w-full rounded-[8px] relative "/>
+                        className="h-full bg-cover bg-center w-full rounded-md"/>
                     <div className="absolute right-[10px] top-[10px] z-10">
                         <button
                             className="w-[36px] h-[36px] flex items-center justify-center rounded-full bg-primary-bg">
@@ -37,7 +37,8 @@ function Images({images}) {
                     <div ref={imageRef}
                          className="scroll-smooth w-full flex gap-[10px] items-center justify-start w-full overflow-hidden">
                         {images?.map((image, index) => (
-                            <div key={index} className={`${active===index? 'border-primary' : 'border-[transparent]'} border-2 relative rounded-md min-w-[64px] min-h-[64px] max-w-[64px] max-h-[64px] transition-all`}>
+                            <div key={index}
+                                 className={`${active === index ? 'border-primary' : 'border-[transparent]'} border-2 relative rounded-md min-w-[64px] min-h-[64px] max-w-[64px] max-h-[64px] transition-all`}>
                                 <button
                                     onClick={() => setActive(index)}
                                     style={{backgroundImage: `url(${image.url || ImageNotFound})`}}

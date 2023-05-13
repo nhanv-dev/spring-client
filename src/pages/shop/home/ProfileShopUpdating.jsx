@@ -151,6 +151,23 @@ function ProfileShopUpdating({handleUpdateShop, shopDetail, setShopDetail}) {
                 </h5>
                 <div className="px-1.5 pb-3">
                     <div className="mb-3 flex items-start gap-3 justify-between ">
+                        <span className="text-tiny font-medium text-black min-w-[150px] py-1.5">Tên cửa hàng: </span>
+                        {(isEdit && !isPrepare) ?
+                            <div className={`shadow bg-white w-full rounded-md`}>
+                                <input type="text" value={shopDetail.shopName || ""} placeholder="Tên cửa hàng"
+                                       onChange={(e) => {
+                                           setShopDetail(prev => ({...prev, shopName: e.target.value}))
+                                       }}
+                                       className={`text-start disabled:bg-white rounded-md p-1.5 text-black-1 font-medium text-md w-full outline-none`}/>
+                            </div> :
+                            <div className={"bg-white w-full rounded-md"}>
+                                <p className={`text-end rounded-md py-1.5 text-black-1 font-medium text-md w-full outline-none`}>
+                                    {shopDetail.shopName}
+                                </p>
+                            </div>
+                        }
+                    </div>
+                    <div className="mb-3 flex items-start gap-3 justify-between ">
                         <span className="text-tiny font-medium text-black min-w-[150px] py-1.5">Email: </span>
                         {(isEdit && !isPrepare) ?
                             <div className={`shadow bg-white w-full rounded-md`}>
@@ -306,7 +323,7 @@ function ProfileShopUpdating({handleUpdateShop, shopDetail, setShopDetail}) {
                             </div> :
                             <div className={"bg-white w-full rounded-md"}>
                                 <p className={`text-end rounded-md py-1.5 text-black-1 font-medium text-md w-full outline-none`}>
-                                    {shopDetail.addressDetail}
+                                    {shopDetail.addressDetail || 'Không có'}
                                 </p>
                             </div>
                         }
