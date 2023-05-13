@@ -33,7 +33,7 @@ function Header() {
                         <div className="flex justify-start items-center gap-4">
                             <Link to="/kenh-ban-hang"
                                   className="cursor-pointer flex items-center justify-center gap-2 text-sm font-medium text-black">
-                                <span>Kênh người bán</span>
+                                <span>Kênh bán hàng</span>
                             </Link>
                             <Link to="/nguoi-dung/dang-ky-ban-hang"
                                   className="cursor-pointer flex items-center justify-center gap-2 text-sm font-medium text-black">

@@ -1,87 +1,59 @@
 import {Link} from "react-router-dom";
-import DefaultAvatar from "../../../assets/img/default-shop.png"
+import DefaultAvatar from "../../../assets/images/default-shop.png"
 import {formatToK} from "../../../util/format";
 import * as Icon from "@iconscout/react-unicons";
 
 function ShopCard({shop}) {
+
     return (
         <div
-            className="relative group w-full rounded-md bg-white rounded-[8px] p-5 shadow-sm hover:shadow-md transition-all">
+            className="relative group w-full rounded-md bg-white p-3 shadow-sm hover:shadow-md transition-all">
             <div className="flex items-center justify-between gap-10">
-                <div className="max-w-[450px] min-w-[450px] flex items-center justify-start gap-3">
+                <div className="min-w-max flex items-center justify-start gap-3">
                     <Link to={`/cua-hang/${shop.slug}`}
-                          className="relative min-w-[70px] min-h-[70px] w-[70px] h-[70px] flex items-center justify-center rounded-full overflow-hidden">
-                        <div style={{backgroundImage: `url(${shop.avatar || DefaultAvatar})`}}
+                          className="relative min-w-[50px] min-h-[50px] w-[50px] h-[50px] flex items-center justify-center rounded-full overflow-hidden">
+                        <div style={{backgroundImage: `url(${shop.shopLogo || DefaultAvatar})`}}
                              className="w-full h-full bg-cover bg-center"/>
                         <div
-                            className="absolute w-full h-full left-0 top-0 rounded-full border-primary-hover border-[3px]"></div>
+                            className="absolute w-full h-full left-0 top-0 rounded-full border-primary border-2"></div>
                     </Link>
-                    <div className="w-full">
+                    <div className="max-w-[300px]">
                         <Link to={`/cua-hang/${shop.slug}`} className="block ">
-                            <p className="hover:text-primary text-lg font-semibold text-[#0f1e29] line-clamp-1">
-                                {shop.name}
+                            <p className="hover:text-primary text-md font-semibold text-black line-clamp-1">
+                                {shop.shopName}
                             </p>
                         </Link>
-                        <p className="font-medium text-md mb-1 text-black-1">
-                            {shop.email}
-                        </p>
                         <div className="flex items-center gap-3 text-black-1">
-                            <p className="font-medium text-tiny">
-                                {formatToK(shop.followed)} người theo dõi
+                            <p className="text-black-2 font-semibold text-sm">
+                                {formatToK(shop.followed || 0)} người theo dõi
                             </p>
-                            <p className="font-medium text-tiny">
+                            <p className="text-black-2 font-semibold text-sm">
                                 |
                             </p>
-                            <p className="font-medium text-tiny">
-                                {formatToK(shop.following)} đang theo dõi
+                            <p className="text-black-2 font-semibold text-sm">
+                                {formatToK(shop.following || 0)} đang theo dõi
                             </p>
                         </div>
                     </div>
                 </div>
-                <div className="flex-1 flex items-center justify-start gap-5">
-                    <p className="font-medium text-tiny w-[1px] h-[48px] bg-[#efefef]"/>
-                    <div className="font-medium text-md flex items-center justify-center flex-col">
-                        <p className="flex items-center justify-center gap-1 text-primary-hover font-semibold mb-1">
-                            <Icon.UilCube className="w-[20px] h-[20px] min-w-[20px] min-h-[20px]"/>
-                            {shop.amountProducts}
-                        </p>
-                        <p className="text-black-1 text-tiny">Sản phẩm</p>
+                <div className="flex-1 flex items-center justify-end gap-5">
+                    <p className="w-[1px] h-[40px] bg-[#efefef]"/>
+                    <div className="flex items-center gap-1">
+                        {/*<Icon.UilCube className="relative text-black-2 w-[22px] h-[22px]"/>*/}
+                        <p className="text-black-2 text-tiny font-medium">{formatToK(shop.productTotal)} sản phẩm</p>
                     </div>
-                    <p className="font-medium text-tiny w-[1px] h-[48px] bg-[#efefef]"/>
-                    <div className="font-medium text-md flex items-center justify-center flex-col">
-                        <p className="flex items-center justify-center gap-1 text-primary-hover font-semibold mb-1">
-                            <Icon.UilStar className="w-[20px] h-[20px] min-w-[20px] min-h-[20px]"/>
-                            {shop.rating}
-                        </p>
-                        <p className="text-black-1 text-tiny">Đánh giá</p>
+                    <p className="w-[1px] h-[40px] bg-[#efefef]"/>
+                    <div className="flex items-center gap-1">
+                        {/*<Icon.UilStar className="relative text-black-2 w-[22px] h-[22px]"/>*/}
+                        <p className="text-black-2 text-tiny font-medium">{shop?.ratingInfo?.totalRating} đánh giá</p>
                     </div>
-                    <p className="font-medium text-tiny w-[1px] h-[48px] bg-[#efefef]"/>
-                    <div className="font-medium text-md flex items-center justify-center flex-col">
-                        <p className="flex items-center justify-center gap-1 text-primary-hover font-semibold mb-1">
-                            <Icon.UilCommentAltLines className="w-[20px] h-[20px] min-w-[20px] min-h-[20px]"/>
-                            {shop.responseRate}
-                        </p>
-                        <p className="text-black-1 text-tiny">Tỉ lệ phản hồi</p>
+                    <p className="w-[1px] h-[40px] bg-[#efefef]"/>
+                    <div className="flex items-center gap-2">
+                        <Link to={`/cua-hang/${shop.slug}`}
+                              className="font-semibold text-tiny flex items-center justify-center rounded bg-primary-bg text-primary min-w-[100px] min-h-[32px]">
+                            <span className="relative top-[.5px]">Xem shop</span>
+                        </Link>
                     </div>
-                    <p className="font-medium text-tiny w-[1px] h-[48px] bg-[#efefef]"/>
-                    <div className="font-medium text-md flex items-center justify-center flex-col">
-                        <p className="flex items-center justify-center gap-1 text-primary-hover font-semibold mb-1">
-                            <Icon.UilClock className="w-[20px] h-[20px] min-w-[20px] min-h-[20px]"/>
-                            {shop.responseTime}
-                        </p>
-                        <p className="text-black-1 text-tiny">Thời gian phản hồi</p>
-                    </div>
-                    <p className="font-medium text-tiny w-[1px] h-[48px] bg-[#efefef]"/>
-                </div>
-                <div className="flex flex-col items-center gap-2">
-                    <Link to={`/cua-hang/${shop.slug}`}
-                          className="font-semibold text-md flex items-center justify-center rounded-[5px] border-2 border-primary-hover text-primary-hover min-w-[100px] min-h-[32px]">
-                        Xem shop
-                    </Link>
-                    <button
-                        className="font-semibold text-md flex items-center justify-center rounded-[5px] border-2 border-primary-hover text-primary-hover min-w-[100px] min-h-[32px]">
-                        Theo dõi
-                    </button>
                 </div>
             </div>
         </div>

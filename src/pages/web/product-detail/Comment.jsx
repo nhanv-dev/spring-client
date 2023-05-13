@@ -11,7 +11,7 @@ function Comment({product}) {
     const [pagination, setPagination] = useState({page: 0, size: 10, loaded: false});
     useEffect(() => {
         if (pagination.loaded) return;
-        publicRequest().get(`/products/${product.id}/evaluates?page=${pagination.page}&size=${pagination.size}`)
+        publicRequest().get(`/products/${product.id}/reviews?page=${pagination.page}&size=${pagination.size}`)
             .then(res => {
                 setComments(res.data.content);
                 setPagination({

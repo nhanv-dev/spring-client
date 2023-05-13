@@ -2,7 +2,7 @@ import React from "react";
 import {BrowserRouter, Route, Routes, useNavigate} from "react-router-dom";
 import ShopRouter from "./ShopRouter";
 import AdminRouter from "./AdminRouter";
-import CommonRouter from "./CommonRouter";
+import UserRouter from "./UserRouter";
 
 function Router() {
 
@@ -10,7 +10,7 @@ function Router() {
         <React.Suspense fallback={<Loader/>}>
             <BrowserRouter>
                 <Routes>
-                    <Route path="/*" element={<CommonRouter/>}/>
+                    <Route path="/*" element={<UserRouter/>}/>
                     <Route path="/kenh-ban-hang/*" element={<ShopRouter/>}/>
                     <Route path="/quan-tri/*" element={<AdminRouter/>}/>
                     <Route path="*" element={<NotFound/>}/>

@@ -2,7 +2,7 @@ import {Link} from "react-router-dom";
 import {formatCurrency, formatLongDate, formatMediumDate} from "../../../util/format";
 import {UilArrowRight, UilArrowUp, UilBan, UilEye, UilMinus, UilPlus, UilSearch} from "@iconscout/react-unicons";
 import TablePagination from "@mui/material/TablePagination";
-import {useState} from "react";
+import React, {useState} from "react";
 import {Pagination} from "@mui/material";
 import ImageNotFound from "../../../assets/images/image-not-found.jpg";
 import StatusStepper from "../order/StatusStepper";
@@ -93,7 +93,7 @@ const TableHead = () => {
     )
 }
 export default function OrderTable({orderStatus, orders, setOrders, pagination, setPagination}) {
-    const [expanded, setExpanded] = useState([19]);
+    const [expanded, setExpanded] = useState([]);
 
     const handleChangePage = (event, newPage) => {
         event.preventDefault();
@@ -125,16 +125,11 @@ export default function OrderTable({orderStatus, orders, setOrders, pagination, 
     return (
         <div className="max-w-full w-full">
             <div className="flex items-center justify-between mb-3">
-                <div className="flex items-center gap-5 justify-between">
-                    <form
-                        className={"min-w-[300px] w-full flex items-center gap-3 rounded-full border-2 border-secondary-bg text-secondary text-md font-medium px-3 py-1.5"}>
-                        <button type={"submit"} className="text-primary">
-                            <UilSearch className="w-[20px] h-[20px]"/>
-                        </button>
-                        <input className="w-full bg-[transparent] outline-none border-none"
-                               placeholder="Tìm theo tên sản phẩm, từ khóa..."/>
-                    </form>
-                </div>
+                <p className="font-semibold text-black-2 text-lg">
+                    Đơn đặt hàng <span className={"text-base"}>
+                    ({pagination.totalElements} kết quả)
+                    </span>
+                </p>
                 <Pagination
                     count={pagination.totalPages}
                     page={pagination.page + 1}
@@ -147,14 +142,12 @@ export default function OrderTable({orderStatus, orders, setOrders, pagination, 
                 <TableHead/>
                 <div className="mb-3 w-full">
                     {orders.length === 0 &&
-                        <div className="my-10 text-center font-bold text-base">Không tìm thấy sản phẩm nào</div>
+                        <div className="my-10 text-center font-bold text-base">Không tìm thấy đơn đặt hàng nào</div>
                     }
                     {orders.map((order) => {
                         const expandOrder = expanded.filter(i => i === order.id);
                         let index = 0;
-                        if (order?.statusHistory?.length < 4) {
-                            console.log(order.statusHistory)
-                        }
+
                         return (
                             <div key={order.id} className="w-full border-b border-b-border-1 border-dashed">
                                 <div
@@ -206,10 +199,11 @@ export default function OrderTable({orderStatus, orders, setOrders, pagination, 
                                         className={`${expandOrder.length > 0 ? 'max-h-[400px] overflow-auto scroll-component' : 'max-h-0'} transition-all bg-app-1 rounded-md`}>
                                         {expandOrder.length > 0 &&
                                             <div className="p-3">
-                                                <div className="w-full bg-white rounded-md mb-5 overflow-hidden p-3">
-                                                    {order.items.map(item => (
+                                                <div
+                                                    className="w-full bg-white rounded-md mb-5 overflow-hidden p-3">
+                                                    {order.items?.map(item => (
                                                         <div key={item.id}
-                                                             className="hover:bg-app-1 transition-all rounded-md relative flex flex-wrap items-start justify-between gap-8 p-3">
+                                                             className="transition-all rounded-md relative p-3">
                                                             {item.product.isDeleted &&
                                                                 <div
                                                                     className="absolute left-0 top-0 right-0 bottom-0 bg-[rgba(255,255,255,0.6)] z-0 rounded-md">
@@ -224,95 +218,106 @@ export default function OrderTable({orderStatus, orders, setOrders, pagination, 
                                                                 </div>
                                                             }
                                                             <div className="flex-1 flex items-start gap-2">
-                                                                <div
-                                                                    className="rounded-md border border-border-1">
+                                                                <div className="rounded-md border border-border-1">
                                                                     <img alt="product"
                                                                          className="w-[70px] h-[70px] min-w-[70px] min-h-[70px] rounded-md"
                                                                          src={item?.product?.images?.length > 0 ? item?.product?.images[0]?.url : ImageNotFound}/>
                                                                 </div>
-                                                                <div className="min-w-[300px] max-w-[500px]">
-                                                                    <Link to={`/san-pham/${item.product.slug}`}
-                                                                          title={item.product.name}
-                                                                          className=" font-medium text-tiny max-w-full line-clamp-2 leading-6">
+                                                                <div className="flex-1">
+                                                                    <Link
+                                                                        to={`/kenh-ban-hang/san-pham/${item.product.id}`}
+                                                                        title={item.product.name}
+                                                                        className=" font-medium text-tiny max-w-full line-clamp-2 leading-6">
                                                                         {item.product.name}
                                                                     </Link>
                                                                     <div
-                                                                        className="flex items-end gap-2 text-black-2 font-medium text-tiny">
-                                                                        <span className="font-medium text-tiny">
-                                                                           Giá bán hiện tại:
-                                                                        </span>
-                                                                        <span
-                                                                            className="text-danger font-bold text-base">
-                                                                             {formatCurrency(item.product.deal.finalPrice)}
-                                                                        </span>
-                                                                    </div>
-                                                                    <div
-                                                                        className="pt-1 flex items-end gap-6 text-black-2 font-medium text-tiny">
+                                                                        className="flex items-center justify-between mt-1 mb-3">
                                                                         <div
-                                                                            className="font-medium text-tiny min-w-max">
-                                                                            Hiện có <span
-                                                                            className="font-semibold text-danger text-base">
-                                                                                        {item.product.quantity}
-                                                                                    </span> sản phẩm
+                                                                            className="flex items-end gap-2 text-black-2 font-medium text-tiny">
+                                                                            <p className="font-medium text-tiny">
+                                                                                Giá bán hiện tại:
+                                                                            </p>
+                                                                            <p
+                                                                                className="text-danger font-bold text-base">
+                                                                                {formatCurrency(item.product.deal.finalPrice)}
+                                                                            </p>
                                                                         </div>
-                                                                        {item.variant &&
-                                                                            <div>
-                                                                                <div
-                                                                                    className="font-medium text-tiny min-w-max">
-                                                                                    Phiên bản có <span
-                                                                                    className="font-semibold text-danger text-base"> {item.variant.quantity} </span> sản
-                                                                                    phẩm
-                                                                                </div>
+                                                                        <div
+                                                                            className="flex items-end gap-2 text-black-2 font-medium text-tiny">
+                                                                            <div className="font-medium text-tiny">
+                                                                                Hiện có <span
+                                                                                className="font-semibold text-danger">
+                                                        {item.product.quantity}</span> sản phẩm
                                                                             </div>
-                                                                        }
+                                                                            {item.variant &&
+                                                                                <>
+                                                                                    <div>|</div>
+                                                                                    <div
+                                                                                        className="font-medium text-tiny">
+                                                                                        Loại {item.variant.attributeHash} có <span
+                                                                                        className="font-semibold text-danger">
+                                                                                {item.variant.quantity}
+                                                                            </span> sản phẩm
+                                                                                    </div>
+                                                                                </>
+                                                                            }
+                                                                        </div>
                                                                     </div>
+
                                                                 </div>
                                                             </div>
                                                             <div
-                                                                className="flex items-center justify-end w-full gap-8">
+                                                                className="mt-3 flex items-center justify-end gap-6 rounded bg-app-1 p-3">
                                                                 {item.variant &&
                                                                     <div
-                                                                        className="w-[200px] justify-end min-w-max flex items-end gap-2">
+                                                                        className="border-r pr-6 border-[#ccc] flex justify-between gap-2 text-black-2 font-medium text-tiny">
                                                                         <div
                                                                             className="font-medium text-tiny leading-6">
                                                                             Phiên bản:
                                                                         </div>
                                                                         <div
-                                                                            className="text-danger font-bold text-base leading-6">
+                                                                            className="text-danger font-bold text-lg leading-6">
                                                                             {item.variant.attributeHash}
                                                                         </div>
                                                                     </div>
                                                                 }
                                                                 <div
-                                                                    className="w-[200px] justify-end min-w-max flex items-end gap-2">
-                                                                    <div
-                                                                        className="font-medium text-tiny leading-6">
+                                                                    className="w-[150px] border-r pr-6 border-[#ccc] flex justify-between gap-2 text-black-2 font-medium text-tiny">
+                                                                    <div className="font-medium text-tiny leading-6">
                                                                         Số lượng đặt:
                                                                     </div>
                                                                     <div
-                                                                        className="text-danger font-bold text-base leading-6">
+                                                                        className="text-danger font-bold text-lg leading-6">
                                                                         {item.quantity}
                                                                     </div>
                                                                 </div>
                                                                 <div
-                                                                    className="w-[200px] justify-end min-w-max flex items-end gap-2">
-                                                                    <div
-                                                                        className="font-medium text-tiny leading-6">
+                                                                    className="w-[200px] border-r pr-6 border-[#ccc]  flex justify-between gap-2 text-black-2 font-medium text-tiny">
+                                                                    <div className="font-medium text-tiny leading-6">
                                                                         Giá đặt mua:
                                                                     </div>
                                                                     <div
-                                                                        className="text-danger font-bold text-base leading-6">
+                                                                        className="text-danger font-bold text-lg leading-6">
                                                                         {formatCurrency(item.finalPrice)}
+                                                                    </div>
+                                                                </div>
+                                                                <div
+                                                                    className="w-[200px] flex justify-between gap-2 text-black-2 font-medium text-tiny">
+                                                                    <div className="font-medium text-tiny leading-6">
+                                                                        Tổng tiền:
+                                                                    </div>
+                                                                    <div
+                                                                        className="text-danger font-bold text-lg leading-6">
+                                                                        {formatCurrency(item.finalPrice * item.quantity)}
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     ))}
-                                                    <div className="border-t border-border-1 pt-3 mt-3">
-                                                        <div className="flex items-center justify-end gap-3">
-                                                            <p className="font-medium">
-                                                                Tổng tiền:
-                                                            </p>
+                                                    <div className="border-t border-border-1 mx-1 p-3 pb-1 mt-3">
+                                                        <div
+                                                            className="flex items-center font-semibold justify-end gap-3">
+                                                            Tổng tiền:
                                                             <p className="text-danger font-semibold text-xl">
                                                                 {formatCurrency(order.totalPrice)}
                                                             </p>

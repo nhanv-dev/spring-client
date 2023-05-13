@@ -319,7 +319,7 @@ export default function ProductTable({products, pagination, setPagination}) {
                                                         </span>
                                                             <div
                                                                 className="flex flex-wrap items-center justify-start gap-3">
-                                                                {p.keywords.split(',').map((k, i) => (
+                                                                {p.keywords.split(',').map((k, i) => k && (
                                                                     <span key={i}
                                                                           className="font-medium text-md text-secondary bg-secondary-bg rounded-md px-3 py-1 max-w-max">
                                                                {k}

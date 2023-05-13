@@ -20,7 +20,7 @@ function Feedback({showFeedback, setShowFeedback, item, handleSetItem}) {
             content,
             rating
         }
-        protectedRequest().post(`/products/${item.product.id}/evaluates`, data)
+        protectedRequest().post(`/products/${item.product.id}/reviews`, data)
             .then(res => {
                 setShowFeedback(false)
                 handleSetItem(item.id);

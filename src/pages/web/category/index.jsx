@@ -8,8 +8,11 @@ import {publicRequest} from "../../../util/request-method";
 import CustomPagination from "../../../components/web/custom-pagination";
 import {Grid} from "@mui/material";
 import {UilAngleRightB, UilPlusCircle} from "@iconscout/react-unicons";
+import productService from "../../../service/ProductService";
+import categoryService from "../../../service/CategoryService";
 
-function Home() {
+
+function Category() {
     const {slug} = useParams();
     const [queryParameters] = useSearchParams();
     const [items, setItems] = useState([]);
@@ -17,7 +20,7 @@ function Home() {
     const [totalPages, setTotalPages] = useState(1);
     const [category, setCategory] = useState({});
     const [activeCategory, setActiveCategory] = useState({});
-    const [filterSections, setFilterSections] = useState([
+    const [filterSections] = useState([
         {title: 'Phổ biến'},
         {title: 'Bán chạy'},
         {title: 'Hàng mới'},
@@ -27,7 +30,7 @@ function Home() {
     const [activeFilter, setActiveFilter] = useState(0);
 
     useEffect(() => {
-        publicRequest().get(`/categories/slug/${slug}`)
+        categoryService.getCategoryBySlug({slug})
             .then(res => {
                 setCategory(res.data)
                 setActiveCategory(() => {
@@ -39,7 +42,7 @@ function Home() {
     }, [slug])
 
     useEffect(() => {
-        publicRequest().get(`/products/category/${slug}?page=${page - 1}`)
+        productService.getProductByCategorySlug({page: page - 1, slugCategory: slug})
             .then(res => {
                 setItems(res.data.content)
                 setTotalPages(res.data.totalPages)
@@ -55,7 +58,7 @@ function Home() {
                         <Grid container spacing={2}>
                             <Grid item xs={2.2}><SidebarCategory/></Grid>
                             <Grid item xs={12 - 2.2}>
-                                <div className="mb-5 p-5 shadow bg-white rounded-md">
+                                <div className="mb-5 p-5 pb-3.5 shadow bg-white rounded-md">
                                     <div className="mb-3">
                                         <div
                                             className="text-sm mb-2 font-medium text-black-2 flex items-center justify-start gap-2">
@@ -178,4 +181,4 @@ function Home() {
 }
 
 
-export default Home;
+export default Category;

@@ -15,6 +15,7 @@ import {UilAngleRightB} from "@iconscout/react-unicons";
 import * as types from '../../../redux/constants/ActionType';
 import toast from "react-hot-toast";
 import ToastCustom from "../../../components/common/toast-custom";
+import LoginPopup from "../../../components/web/login-popup";
 
 
 function ProductDetail() {
@@ -25,13 +26,13 @@ function ProductDetail() {
     const [quantity, setQuantity] = useState(1);
     const [selectedVariant, setSelectedVariant] = useState(null);
     const [success, setSuccess] = useState(false);
+    const [showLogin, setShowLogin] = useState(false);
 
     useEffect(() => {
         publicRequest().get(`/products/slug/${slug}`)
             .then(res => {
                 setProduct(res.data)
-                setSuccess(true);
-                console.log(res.data)
+                setSuccess(true)
             })
             .catch(err => {
                 setSuccess(false)
@@ -63,16 +64,19 @@ function ProductDetail() {
         const action = await addToCart(payload);
         dispatch(action);
         if (action.type === types.cart.ADD_CART_ITEM) {
-            toast.success("Đã thêm sản phẩm vào giỏ hàng.")
-        } else {
-            toast.error("Vui lòng thử lại sau.")
+            return toast.success("Đã thêm sản phẩm vào giỏ hàng.")
         }
+        if (action.type === types.user.USER_LOGIN_FAILED) {
+            return setShowLogin(true);
+        }
+        toast.error("Vui lòng thử lại sau.")
     }
 
     return (
         <Helmet title={`Depot - ${product?.name || 'Not found'} `}>
             <Layout>
                 <ToastCustom/>
+                <LoginPopup show={showLogin} setShow={setShowLogin}/>
                 <div className="bg-app-1 pb-10">
                     {success ?
                         <div className="container">
@@ -114,8 +118,11 @@ function ProductDetail() {
                             <div className="flex flex-wrap justify-between mt-6 max-w-full gap-6 pb-6">
                                 {product?.shop && <Shop shop={product.shop}/>}
                                 <div className="flex-1">
-                                    <ProductDescription product={product}/>
-                                    <Comment product={product}/>
+                                    <div className="mb-6">
+                                        <ProductDescription content={product?.shortDescription}
+                                                            title={"Mô tả sản phẩm"}/>
+                                    </div>
+                                    <ProductDescription content={product?.description} title={"Chi tiết sản phẩm"}/>
                                 </div>
                             </div>
                             <Comment product={product}/>

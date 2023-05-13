@@ -78,7 +78,7 @@ function ManageUserSidebar() {
                 </div>
                 <div className="mb-2">
                     <Link to="/kenh-ban-hang" className="block font-semibold text-md mb-3 hover:text-primary transition-all">
-                        Bán hàng trên Shopio
+                        Bán hàng trên Depot
                     </Link>
                 </div>
             </div>

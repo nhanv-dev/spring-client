@@ -8,8 +8,6 @@ import ImageNotFound from "../../../assets/images/image-not-found.jpg";
 function Footer({product}) {
     const [scrollTop, setScrollTop] = useState(0);
 
-    console.log(product)
-
     useEffect(() => {
         const onScroll = (e) => {
             setScrollTop(e.target.documentElement.scrollTop);

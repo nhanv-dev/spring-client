@@ -1,60 +1,60 @@
-import {useContext, useEffect, useRef, useState} from "react";
-import {getDownloadURL, ref, uploadBytesResumable} from "@firebase/storage";
-import {storage} from "../../../service/firebase";
+import React, {useEffect, useRef, useState} from "react";
+import {getDownloadURL, ref, uploadBytes} from "@firebase/storage";
+import {storage} from "../../../service/FirebaseService";
 import * as Icon from "@iconscout/react-unicons";
-import {PayloadContext} from "./index";
+import Tooltip from "@mui/material/Tooltip";
 
-function Images({images, setImages}) {
-    const {payload, setPayload} = useContext(PayloadContext);
+function UploadImages({images, setImages}) {
     const imageRef = useRef(null);
-    const [files, setFiles] = useState([]);
+    const formRef = useRef(null);
     const [active, setActive] = useState(0);
+    const [files, setFiles] = useState([]);
+    const [uploadedImage, setUploadedImage] = useState([]);
+
+    useEffect(() => {
+        if (files.length > 0 && files.length === uploadedImage.length) {
+            const filterImages = images.filter(image => !image.isPreview);
+            setImages([...filterImages, ...uploadedImage]);
+            setFiles([]);
+            setUploadedImage([]);
+            formRef.current.reset();
+        }
+    }, [uploadedImage])
 
     const scroll = (scrollOffset) => {
         imageRef.current.scrollLeft += scrollOffset;
     }
-
-    const uploadImage = (file) => {
-        if (!file) return;
-        const storageRef = ref(storage, `/files/${file.name}`);
-        const uploadTask = uploadBytesResumable(storageRef, file);
-        uploadTask.on("state_changed", (snapshot) => {
-            const pg = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
-        }, (err) => {
-            console.log(err)
-        }, () => {
-            getDownloadURL(uploadTask.snapshot.ref).then(url => {
-                console.log(url);
-                setImages(prev => [...prev, {url: url}])
-            })
-        })
-    }
-
-    const deleteImage = () => {
-        const payload = [...images].filter((image, index) => index !== active);
-        setImages(payload);
-        setActive((prev) => prev - 1 < 0 ? 0 : prev - 1)
-    }
-
-    const handleUploadImage = (e) => {
+    const handleUploadImage = async (e) => {
         e.preventDefault();
-        const file = e.target[0].files[0]
-        uploadImage(file);
+        await Promise.all(
+            files.map(file => {
+                const imageRef = ref(storage, `/files/${file.name}`)
+                uploadBytes(imageRef, file, 'data_url').then(async () => {
+                    const downloadedURL = await getDownloadURL(imageRef);
+                    setUploadedImage(prev => [...prev, {url: downloadedURL}]);
+                })
+            })
+        )
     }
-
+    const handleReadImage = async (e) => {
+        const uploadedImages = Array.from(e.target.files).map(file => {
+            const objectUrl = URL.createObjectURL(file)
+            return {url: objectUrl, isPreview: true, file}
+        })
+        setImages([...images, ...uploadedImages]);
+        setFiles(prev => [...prev, ...e.target.files])
+    }
     const handleUploadImageByURL = (e) => {
         e.preventDefault();
         if (!e.target.image.value) return;
         const url = e.target.image.value;
-        setImages(prev => [{url}, ...prev]);
+        setImages([{url}, ...images]);
         e.target.image.value = "";
     }
-
-
-    const handleReadImage = (e) => {
-        const objectUrl = URL.createObjectURL(e.target.files[0]);
-        setImages(prev => [...prev, {url: objectUrl, isPreview: true}]);
-        setFiles(prev => [...prev, {url: {...e.target.files[0]}, isPreview: true}]);
+    const deleteImage = () => {
+        const payload = [...images].filter((image, index) => index !== active);
+        setImages(payload);
+        setActive((prev) => prev - 1 < 0 ? 0 : prev - 1)
     }
 
     return (
@@ -65,23 +65,23 @@ function Images({images, setImages}) {
                 </h5>
                 <div className="flex items-center justify-center gap-2">
                     <form onSubmit={handleUploadImageByURL}
-                          className="flex-1 flex items-center justify-start gap-2 border-2 botext-primary rounded-[5px] px-2 py-1.5 text-primary text-sm font-medium cursor-pointer">
+                          className="flex-1 flex items-center justify-start gap-2 border-2 botext-primary rounded-md px-2 py-1.5 text-primary text-sm font-medium cursor-pointer">
                         <input type="text" id="image" name="image" placeholder="Dán đường dẫn tại đây"
                                className="outline-none text-sm flex-1"/>
                         <button type="submit">
                             <Icon.UilMessage className="w-[18px] h-[18px]"/>
                         </button>
                     </form>
-                    <form onSubmit={handleUploadImage}>
+                    <form onSubmit={handleUploadImage} ref={formRef}>
                         <div className="flex items-center justify-start gap-2">
                             <input type="file" id="upload-image" name="upload-image" accept="image/png, image/jpeg"
-                                   onChange={handleReadImage} className="hidden"/>
+                                   onChange={handleReadImage} className="hidden" multiple="multiple"/>
                             <label htmlFor="upload-image"
-                                   className="flex items-center justify-center gap-1 border-2 botext-primary rounded-[5px] min-w-[70px] p-1.5 text-primary text-sm font-medium cursor-pointer">
+                                   className="flex items-center justify-center gap-1 border-2 botext-primary rounded-md min-w-[70px] p-1.5 text-primary text-sm font-medium cursor-pointer">
                                 Tải ảnh
                             </label>
                             <button type="submit"
-                                    className="flex items-center justify-center gap-1 border-2 botext-primary rounded-[5px] min-w-[70px] p-1.5 text-primary text-sm font-medium cursor-pointer">
+                                    className="flex items-center justify-center gap-1 border-2 botext-primary rounded-md min-w-[70px] p-1.5 text-primary text-sm font-medium cursor-pointer">
                                 Lưu ảnh
                             </button>
                         </div>
@@ -115,15 +115,26 @@ function Images({images, setImages}) {
                         </button>
                     }
                     <div ref={imageRef}
-                         className="scroll-smooth w-full flex gap-[10px] items-center justify-start w-full overflow-hidden">
+                         className="scroll-smooth w-full flex gap-[10px] items-center justify-start overflow-hidden">
                         {images?.map((image, index) => (
                             <div key={index} className="relative">
                                 <button
                                     onClick={() => setActive(index)}
                                     style={{backgroundImage: `url(${image.url || defaultImage})`}}
-                                    className={`bg-cover bg-center overflow-hidden transition-all outline-none min-w-[80px] min-h-[80px] max-w-[80px] max-h-[80px] bg-cover bg-center rounded-[5px] border-2  
-                                 ${index === active ? 'border-2 border-primary' : 'border-border'}`}>
+                                    className={`bg-cover bg-center overflow-hidden transition-all outline-none min-w-[80px] min-h-[80px] max-w-[80px] max-h-[80px] rounded-md border-2 ${index === active ? 'border-2 border-primary' : 'border-border'}`}>
                                 </button>
+                                {image.isPreview &&
+                                    <div
+                                        className="absolute top-[5px] right-[5px] z-[9999]">
+                                        <Tooltip arrow followCursor
+                                                 title="Hình ảnh chưa lưu được lưu !">
+                                            <div className="flex items-center gap-3 max-w-max">
+                                                <Icon.UilInfoCircle
+                                                    className="rounded-full text-danger bg-white w-[20px] h-[20px]"/>
+                                            </div>
+                                        </Tooltip>
+                                    </div>
+                                }
                             </div>
                         ))}
                     </div>
@@ -137,11 +148,11 @@ function Images({images, setImages}) {
             ) : (
                 <div className="relative flex justify-center">
                     <div ref={imageRef}
-                         className="scroll-smooth w-full flex gap-[10px] items-center justify-start w-full overflow-hidden">
+                         className="scroll-smooth w-full flex gap-[10px] items-center justify-start overflow-hidden">
                         <div className="relative">
                             <button
                                 style={{backgroundImage: `url(${defaultImage})`}}
-                                className={`bg-cover bg-center overflow-hidden transition-all outline-none min-w-[80px] min-h-[80px] max-w-[80px] max-h-[80px] bg-cover bg-center rounded-[5px] border-2 border-2 border-primary`}>
+                                className={`bg-cover bg-center overflow-hidden transition-all outline-none min-w-[80px] min-h-[80px] max-w-[80px] max-h-[80px] rounded-md border-2 border-primary`}>
                             </button>
                         </div>
                     </div>
@@ -152,4 +163,4 @@ function Images({images, setImages}) {
 }
 
 const defaultImage = 'https://media.istockphoto.com/id/924949200/vector/404-error-page-or-file-not-found-icon.jpg?s=170667a&w=0&k=20&c=gsR5TEhp1tfg-qj1DAYdghj9NfM0ldfNEMJUfAzHGtU='
-export default Images;
+export default UploadImages;

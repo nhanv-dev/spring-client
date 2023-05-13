@@ -1,25 +1,17 @@
-import {useEffect, useRef, useState} from 'react';
+import {useState} from 'react';
 
 
-function ProductDescription({product}) {
+function ProductDescription({content, title}) {
     const [isShow, setIsShow] = useState(false);
     const [isWrap, setIsWrap] = useState(false);
 
-    const containerRef = useRef();
-    useEffect(() => {
-        if (containerRef === null) return;
-        if (containerRef?.current?.clientHeight >= 240) {
-
-        }
-    }, [product])
     return (
-        <div className="rounded-md bg-white p-6 mb-6">
-            {(product?.description || product?.shortDescription) ?
+        <div className="min-h-[300px] rounded-md bg-white p-6">
+            {content ?
                 <div>
-                    <div ref={containerRef} className={`overflow-hidden ${!isShow ? 'h-[240px]' : 'h-auto mb-[50px]'}`}>
-                        <p className="font-bold text-base mb-3">Mô tả sản phẩm</p>
-                        <div dangerouslySetInnerHTML={{__html: product.shortDescription}} className="text-md mb-3"/>
-                        <div dangerouslySetInnerHTML={{__html: product.description}} className="text-md mb-3"/>
+                    <div className={`overflow-hidden ${!isShow ? 'h-[240px]' : 'h-auto mb-[50px]'}`}>
+                        <p className="font-bold text-base mb-3">{title}</p>
+                        <div dangerouslySetInnerHTML={{__html: content}} className="text-md mb-3"/>
                     </div>
                     <div className="relative py-1">
                         <div
@@ -31,9 +23,9 @@ function ProductDescription({product}) {
                         </button>
                     </div>
                 </div> :
-                <div>
-                    <p className="font-bold text-base mb-5">Mô tả sản phẩm</p>
-                    <p className="text-lg font-semibold text-center py-[40px]">Không có mô tả về sản phẩm</p>
+                <div className={"h-full"}>
+                    <p className="font-bold text-base mb-5">{title}</p>
+                    <p className="h-full text-lg font-semibold text-center py-[40px]">Không có mô tả về sản phẩm</p>
                 </div>
             }
         </div>

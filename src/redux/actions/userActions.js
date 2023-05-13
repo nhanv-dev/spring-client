@@ -1,13 +1,16 @@
 import * as types from '../constants/ActionType'
-import {protectedRequest, publicRequest} from "../../util/request-method";
+import {protectedRequest} from "../../util/request-method";
+import UserService from "../../service/UserService";
 
+const userService = new UserService();
 export const login = async (payload) => {
     const action = {type: types.user.USER_LOGIN_FAILED};
-    await publicRequest().post("/auth/sign-in", payload)
+    await userService.signIn(payload)
         .then(res => {
             action.payload = {...res.data};
             action.type = types.user.USER_LOGIN_SUCCESS;
-        }).catch(err => {
+        })
+        .catch(err => {
             action.type = types.user.USER_LOGIN_FAILED;
             action.error = err.response?.data || 'Password invalid';
         })
@@ -29,6 +32,22 @@ export const validateToken = async () => {
         })
         .catch(err => {
             action = {type: types.user.CHECK_TOKEN_FAILED}
+        })
+    return {...action}
+}
+export const updateUser = async (user) => {
+    let action = {type: types.user.UPDATE_USER_FAILED};
+    await userService.updateProfile({...user})
+        .then(res => {
+            console.log(res)
+            action = {
+                type: types.user.UPDATE_USER_SUCCESS,
+                payload: {...user},
+            }
+        })
+        .catch(err => {
+            console.log(err)
+            action = {type: types.user.UPDATE_USER_FAILED}
         })
     return {...action}
 }

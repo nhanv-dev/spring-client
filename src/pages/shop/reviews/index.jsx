@@ -39,7 +39,7 @@ function Orders() {
     }, [pagination])
 
     return (
-        <Helmet title="Depot - Kênh người bán - Đánh giá shop">
+        <Helmet title="Depot - Kênh bán hàng - Đánh giá shop">
             <Layout>
                 <ToastCustom/>
                 <div className="flex items-start gap-6">

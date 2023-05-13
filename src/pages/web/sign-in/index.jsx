@@ -1,14 +1,13 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import Helmet from "../../../components/common/helmet";
-import * as types from '../../../redux/constants/ActionType'
 import Logo from "../../../assets/images/logo.png";
 import {Link, Navigate, useNavigate} from "react-router-dom";
 import {UilAt, UilExclamationTriangle, UilEyeSlash, UilKeyholeCircle} from '@iconscout/react-unicons'
-import {login, validateToken} from "../../../redux/actions/userActions";
+import {login} from "../../../redux/actions/userActions";
 import {useDispatch, useSelector} from "react-redux";
-import {initializeCart} from "../../../redux/actions/cartActions";
-import {isRole, ROLE_SHOP, ROLE_USER} from "../../../service/auth";
-import {initShop} from "../../../redux/actions/shopActions";
+import UserService from "../../../service/UserService";
+
+const userService = new UserService();
 
 function SignIn() {
     const dispatch = useDispatch();
@@ -17,13 +16,6 @@ function SignIn() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState(null);
-
-    useEffect(() => {
-        if (user?.token) {
-
-
-        }
-    }, [dispatch, navigate, user])
 
     async function handleSubmit(e) {
         e.preventDefault();
@@ -37,25 +29,11 @@ function SignIn() {
             return;
         }
         dispatch(action);
-        prepare(action)
-            .then(() => navigate("/trang-chu"))
-            .catch((err) => {
-                console.log(err)
-            })
+        const data = await userService.prepare(action);
+        dispatch(data?.cart)
+        dispatch(data?.shop)
     }
 
-    const prepare = async (action) => {
-        if (action.type === types.user.USER_LOGIN_SUCCESS) {
-            if (isRole(action.payload, ROLE_USER)) {
-                const cart = await initializeCart();
-                dispatch(cart);
-            }
-            if (isRole(action.payload, ROLE_SHOP)) {
-                const shop = await initShop({userId: action.payload.id});
-                dispatch(shop);
-            }
-        }
-    }
 
     return user?.token ? <Navigate to={"/trang-chu"}/> : (
         <Helmet title="Depot - Đăng nhập">

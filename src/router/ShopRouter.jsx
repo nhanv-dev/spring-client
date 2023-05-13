@@ -2,7 +2,7 @@ import React, {lazy} from 'react';
 import {Route, Routes} from "react-router-dom";
 import {NotFound} from "./Router";
 import {useSelector} from "react-redux";
-import {isRole, ROLE_SHOP} from "../service/auth";
+import {isRole, ROLE_SHOP} from "../service/AuthService";
 import ProtectedRoute from "./ProtectedRoute";
 
 const Home = lazy(() => import('../pages/shop/home'));
