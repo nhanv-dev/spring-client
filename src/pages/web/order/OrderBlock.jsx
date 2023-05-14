@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import * as Icon from "@iconscout/react-unicons";
-import {UilStar} from "@iconscout/react-unicons";
+import {UilEllipsisH, UilStar, UilTimes} from "@iconscout/react-unicons";
 import ImageNotFound from "../../../assets/images/image-not-found.jpg";
 import {formatCurrency, formatLongDate, formatToK} from "../../../util/format";
 import {Link, useNavigate} from "react-router-dom";
@@ -17,6 +17,7 @@ import {
 import {protectedRequest} from "../../../util/request-method";
 import {toast} from "react-hot-toast";
 import {useSelector} from "react-redux";
+import {Backdrop} from "@mui/material";
 
 function OrderBlock({order, setOrders}) {
     const user = useSelector(state => state.user);
@@ -25,10 +26,17 @@ function OrderBlock({order, setOrders}) {
     const [showFeedback, setShowFeedback] = useState(false);
     const [active, setActive] = useState(null);
     const [items, setItems] = useState([]);
+    const [openAddress, setOpenAddress] = useState(false);
+    const [openOptions, setOpenOptions] = useState(false);
 
     useEffect(() => {
         setItems(order.items);
     }, [order])
+
+    useEffect(() => {
+        document.body.style.overflowY = openAddress ? "hidden" : "";
+    }, [openAddress])
+
     const handleShowFeedback = (item) => {
         setActive(item);
         setShowFeedback(true)
@@ -68,7 +76,7 @@ function OrderBlock({order, setOrders}) {
                             <div
                                 className="w-[50px] h-[50px] min-w-[50px] min-h-[50px] rounded-full border-[3px] border-primary">
                                 <Link to={`/cua-hang/${order.shop.slug}`}
-                                      className="block w-full h-full bg-cover rounded-full"
+                                      className="block w-full h-full bg-cover bg-center rounded-full"
                                       style={{backgroundImage: `url(${order.shop.shopLogo || DefaultShop})`}}>
                                 </Link>
                             </div>
@@ -98,7 +106,77 @@ function OrderBlock({order, setOrders}) {
                             </div>
                         </div>
                         <div className="flex flex-col items-end gap-3">
-                            <StatusOrder orderStatus={order.orderStatus}/>
+                            <div className={"flex items-center gap-5"}>
+                                <StatusOrder orderStatus={order.orderStatus}/>
+                                <div>
+                                    <button onClick={() => {
+                                        setOpenAddress(true)
+                                    }}
+                                            className={"font-medium text-black-2 text-tiny outline-none border-none p-1 hover:bg-app-1 transition-all rounded-full"}>
+                                        <UilEllipsisH className={"w-[20px] h-[20px]"}/>
+                                    </button>
+                                    {/*<div>*/}
+                                    {/*    Thông tin nhận hàng*/}
+                                    {/*</div>*/}
+                                    <div
+                                        className={`${openAddress ? 'opacity-100 visible' : 'opacity-0 hidden'} z-[1000] fixed left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] transition-all w-[450px] bg-white rounded-md`}>
+                                        <div className="p-3 mb-3 flex items-center justify-between border-b border-border-1">
+                                            <h5 className="font-semibold">
+                                                Thông tin nhận hàng
+                                            </h5>
+                                            <button onClick={() => setOpenAddress(false)}
+                                                    className={"text-danger rounded-full hover:bg-danger-bg transition-all"}>
+                                                <UilTimes/>
+                                            </button>
+                                        </div>
+                                        <div className="p-3">
+                                            <div className={"flex items-center font-medium text-md mb-4 text-black-2"}>
+                                                <p className="w-[140px]">Họ tên:</p>
+                                                <p className={"font-semibold"}>
+                                                    {order.address?.customerName}
+                                                </p>
+                                            </div>
+                                            <div className={"flex items-center font-medium text-md mb-4 text-black-2"}>
+                                                <p className="w-[140px]">Số điện thoại:</p>
+                                                <p className={"font-semibold"}>
+                                                    {order.address?.phoneNumber}
+                                                </p>
+                                            </div>
+                                            {order.address?.email &&
+                                                <div className={"flex items-center font-medium text-md mb-5 text-black-2"}>
+                                                    <p className="w-[140px]">Email:</p>
+                                                    <p>
+                                                        {order.address?.email}
+                                                    </p>
+                                                </div>
+                                            }
+                                            <div className={"flex items-center font-medium text-md mb-4 text-black-2"}>
+                                                <p className="w-[140px]">Địa chỉ nhận hàng:</p>
+                                                <p className={"font-semibold"}>
+                                                    {order.address?.addressDetail}
+                                                </p>
+                                            </div>
+                                            {order.note &&
+                                                <div className={"flex items-center font-medium text-md mb-5 text-black-2"}>
+                                                    <p className="w-[140px]">Ghi chú:</p>
+                                                    <p>
+                                                        {order.note}
+                                                    </p>
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                    <Backdrop
+                                        sx={{color: '#fff', zIndex: 999}}
+                                        open={openAddress}
+                                        onClick={(e) => {
+                                            e.preventDefault()
+                                            setOpenAddress(false)
+                                        }}>
+
+                                    </Backdrop>
+                                </div>
+                            </div>
                             <p className="font-medium text-sm text-black-2">
                                 Đặt hàng {formatLongDate(order.createdAt)}
                             </p>

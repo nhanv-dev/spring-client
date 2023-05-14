@@ -1,17 +1,14 @@
 import React, {useState} from 'react';
 import Helmet from "../../../components/common/helmet";
 import Logo from "../../../assets/images/logo.png";
-import {Link, Navigate, useNavigate} from "react-router-dom";
+import {Link, Navigate} from "react-router-dom";
 import {UilAt, UilExclamationTriangle, UilEyeSlash, UilKeyholeCircle} from '@iconscout/react-unicons'
 import {login} from "../../../redux/actions/userActions";
 import {useDispatch, useSelector} from "react-redux";
-import UserService from "../../../service/UserService";
-
-const userService = new UserService();
+import userService from "../../../service/UserService";
 
 function SignIn() {
     const dispatch = useDispatch();
-    const navigate = useNavigate();
     const user = useSelector(state => state.user);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");

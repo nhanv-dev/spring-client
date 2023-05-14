@@ -9,7 +9,7 @@ class ProductService {
 
     async searchProduct({search}) {
         return new Promise((resolve, reject) => {
-            protectedRequest().get(`/search/products?search=${search}`).then(resolve).catch(reject)
+            publicRequest().get(`/search/products?search=${search}`).then(resolve).catch(reject)
         })
     }
 
