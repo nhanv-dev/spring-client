@@ -8,6 +8,7 @@ import {Grid, Pagination} from "@mui/material";
 import productService from "../../../service/ProductService";
 import shopService from "../../../service/ShopService";
 import ShopCard from "../../../components/web/shop-card";
+import {UilAngleRight} from "@iconscout/react-unicons";
 
 const TYPE_ALL = 'tat-ca'
 const TYPE_PRODUCT = 'san-pham'
@@ -27,7 +28,7 @@ function Searching() {
     return (
         <Helmet title={`Depot - ${search || 'Danh mục'}`}>
             <Layout>
-                <div className="bg-app-1 py-6">
+                <div className="bg-app-1 py-10">
                     <div className="container">
                         <Grid container spacing={2}>
                             <Grid item xs={2.2}><SidebarCategory/></Grid>
@@ -73,15 +74,17 @@ const SearchingShop = ({search}) => {
 
     return (
         <div className="mb-8">
-            <div className="mb-4 flex items-center gap-5 justify-between">
+            <div className="mb-4 flex items-end gap-5 justify-between">
                 <div className=" font-medium text-base">
                     <p className={"inline"}>Shop liên quan đến '{search}' </p>
                     <div className="inline font-medium text-md text-gray">
                         (Tìm thấy <p className="inline font-semibold text-red text-base">{shops.length}</p> kết quả)
                     </div>
                 </div>
-                <Link to={`/tim-kiem?s=${search}&t=cua-hang`}>
+                <Link to={`/tim-kiem?s=${search}&t=cua-hang`}
+                      className={"flex items-center gap-2text-black-2 font-medium text-md hover:text-primary transition-all"}>
                     Thêm kết quả
+                    <UilAngleRight/>
                 </Link>
             </div>
             {shops.map(shop => (
@@ -179,7 +182,6 @@ const CustomPagination = ({count, page, handleChange}) => {
     return (
         <div>
             <Pagination count={count} page={page} onChange={(e, page) => {
-                console.log(`${location.pathname}?page=${page}`)
                 navigate(`${location.pathname}?page=${page}`)
                 handleChange(page)
             }} color={"primary"} showFirstButton showLastButton/>

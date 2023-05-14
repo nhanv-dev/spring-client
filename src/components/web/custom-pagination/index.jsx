@@ -9,7 +9,6 @@ const CustomPagination = ({count, page, handleChange}) => {
     return (
         <div>
             <Pagination count={count} page={page} onChange={(e, page) => {
-                console.log(`${location.pathname}?page=${page}`)
                 navigate(`${location.pathname}?page=${page}`)
                 handleChange(page)
             }} color={"primary"} showFirstButton showLastButton/>

@@ -1,8 +1,7 @@
 import * as types from '../constants/ActionType'
 import {protectedRequest} from "../../util/request-method";
-import UserService from "../../service/UserService";
+import userService from "../../service/UserService";
 
-const userService = new UserService();
 export const login = async (payload) => {
     const action = {type: types.user.USER_LOGIN_FAILED};
     await userService.signIn(payload)

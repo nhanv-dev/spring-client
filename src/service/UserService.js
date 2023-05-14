@@ -4,7 +4,7 @@ import {isRole, ROLE_SHOP, ROLE_USER} from "./AuthService";
 import {initializeCart} from "../redux/actions/cartActions";
 import {initShop} from "../redux/actions/shopActions";
 
-export default class UserService {
+class UserService {
     async prepare(action) {
         if (action.type === types.user.USER_LOGIN_SUCCESS) {
             const data = {};
@@ -39,3 +39,7 @@ export default class UserService {
     }
 
 }
+
+const userService = new UserService();
+export default userService;
+
