@@ -1,9 +1,21 @@
 import {protectedRequest, publicRequest} from "../util/request-method";
 
 class ProductService {
+    async getProduct({page, size}) {
+        return new Promise((resolve, reject) => {
+            publicRequest().get(`/products?page=${page - 1}&size=${size}`).then(resolve).catch(reject)
+        })
+    }
+
     async getProductByCategorySlug({slugCategory, page}) {
         return new Promise((resolve, reject) => {
             publicRequest().get(`/products/category/${slugCategory}?page=${page - 1}`).then(resolve).catch(reject)
+        })
+    }
+
+    async getProductByShop({page, size}) {
+        return new Promise((resolve, reject) => {
+            protectedRequest().get(`/shops/products?page=${page}&size=${size}`).then(resolve).catch(reject)
         })
     }
 

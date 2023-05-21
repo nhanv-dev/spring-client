@@ -4,6 +4,7 @@ import Helmet from "../../../components/common/helmet";
 import {protectedRequest} from "../../../util/request-method";
 import ProductTable from "./ProductTable";
 import ToastCustom from "../../../components/common/toast-custom";
+import productService from "../../../service/ProductService";
 
 function Products() {
     const [products, setProducts] = useState([]);
@@ -11,9 +12,8 @@ function Products() {
 
     useEffect(() => {
         if (pagination.loaded) return;
-        protectedRequest().get(`/shops/products?page=${pagination.page}&size=${pagination.size}`)
+        productService.getProductByShop({page: pagination.page, size: pagination.size})
             .then(res => {
-                console.log(res)
                 setPagination({
                     size: res.data.size,
                     page: res.data.number,

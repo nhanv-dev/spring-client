@@ -40,6 +40,9 @@ function SalesRegister() {
 
     async function handleSubmit(e) {
         e.preventDefault();
+        if (!shopName || !shopEmail || !shopPhone || !warehouse?.name) {
+            return toast.error('Đăng ký thất bại. Vui lòng thử lại')
+        }
         const payload = {
             shopName, shopEmail, shopPhone, addressDetail,
             warehouseRegionName: warehouse?.name,
@@ -54,6 +57,7 @@ function SalesRegister() {
             })
             .catch(err => {
                 console.log(err)
+                toast.error('Đăng ký thất bại. Vui lòng thử lại')
             })
     }
 

@@ -1,11 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import Layout from "../../../components/shop/layout";
 import Helmet from "../../../components/common/helmet";
-import {protectedRequest, publicRequest} from "../../../util/request-method";
+import {publicRequest} from "../../../util/request-method";
 import OrderTable from "./OrderTable";
 import ToastCustom from "../../../components/common/toast-custom";
-import StatusBadge from "../order/StatusBadge";
 import {UilSearch} from "@iconscout/react-unicons";
+import orderService from "../../../service/OrderService";
 
 function Orders() {
     const [orders, setOrders] = useState([]);
@@ -20,7 +20,7 @@ function Orders() {
 
     useEffect(() => {
         if (pagination.loaded) return;
-        protectedRequest().get(`/shops/orders?page=${pagination.page}&size=${pagination.size}`)
+        orderService.getOrdersByShop({page: pagination.page, size: pagination.size})
             .then(res => {
                 setPagination({
                     size: res.data.size,
@@ -61,7 +61,7 @@ function Orders() {
                         <div className="flex flex-wrap items-start gap-4">
                             {orderStatus.map(status => (
                                 <button key={status.id}
-                                    className="px-6 py-1.5 bg-secondary-bg font-semibold text-tiny rounded-md text-secondary cursor-pointer">
+                                        className="px-6 py-1.5 bg-secondary-bg font-semibold text-tiny rounded-md text-secondary cursor-pointer">
                                     <p>{status.title}</p>
                                 </button>
                             ))}

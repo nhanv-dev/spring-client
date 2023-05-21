@@ -9,9 +9,8 @@ import {
 import {Step, StepContent, StepLabel, Stepper} from "@mui/material";
 import {formatLongDate} from "../../../util/format";
 import {toast} from "react-hot-toast";
-import OrderService from "../../../service/OrderService";
+import orderService from "../../../service/OrderService";
 
-const orderService = new OrderService();
 
 const StatusStepper = ({order, orderStatus, setOrder, setOrders}) => {
     const [list, setList] = useState([]);

@@ -38,6 +38,7 @@ export const removeFromCart = async (payload) => {
     return {...action}
 }
 export const updateQuantity = async ({item, quantity}) => {
+    console.log({...item, quantity})
     const res = await protectedRequest().put(`/cart/items/${item.id}`, {...item, quantity});
     console.log(res)
     if (res.status !== 200) return {};

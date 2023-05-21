@@ -5,6 +5,7 @@ import Logo from "../../../assets/images/logo.png";
 import {UilAt, UilEyeSlash, UilInfoCircle, UilKeyholeCircle, UilPhoneAlt, UilUser} from '@iconscout/react-unicons'
 import userService from "../../../service/UserService";
 import {toast} from "react-hot-toast";
+import ToastCustom from "../../../components/common/toast-custom";
 
 function SignUp() {
     const navigate = useNavigate();
@@ -14,6 +15,8 @@ function SignUp() {
     const [repeatPassword, setRepeatPassword] = useState("");
     const [phoneNumber, setPhoneNumber] = useState("");
     const [error, setError] = useState(null);
+    const [isWaiting, setIsWaiting] = useState(false);
+
 
     function validateEmpty() {
         const error = {};
@@ -29,6 +32,7 @@ function SignUp() {
 
     function validateServerResponse(data) {
         const error = {};
+        if (data.message === 'Error: Email is already in use!') error.email = {title: 'Email đã tồn tại.'}
         if (data.email === "must be a well-formed email address") error.email = {title: 'Email không hợp lệ.'}
         if (data.password === "size must be between 8 and 2147483647") error.password = {title: 'Mật khẩu nên ít nhất 8 ký tự.'}
         if (data.phoneNumber === "must match \"^\\d{10}$\"") error.phoneNumber = {title: 'Số điện thoại không hợp lệ.'}
@@ -37,12 +41,13 @@ function SignUp() {
     }
 
     function handleSubmit() {
+        if (isWaiting) return;
         const emptyError = validateEmpty();
         if (emptyError) return setError(emptyError);
-
         userService.signUp({email, password, name, phoneNumber})
             .then(res => {
                 if (res.status === 200) {
+                    setIsWaiting(true)
                     toast.success('Đăng ký tài khoản thành công');
                     setTimeout(() => {
                         toast.dismiss();
@@ -59,6 +64,7 @@ function SignUp() {
 
     return (
         <Helmet title="Depot - Đăng ký">
+            <ToastCustom/>
             <div className="w-full h-[100vh] flex">
                 <div className={"w-[500px] bg-app-1 px-10 border-r-2 border-border-1"}>
                     <div className="h-full flex items-center justify-start">

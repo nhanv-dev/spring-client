@@ -3,11 +3,11 @@ import {Link, useSearchParams} from "react-router-dom";
 import Layout from "../../../components/web/layout";
 import Helmet from "../../../components/common/helmet";
 import ProductCard from "../../../components/web/product-card";
-import {publicRequest} from "../../../util/request-method";
 import CustomPagination from "../../../components/web/custom-pagination";
 import {Grid} from "@mui/material";
 import categoryService from "../../../service/CategoryService";
 import {UilAngleRight} from "@iconscout/react-unicons";
+import productService from "../../../service/ProductService";
 
 
 function Home() {
@@ -28,11 +28,16 @@ function Home() {
     }, [])
 
     useEffect(() => {
-        publicRequest().get(`/products?page=${page - 1}`)
+        productService.getProduct({page:1, size: 30})
             .then(res => {
                 setItems(res.data.content)
                 setTotalPages(res.data.totalPages)
                 window.scrollTo(0, 0);
+            })
+            .catch(err => {
+                console.log(err)
+                setItems([])
+                setTotalPages(1)
             })
     }, [page])
 
@@ -76,7 +81,8 @@ function Home() {
                     }
                     {items.length > 0 &&
                         <div className="container">
-                            <div className="p-3 rounded-t-md bg-white flex items-center justify-center w-full mb-4 border-b-4 border-b-primary">
+                            <div
+                                className="p-3 rounded-t-md bg-white flex items-center justify-center w-full mb-4 border-b-4 border-b-primary">
                                 <p className="font-bold text-primary text-lg capitalize">Gợi ý hôm nay</p>
                             </div>
                             <Grid container spacing={2}>

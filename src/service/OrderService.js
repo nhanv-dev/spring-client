@@ -1,6 +1,6 @@
 import {protectedRequest} from "../util/request-method";
 
-export default class OrderService {
+class OrderService {
     async getCancelledOrder({orderId}) {
         return new Promise((resolve, reject) => {
             protectedRequest().get(`/orders/${orderId}/cancel-order`).then(resolve).catch(reject)
@@ -13,4 +13,13 @@ export default class OrderService {
         })
     }
 
+    async getOrdersByShop({page, size}) {
+        return new Promise((resolve, reject) => {
+            protectedRequest().get(`/shops/orders?page=${page}&size=${size}`).then(resolve).catch(reject)
+        })
+    }
+
 }
+
+const orderService = new OrderService();
+export default orderService;

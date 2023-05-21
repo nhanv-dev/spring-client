@@ -63,7 +63,7 @@ function SignIn() {
                  style={{backgroundImage: `url(https://img.freepik.com/free-vector/ecommerce-web-page-concept-illustration_114360-8204.jpg?w=2000)`}}>
                 <div className="fixed left-0 top-0 w-[100vw] h-[100vh] bg-[black] opacity-50 z-10"/>
                 <div
-                    className="p-6 z-50 fixed md:w-[1000px] bg-white rounded-md top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
+                    className="p-6 z-50 fixed md:w-[500px] bg-white rounded-md top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
                     <div className="w-full flex gap-6">
                         <div className="flex-1 py-5">
                             <div className="mb-8">

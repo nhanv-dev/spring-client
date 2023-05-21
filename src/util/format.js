@@ -29,7 +29,6 @@ export function formatMediumDate(date) {
         minute: "numeric",
         second: "numeric",
         hour12: false,
-        timeZone: "America/Los_Angeles",
     };
     return new Intl.DateTimeFormat("en-US", options).format(new Date(date));
 }
