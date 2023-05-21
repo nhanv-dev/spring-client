@@ -137,7 +137,7 @@ export default function SalesRegisterTable({salesRegisters, setSalesRegisters, p
                             <UilSearch className="w-[20px] h-[20px]"/>
                         </button>
                         <input className="w-full bg-[transparent] outline-none border-none"
-                               placeholder="Tìm theo tên sản phẩm, từ khóa..."/>
+                               placeholder="Tìm theo tên id, email..."/>
                     </form>
                 </div>
                 <Pagination
@@ -152,7 +152,7 @@ export default function SalesRegisterTable({salesRegisters, setSalesRegisters, p
                 <TableHead/>
                 <div className="mb-3 w-full">
                     {salesRegisters.length === 0 &&
-                        <div className="my-10 text-center font-bold text-base">Không tìm thấy sản phẩm nào</div>
+                        <div className="my-10 text-center font-bold text-base">Không tìm thấy đơn đăng ký nào</div>
                     }
                     {salesRegisters.map((salesRegister) => {
                         let index = 0;

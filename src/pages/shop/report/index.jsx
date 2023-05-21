@@ -18,7 +18,9 @@ function Order() {
         <Helmet title="Depot - Kênh bán hàng - Thống kê">
             <Layout>
                 <ToastCustom/>
-                Thống kê
+                <div className={"font-semibold text-lg flex items-center justify-center py-10 bg-white rounded-md"}>
+                    Chức năng chưa hỗ trợ
+                </div>
             </Layout>
         </Helmet>
     );

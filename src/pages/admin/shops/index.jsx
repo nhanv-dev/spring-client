@@ -30,10 +30,8 @@ function SalesRegister() {
     return (
         <Helmet title="Depot - Quản trị - Đơn bán hàng">
             <Layout>
-                <div className="flex gap-6">
-                    <div className="flex-1 bg-white p-5 rounded-md h-max">
-                    </div>
-                    <div className="max-w-[1100px] bg-white p-5 rounded-md">
+                <div className="flex justify-center gap-6">
+                    <div className="bg-white p-5 rounded-md">
                         <ShopTable shops={shops} pagination={pagination} setPagination={setPagination}/>
                     </div>
                 </div>

@@ -10,6 +10,7 @@ import * as Icon from '@iconscout/react-unicons';
 import {Radio} from "@mui/material";
 import {placeOrder} from "../../../redux/actions/orderActions";
 import ToastCustom from "../../../components/common/toast-custom";
+import {toast} from "react-hot-toast";
 
 function PlaceOrder() {
     const navigate = useNavigate();
@@ -23,6 +24,7 @@ function PlaceOrder() {
     const [paymentMethod, setPaymentMethod] = useState("cod");
     const [shippingMethod, setShippingMethod] = useState("now");
     const [isSending, setIsSending] = useState(false);
+
     useEffect(() => {
         if (!isSending && cart.items.filter(item => item.checked).length <= 0) navigate("/gio-hang")
     }, [cart.items, isSending, navigate])
@@ -53,6 +55,10 @@ function PlaceOrder() {
     }, [cart])
 
     const handlePlaceOrder = async () => {
+        if (!address) {
+            toast.error("Bạn chưa chọn địa chỉ nhận hàng")
+            return;
+        }
         setIsSending(true);
         const action = await placeOrder({
             list, note, address, userId: user.id
@@ -107,7 +113,8 @@ function PlaceOrder() {
                                                                 </Link>
 
                                                             </div>
-                                                            <div className="flex justify-between items-center gap-3 w-full">
+                                                            <div
+                                                                className="flex justify-between items-center gap-3 w-full">
                                                                 {item.variant &&
                                                                     <p className="px-5 font-bold text-sm bg-primary-bg rounded-full text-primary min-w-max max-w-max">
                                                                         <span

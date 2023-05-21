@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {Link, useParams, useSearchParams} from "react-router-dom";
 import Layout from "../../../components/web/layout";
 import Helmet from "../../../components/common/helmet";
@@ -7,7 +7,7 @@ import SidebarCategory from "../../../components/web/sidebar-category";
 import {publicRequest} from "../../../util/request-method";
 import CustomPagination from "../../../components/web/custom-pagination";
 import {Grid} from "@mui/material";
-import {UilAngleRightB, UilPlusCircle} from "@iconscout/react-unicons";
+import {UilAngleLeft, UilAngleRight, UilAngleRightB, UilPlusCircle} from "@iconscout/react-unicons";
 import productService from "../../../service/ProductService";
 import categoryService from "../../../service/CategoryService";
 
@@ -28,6 +28,9 @@ function Category() {
         {title: 'Giá cao đến thấp'},
     ]);
     const [activeFilter, setActiveFilter] = useState(0);
+    const categoryRef = useRef();
+    const [scrollCate, setScrollCate] = useState(0);
+    const [maxScrollCate, setMaxScrollCate] = useState();
 
     useEffect(() => {
         categoryService.getCategoryBySlug({slug})
@@ -42,13 +45,26 @@ function Category() {
     }, [slug])
 
     useEffect(() => {
-        productService.getProductByCategorySlug({page: page - 1, slugCategory: slug})
+        productService.getProductByCategorySlug({page, slugCategory: slug})
             .then(res => {
                 setItems(res.data.content)
                 setTotalPages(res.data.totalPages)
                 window.scrollTo(0, 0);
             })
     }, [page, slug])
+
+    useEffect(() => {
+        setMaxScrollCate(categoryRef?.current?.clientWidth)
+    }, [categoryRef])
+
+    function scrollCategory(scrollOffset) {
+        const scroll = categoryRef.current.scrollLeft + scrollOffset;
+        if (scroll + scrollOffset >= maxScrollCate)
+            setScrollCate(maxScrollCate);
+        else
+            setScrollCate(scroll);
+        categoryRef.current.scrollLeft = scroll
+    }
 
     return (
         <Helmet title={`Depot - ${activeCategory?.title || 'Danh mục'}`}>
@@ -103,8 +119,32 @@ function Category() {
                                         </div>
                                     </div>
                                     {category && (
-                                        <div className="w-full bg-white border-b border-b-border mb-3 pb-3">
-                                            <div className="scroll-smooth overflow-hidden">
+                                        <div className="relative w-full bg-white mb-3">
+                                            {scrollCate > 0 &&
+                                                <div
+                                                    className={`absolute left-0 top-0 bottom-0 flex items-center justify-center w-[60px]`}
+                                                    style={{
+                                                        background: 'linear-gradient(to left, rgba(255,255,255,0.7) 50%, #fff 75%)'
+                                                    }}>
+                                                    <button onClick={() => scrollCategory(-200)}
+                                                            className={` p-1.5 bg-primary-bg border-none outline-none text-primary rounded-full`}>
+                                                        <UilAngleLeft className={"w-[18px] h-[18px]"}/>
+                                                    </button>
+                                                </div>
+                                            }
+                                            {scrollCate < maxScrollCate &&
+                                                <div
+                                                    className={`absolute right-0 top-0 bottom-0 flex items-center justify-center w-[60px]`}
+                                                    style={{
+                                                        background: 'linear-gradient(to left, #fff 50%, rgba(255,255,255,0.7) 75%)'
+                                                    }}>
+                                                    <button onClick={() => scrollCategory(200)}
+                                                            className={`p-1.5 bg-primary-bg border-none outline-none text-primary rounded-full`}>
+                                                        <UilAngleRight className={"w-[18px] h-[18px]"}/>
+                                                    </button>
+                                                </div>
+                                            }
+                                            <div ref={categoryRef} className="scroll-smooth overflow-hidden">
                                                 <div className="flex gap-3 items-center">
                                                     <Link to={`/danh-muc/${category?.slug}`}
                                                           className={`${slug === category.slug ? "bg-primary-bg text-primary" : "bg-[#e7e8ea] text-black-1 border-[#e7e8ea] hover:text-primary"} border-2 block min-w-max py-1.5 px-4 rounded-md font-semibold text-sm transition-all`}>
@@ -116,15 +156,12 @@ function Category() {
                                                             {sub.title}
                                                         </Link>
                                                     ))}
-                                                    <Link to={`/danh-muc`}
-                                                          className="text-black-1 hover:text-primary transition-all">
-                                                        <UilPlusCircle className="w-[20px] h-[20px]"/>
-                                                    </Link>
                                                 </div>
                                             </div>
                                         </div>
                                     )}
-                                    <div className="flex items-center gap-6 justify-between mb-2">
+                                    <div
+                                        className="border-t border-t-border flex items-center gap-6 justify-between mb-2 pt-3">
                                         <div className="flex items-center justify-start gap-x-8">
                                             {filterSections.map((filter, i) => (
                                                 <button type={"button"} key={i} onClick={() => {

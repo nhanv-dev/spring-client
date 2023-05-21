@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import Layout from "../../../components/shop/layout";
+import Layout, {Footer} from "../../../components/shop/layout";
 import Helmet from "../../../components/common/helmet";
 import {protectedRequest} from "../../../util/request-method";
 import {useSelector} from "react-redux";
@@ -8,25 +8,48 @@ import DefaultShopBg from "../../../assets/images/default-shop-bg.png";
 import {Link, useNavigate} from "react-router-dom";
 import * as Icon from "@iconscout/react-unicons";
 import StarRating from "../../../components/common/star-rating";
-import {formatBetweenDate} from "../../../util/format";
+import {formatBetweenDate, formatCurrency} from "../../../util/format";
 import ProfileShopUpdating from "./ProfileShopUpdating";
 import ToastCustom from "../../../components/common/toast-custom";
 import {toast} from "react-hot-toast";
 import {getDownloadURL, ref, uploadBytesResumable} from "@firebase/storage";
 import {storage} from "../../../service/FirebaseService";
+import productService from "../../../service/ProductService";
+import shopService from "../../../service/ShopService";
+import {Grid} from "@mui/material";
+import ProductCard from "../../../components/web/product-card";
+import {UilAngleRight} from "@iconscout/react-unicons";
+import orderService from "../../../service/OrderService";
 
 function Home() {
     const {shop} = useSelector(state => state);
     const [shopDetail, setShopDetail] = useState({});
+    const [products, setProducts] = useState([]);
+    const [orders, setOrders] = useState([]);
 
     useEffect(() => {
         if (!shop?.id) return;
-        protectedRequest().get(`/shops/${shop.id}`)
+        shopService.getShop({shopId: shop.id})
             .then(res => {
                 setShopDetail(res.data)
             })
             .catch(err => {
                 setShopDetail({})
+            })
+        productService.getProductByShop({page: 0, size: 8})
+            .then(res => {
+                setProducts(res.data.content)
+            })
+            .catch(err => {
+                setProducts([])
+            })
+        orderService.getOrdersByShop({page: 0, size: 5})
+            .then(res => {
+                console.log(res)
+                setOrders(res.data.content)
+            })
+            .catch(err => {
+                setOrders([])
             })
     }, [shop])
 
@@ -45,7 +68,6 @@ function Home() {
             })
 
     }
-
     const handleUploadBackgroundImage = (e) => {
         e.preventDefault();
         const file = e.target.files[0];
@@ -227,9 +249,69 @@ function Home() {
                 </div>
                 <div className="flex items-start gap-6">
                     <div className="flex-1">
-                        <div className="basis-1/3 flex gap-6">
-                            <div className="flex-1 bg-white rounded-md p-5"></div>
-                            <div className="flex-1 bg-white rounded-md p-5"></div>
+                        <div className={"mb-5 p-3 rounded-md bg-white"}>
+                            <div className="flex items-center gap-5 justify-between mb-3 pb-3 border-b border-border-1">
+                                <h5 className="font-semibold text-black text-lg">
+                                    Đơn đặt hàng
+                                </h5>
+                                <Link to={"/kenh-ban-hang/don-dat-hang"}
+                                      className={"flex items-center gap-2 font-medium text-tiny hover:text-primary transition-all"}>
+                                    Xem tất cả
+                                    <UilAngleRight className={"w-[20px] h-[20px]"}/>
+                                </Link>
+                            </div>
+                            {orders?.length <= 0 &&
+                                <div className="flex items-center justify-center py-6 font-semibold">
+                                    Bạn chưa có đơn đặt hàng nào.
+                                </div>
+                            }
+                            {orders.length > 0 &&
+                                <div>
+                                    {orders.map(order => (
+                                        <div key={order.id}
+                                             className="text-md font-medium flex items-center gap-3 bg-app-1 mb-2 p-3 rounded-md">
+                                            <div className="text-md min-w-[80px]">
+                                                {order.id}
+                                            </div>
+                                            <div className={""}>
+                                                {order.email}
+                                            </div>
+                                            <div>
+                                                {formatCurrency(order.totalPrice)}
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            }
+                        </div>
+                        <div className={"p-3 rounded-md bg-white"}>
+                            <div className="flex items-center gap-5 justify-between mb-3 pb-3 border-b border-border-1">
+                                <h5 className="font-semibold text-black text-lg">
+                                    Quản lý sản phẩm
+                                </h5>
+                                <Link to={"/kenh-ban-hang/san-pham"}
+                                      className={"flex items-center gap-2 font-medium text-tiny hover:text-primary transition-all"}>
+                                    Xem tất cả
+                                    <UilAngleRight className={"w-[20px] h-[20px]"}/>
+                                </Link>
+                            </div>
+                            <div className="bg-app-1 p-3 rounded-md">
+                                {products.length <= 0 &&
+                                    <div
+                                        className="flex items-center justify-center py-6 font-semibold">
+                                        Cửa hàng chưa có sản phẩm nào.
+                                    </div>
+                                }
+                                {products?.length > 0 &&
+                                    <Grid container spacing={2}>
+                                        {products.map((item) => (
+                                            <Grid item xl={12 / 4} md={12 / 4} xs={12 / 2} key={item.id}>
+                                                <ProductCard item={item}/>
+                                            </Grid>
+                                        ))}
+                                    </Grid>
+                                }
+                            </div>
                         </div>
                     </div>
                     <div className="basis-1/3 bg-white rounded-md p-5">
@@ -238,6 +320,7 @@ function Home() {
                     </div>
                 </div>
             </Layout>
+            <Footer/>
         </Helmet>
     );
 }
