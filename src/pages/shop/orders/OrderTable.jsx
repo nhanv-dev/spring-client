@@ -276,7 +276,7 @@ export default function OrderTable({orderStatus, orders, setOrders, pagination, 
                                                                             Phiên bản:
                                                                         </div>
                                                                         <div
-                                                                            className="text-danger font-bold text-lg leading-6">
+                                                                            className="text-danger font-bold text-base leading-6">
                                                                             {item.variant.attributeHash}
                                                                         </div>
                                                                     </div>

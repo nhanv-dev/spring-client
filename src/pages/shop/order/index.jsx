@@ -116,7 +116,7 @@ function Order() {
                                         </div>
                                     </div>
                                     <div
-                                        className="mt-3 flex items-center justify-end gap-6 rounded bg-app-1 p-3">
+                                        className="mt-3 flex flex-wrap items-center justify-end gap-6 rounded bg-app-1 p-3">
                                         {item.variant &&
                                             <div
                                                 className="border-r pr-6 border-[#ccc] flex justify-between gap-2 text-black-2 font-medium text-tiny">
@@ -125,7 +125,7 @@ function Order() {
                                                     Phiên bản:
                                                 </div>
                                                 <div
-                                                    className="text-danger font-bold text-lg leading-6">
+                                                    className="text-danger font-bold text-base leading-6">
                                                     {item.variant.attributeHash}
                                                 </div>
                                             </div>
@@ -136,7 +136,7 @@ function Order() {
                                                 Số lượng đặt:
                                             </div>
                                             <div
-                                                className="text-danger font-bold text-lg leading-6">
+                                                className="text-danger font-bold text-base leading-6">
                                                 {item.quantity}
                                             </div>
                                         </div>
@@ -146,7 +146,7 @@ function Order() {
                                                 Giá đặt mua:
                                             </div>
                                             <div
-                                                className="text-danger font-bold text-lg leading-6">
+                                                className="text-danger font-bold text-base leading-6">
                                                 {formatCurrency(item.finalPrice)}
                                             </div>
                                         </div>
@@ -156,7 +156,7 @@ function Order() {
                                                 Tổng tiền:
                                             </div>
                                             <div
-                                                className="text-danger font-bold text-lg leading-6">
+                                                className="text-danger font-bold text-base leading-6">
                                                 {formatCurrency(item.finalPrice * item.quantity)}
                                             </div>
                                         </div>

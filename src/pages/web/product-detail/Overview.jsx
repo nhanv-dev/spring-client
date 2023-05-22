@@ -26,10 +26,6 @@ function Overview(props) {
         })
     }
 
-    useEffect(() => {
-        // console.log(selectedVariant)
-    }, [selectedVariant])
-
     return (
         <>
             {product && <div className="flex gap-6 bg-white h-auto rounded-md px-6">

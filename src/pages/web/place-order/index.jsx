@@ -11,6 +11,7 @@ import {Radio} from "@mui/material";
 import {placeOrder} from "../../../redux/actions/orderActions";
 import ToastCustom from "../../../components/common/toast-custom";
 import {toast} from "react-hot-toast";
+import * as types from "../../../redux/constants/ActionType";
 
 function PlaceOrder() {
     const navigate = useNavigate();
@@ -56,15 +57,19 @@ function PlaceOrder() {
 
     const handlePlaceOrder = async () => {
         if (!address) {
-            toast.error("Bạn chưa chọn địa chỉ nhận hàng")
-            return;
+            return toast.error("Bạn chưa chọn địa chỉ nhận hàng");
         }
         setIsSending(true);
         const action = await placeOrder({
             list, note, address, userId: user.id
         });
-        dispatch(action)
-        navigate("/dat-hang-thanh-cong")
+        if (action.type === types.order.PLACE_ORDER_FAILED) {
+            setIsSending(false)
+            return toast.error("Đặt hàng thất bại. Vui lòng thử lại sau.")
+        } else {
+            dispatch(action)
+            navigate("/dat-hang-thanh-cong")
+        }
     }
 
     return (

@@ -55,7 +55,9 @@ function ProductDetail() {
     }
 
     const handleAddToCart = async () => {
-        if (product?.variants?.length > 0 && !selectedVariant) return;
+        if (product?.variants?.length > 0 && !selectedVariant) {
+            return toast.error("Vui lòng chọn loại sản phẩm.");
+        }
         const payload = {
             quantity: quantity,
             productId: product.id,
@@ -82,14 +84,14 @@ function ProductDetail() {
                         <div className="container">
                             <div
                                 className="py-5 text-tiny font-medium text-black-2 flex items-center justify-start gap-2">
-                                <Link to={"/trang-chu"} className="hover:text-primary transition-all">
+                                <Link to={"/trang-chu"} className="hover:text-primary transition-all min-w-max block">
                                     Trang Chủ
                                 </Link>
                                 {product?.category &&
                                     <>
                                         <UilAngleRightB className={"w-[16px] h-[16px]"}/>
                                         <Link to={`/danh-muc/${product.category.slug}`}
-                                              className="hover:text-primary transition-all">
+                                              className="hover:text-primary transition-all min-w-max block">
                                             {product.category.title}
                                         </Link>
                                     </>
@@ -99,7 +101,7 @@ function ProductDetail() {
                                         <UilAngleRightB className={"w-[16px] h-[16px]"}/>
                                         <Link
                                             to={`/danh-muc/${product.subCategory.slug}`}
-                                            className="hover:text-primary transition-all">
+                                            className="hover:text-primary transition-all min-w-max block">
                                             {product.subCategory.title}
                                         </Link>
                                     </>
