@@ -27,10 +27,12 @@ export const placeOrder = async (payload) => {
     })
     await protectedRequest().post(`/users/${payload.userId}/orders/place-order`, orders)
         .then(res => {
+            console.log(res)
             action.payload = {items: cartItems};
             action.type = types.order.PLACE_ORDER_SUCCESS;
         })
         .catch(err => {
+            console.log(err)
             action.type = types.order.PLACE_ORDER_FAILED;
         })
     return {...action}

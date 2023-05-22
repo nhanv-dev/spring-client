@@ -8,7 +8,7 @@ import DefaultShopBg from "../../../assets/images/default-shop-bg.png";
 import {Link, useNavigate} from "react-router-dom";
 import * as Icon from "@iconscout/react-unicons";
 import StarRating from "../../../components/common/star-rating";
-import {formatBetweenDate, formatCurrency} from "../../../util/format";
+import {formatBetweenDate, formatCurrency, formatMediumDate} from "../../../util/format";
 import ProfileShopUpdating from "./ProfileShopUpdating";
 import ToastCustom from "../../../components/common/toast-custom";
 import {toast} from "react-hot-toast";
@@ -18,8 +18,9 @@ import productService from "../../../service/ProductService";
 import shopService from "../../../service/ShopService";
 import {Grid} from "@mui/material";
 import ProductCard from "../../../components/web/product-card";
-import {UilAngleRight} from "@iconscout/react-unicons";
+import {UilAngleRight, UilPen} from "@iconscout/react-unicons";
 import orderService from "../../../service/OrderService";
+import StatusBadge from "../order/StatusBadge";
 
 function Home() {
     const {shop} = useSelector(state => state);
@@ -267,17 +268,53 @@ function Home() {
                             }
                             {orders.length > 0 &&
                                 <div>
+                                    <div
+                                        className="text-tiny font-semibold text-black flex items-center gap-5 mb-1 p-3">
+                                        <div className="text-md min-w-[80px]">
+                                            ID
+                                        </div>
+                                        <div className={"min-w-[150px] flex items-center justify-center"}>
+                                            Trạng thái
+                                        </div>
+                                        <div className={"min-w-[150px] flex items-center justify-end"}>
+                                            Tổng tiền
+                                        </div>
+                                        <div className={"min-w-[80px] flex-1 flex items-center justify-end"}>
+                                            Ngày tạo
+                                        </div>
+                                        <div className={"min-w-[80px] flex-1 flex items-center justify-end"}>
+                                            Ngày cập nhật
+                                        </div>
+                                        <div className={"min-w-[80px] flex items-center justify-end"}>
+                                            Thao tác
+                                        </div>
+                                    </div>
                                     {orders.map(order => (
                                         <div key={order.id}
-                                             className="text-md font-medium flex items-center gap-3 bg-app-1 mb-2 p-3 rounded-md">
+                                             className="text-tiny font-medium text-black-2 flex items-center gap-5 bg-app-1 mb-2 p-3 rounded-md">
                                             <div className="text-md min-w-[80px]">
                                                 {order.id}
                                             </div>
-                                            <div className={""}>
-                                                {order.email}
+                                            <div className={"min-w-[150px]"}>
+                                                <div className={"max-w-max flex items-center justify-center"}>
+                                                    <StatusBadge orderStatus={order.orderStatus}/>
+                                                </div>
                                             </div>
-                                            <div>
+                                            <div
+                                                className={"min-w-[150px] flex items-center justify-end font-bold text-danger text-md"}>
                                                 {formatCurrency(order.totalPrice)}
+                                            </div>
+                                            <div className={"min-w-[80px] flex-1 flex items-center justify-end"}>
+                                                {formatMediumDate(order.createdAt)}
+                                            </div>
+                                            <div className={"min-w-[80px] flex-1 flex items-center justify-end"}>
+                                                {formatMediumDate(order.updatedAt)}
+                                            </div>
+                                            <div className={"min-w-[80px] flex items-center justify-end"}>
+                                                <Link to={`/kenh-ban-hang/don-dat-hang/${order.id}`}
+                                                      className={"bg-primary-bg text-primary rounded-full w-[32px] h-[32px] flex items-center justify-center"}>
+                                                    <UilPen size={"18px"}/>
+                                                </Link>
                                             </div>
                                         </div>
                                     ))}
