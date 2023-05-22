@@ -58,6 +58,9 @@ function ProductDetail() {
         if (product?.variants?.length > 0 && !selectedVariant) {
             return toast.error("Vui lòng chọn loại sản phẩm.");
         }
+        if (quantity > selectedVariant.quantity) {
+            return toast.error("Sản phẩm không đủ số lượng.");
+        }
         const payload = {
             quantity: quantity,
             productId: product.id,

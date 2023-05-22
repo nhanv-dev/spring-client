@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import Layout, {Footer} from "../../../components/shop/layout";
 import Helmet from "../../../components/common/helmet";
 import {protectedRequest} from "../../../util/request-method";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import DefaultShop from "../../../assets/images/default-shop.png";
 import DefaultShopBg from "../../../assets/images/default-shop-bg.png";
 import {Link, useNavigate} from "react-router-dom";
@@ -21,9 +21,12 @@ import ProductCard from "../../../components/web/product-card";
 import {UilAngleRight, UilPen} from "@iconscout/react-unicons";
 import orderService from "../../../service/OrderService";
 import StatusBadge from "../order/StatusBadge";
+import {updateShop} from "../../../redux/actions/shopActions";
+import * as types from "../../../redux/constants/ActionType";
 
 function Home() {
     const {shop} = useSelector(state => state);
+    const dispatch = useDispatch();
     const [shopDetail, setShopDetail] = useState({});
     const [products, setProducts] = useState([]);
     const [orders, setOrders] = useState([]);
@@ -52,22 +55,17 @@ function Home() {
             .catch(err => {
                 setOrders([])
             })
-    }, [shop])
+    }, [shop.id])
 
     const handleUpdateShop = async (data) => {
-        protectedRequest().put(`/shops/${shop.id}`, data)
-            .then(res => {
-                console.log(res)
-                if (res.status === 200) {
-                    toast.success("Cập nhật thông tin cửa hàng thành công")
-                    setShopDetail(res.data)
-                }
-            })
-            .catch(err => {
-                toast.error("Cập nhật thông tin cửa hàng thất bại")
-                console.log(err)
-            })
-
+        const action = await updateShop({shop: data});
+        if (action.type === types.shop.UPDATE_SHOP) {
+            toast.success("Cập nhật thông tin cửa hàng thành công");
+            setShopDetail(action.payload);
+            dispatch(action);
+            return;
+        }
+        toast.error("Cập nhật thông tin cửa hàng thất bại")
     }
     const handleUploadBackgroundImage = (e) => {
         e.preventDefault();
@@ -295,8 +293,8 @@ function Home() {
                                             <div className="text-md min-w-[80px]">
                                                 {order.id}
                                             </div>
-                                            <div className={"min-w-[150px]"}>
-                                                <div className={"max-w-max flex items-center justify-center"}>
+                                            <div className={"min-w-[150px] flex items-center justify-center"}>
+                                                <div className={"max-w-max"}>
                                                     <StatusBadge orderStatus={order.orderStatus}/>
                                                 </div>
                                             </div>

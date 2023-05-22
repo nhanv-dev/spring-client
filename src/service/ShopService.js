@@ -8,6 +8,12 @@ class ShopService {
         })
     }
 
+    async updateShop({shop}) {
+        return new Promise((resolve, reject) => {
+            protectedRequest().put(`/shops/${shop.id}`, shop).then(resolve).catch(reject)
+        })
+    }
+
     async searchShop({search}) {
         return new Promise((resolve, reject) => {
             protectedRequest().get(`/search/shops?search=${search}`).then(resolve).catch(reject)
