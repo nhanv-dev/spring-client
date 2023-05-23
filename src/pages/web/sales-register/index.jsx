@@ -109,7 +109,7 @@ function SalesRegister() {
                                             className="bg-white flex items-center px-3 rounded-md border border-border h-[40px] w-full shadow-md">
                                             <div className="flex items-center gap-3 w-full">
                                                 <div className="flex items-center justify-center w-[20px] h-[20px]">
-                                                    <UilPhone className="w-full h-full text-gray"/>
+                                                    <UilStore className="w-full h-full text-gray"/>
                                                 </div>
                                                 <div
                                                     className="flex-1 focus:outline-none text-md font-medium text-black-1">
@@ -127,7 +127,7 @@ function SalesRegister() {
                                             className="bg-white flex items-center px-3 rounded-md border border-border h-[40px] w-full shadow-md">
                                             <div className="flex items-center gap-3 w-full">
                                                 <div className="flex items-center justify-center w-[20px] h-[20px]">
-                                                    <UilPhone className="w-full h-full text-gray"/>
+                                                    <UilAt className="w-full h-full text-gray"/>
                                                 </div>
                                                 <div
                                                     className="flex-1 focus:outline-none text-md font-medium text-black-1">
@@ -163,7 +163,7 @@ function SalesRegister() {
                                             className="bg-white flex items-center px-3 rounded-md border border-border h-[40px] w-full shadow-md">
                                             <div className="flex items-center gap-3 w-full">
                                                 <div className="flex items-center justify-center w-[20px] h-[20px]">
-                                                    <UilPhone className="w-full h-full text-gray"/>
+                                                    <UilLocationPoint className="w-full h-full text-gray"/>
                                                 </div>
                                                 <div
                                                     className="flex-1 focus:outline-none text-md font-medium text-black-1">
@@ -186,7 +186,7 @@ function SalesRegister() {
                                             className="bg-white flex items-center px-3 rounded-md border border-border h-[40px] w-full shadow-md">
                                             <div className="flex items-center gap-3 w-full">
                                                 <div className="flex items-center justify-center w-[20px] h-[20px]">
-                                                    <UilPhone className="w-full h-full text-gray"/>
+                                                    <UilLocationPoint className="w-full h-full text-gray"/>
                                                 </div>
                                                 <div
                                                     className="flex-1 focus:outline-none text-md font-medium text-black-1">
@@ -204,7 +204,7 @@ function SalesRegister() {
                                             className="bg-white flex items-center px-3 rounded-md border border-border h-[40px] w-full shadow-md">
                                             <div className="flex items-center gap-3 w-full">
                                                 <div className="flex items-center justify-center w-[20px] h-[20px]">
-                                                    <UilPhone className="w-full h-full text-gray"/>
+                                                    <UilLocationPoint className="w-full h-full text-gray"/>
                                                 </div>
                                                 <div
                                                     className="flex-1 focus:outline-none text-md font-medium text-black-1">
@@ -222,7 +222,7 @@ function SalesRegister() {
                                             className="bg-white flex items-center px-3 rounded-md border border-border h-[40px] w-full shadow-md">
                                             <div className="flex items-center gap-3 w-full">
                                                 <div className="flex items-center justify-center w-[20px] h-[20px]">
-                                                    <UilPhone className="w-full h-full text-gray"/>
+                                                    <UilLocationPoint className="w-full h-full text-gray"/>
                                                 </div>
                                                 <div
                                                     className="flex-1 focus:outline-none text-md font-medium text-black-1">
@@ -240,7 +240,7 @@ function SalesRegister() {
                                             className="bg-white flex items-center px-3 rounded-md border border-border h-[40px] w-full shadow-md">
                                             <div className="flex items-center gap-3 w-full">
                                                 <div className="flex items-center justify-center w-[20px] h-[20px]">
-                                                    <UilPhone className="w-full h-full text-gray"/>
+                                                    <UilLocationPoint className="w-full h-full text-gray"/>
                                                 </div>
                                                 <div
                                                     className="flex-1 focus:outline-none text-md font-medium text-black-1">

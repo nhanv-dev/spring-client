@@ -10,6 +10,7 @@ import {FormGroup} from "@mui/material";
 import {UilCopy} from "@iconscout/react-unicons";
 import Tooltip from "@mui/material/Tooltip";
 import Switch from "@mui/material/Switch";
+import CurrencyInput from "react-currency-input-field";
 
 function TabProduct({handleSubmit}) {
     const {payload, setPayload} = useContext(PayloadContext);
@@ -226,18 +227,23 @@ function TabProduct({handleSubmit}) {
                             <div>
                                 <p className="text-md font-semibold mb-2">Giá gốc</p>
                                 <div className="shadow bg-white w-full h-[40px] rounded-md px-3">
-                                    <input type="number" value={payload.product?.deal?.price}
-                                           onChange={(e) => handleChangeDeal('price', e.target.value)}
-                                           className="h-[40px] text-black-1 font-medium text-md w-full outline-none"/>
+                                    <CurrencyInput
+                                        value={payload.product?.deal?.price || 0}
+                                        intlConfig={{locale: 'vi-VN', currency: 'VND'}}
+                                        className="h-[40px] text-black-1 font-medium text-md w-full outline-none"
+                                        onValueChange={(value, name) => handleChangeDeal('price', value)}
+                                    />
                                 </div>
                             </div>
                             <div>
                                 <p className="text-md font-semibold mb-2">Giá bán</p>
                                 <div className="shadow bg-white w-full h-[40px] rounded-md px-3">
-                                    <input type="number" value={payload.product?.deal?.finalPrice}
-                                           onChange={(e) => handleChangeDeal('finalPrice', e.target.value)}
-
-                                           className="h-[40px] text-black-1 font-medium text-md w-full outline-none"/>
+                                    <CurrencyInput
+                                        value={payload.product?.deal?.finalPrice || 0}
+                                        intlConfig={{locale: 'vi-VN', currency: 'VND'}}
+                                        className="h-[40px] text-black-1 font-medium text-md w-full outline-none"
+                                        onValueChange={(value, name) => handleChangeDeal('finalPrice', value)}
+                                    />
                                 </div>
                             </div>
                             <div>

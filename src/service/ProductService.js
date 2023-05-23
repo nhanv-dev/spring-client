@@ -3,7 +3,7 @@ import {protectedRequest, publicRequest} from "../util/request-method";
 class ProductService {
     async getProduct({page, size}) {
         return new Promise((resolve, reject) => {
-            publicRequest().get(`/products?page=${page - 1}&size=${size}`).then(resolve).catch(reject)
+            publicRequest().get(`/products?page=${page}&size=${size}`).then(resolve).catch(reject)
         })
     }
 

@@ -1,6 +1,8 @@
 import * as Icon from "@iconscout/react-unicons";
 import toast from "react-hot-toast";
 import Tooltip from "@mui/material/Tooltip";
+import CurrencyInput from "react-currency-input-field";
+import React from "react";
 
 function ProductVariants(props) {
     const {attributes, variants, setVariants, selectedVariant, setSelectedVariant} = props;
@@ -133,14 +135,20 @@ function ProductVariants(props) {
                                        className="outline-none py-1 px-3 w-full rounded-md text-center shadow-md"/>
                             </div>
                             <div className="font-medium text-tiny max-w-[100px] min-w-[100px]">
-                                <input type="number" value={variant.price + ""}
-                                       onChange={(e) => handleChangeValueVariant(variant, "price", e.target.value)}
-                                       className="outline-none py-1 px-3 w-full rounded-md text-center shadow-md"/>
+                                <CurrencyInput
+                                    value={variant.price || 0}
+                                    intlConfig={{locale: 'vi-VN', currency: 'VND'}}
+                                    className="outline-none py-1 px-3 w-full rounded-md text-center shadow-md"
+                                    onValueChange={(value, name) => handleChangeValueVariant(variant, "price", value)}
+                                />
                             </div>
                             <div className="font-medium text-tiny max-w-[100px] min-w-[100px]">
-                                <input type="number" value={variant.finalPrice + ""}
-                                       onChange={(e) => handleChangeValueVariant(variant, "finalPrice", e.target.value)}
-                                       className="outline-none py-1 px-3 w-full rounded-md text-center shadow-md"/>
+                                <CurrencyInput
+                                    value={variant.finalPrice || 0}
+                                    intlConfig={{locale: 'vi-VN', currency: 'VND'}}
+                                    className="outline-none py-1 px-3 w-full rounded-md text-center shadow-md"
+                                    onValueChange={(value, name) => handleChangeValueVariant(variant, "finalPrice", value)}
+                                />
                             </div>
                             <div className="font-medium text-tiny max-w-[100px] min-w-[100px]">
                                 <input type="number" value={variant.discountPercent + ""}
