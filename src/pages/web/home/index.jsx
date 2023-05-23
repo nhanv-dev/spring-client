@@ -13,7 +13,7 @@ import productService from "../../../service/ProductService";
 function Home() {
     const [queryParameters] = useSearchParams();
     const [items, setItems] = useState([]);
-    const [page, setPage] = useState(parseInt(queryParameters.get("page")) || 1);
+    const [page, setPage] = useState(parseInt(queryParameters.get("page")) || 0);
     const [totalPages, setTotalPages] = useState(1);
     const [categories, setCategories] = useState([]);
 
@@ -28,11 +28,10 @@ function Home() {
     }, [])
 
     useEffect(() => {
-        productService.getProduct({page:1, size: 30})
+        productService.getProduct({page: page - 1, size: 24})
             .then(res => {
                 setItems(res.data.content)
                 setTotalPages(res.data.totalPages)
-                window.scrollTo(0, 0);
             })
             .catch(err => {
                 console.log(err)
