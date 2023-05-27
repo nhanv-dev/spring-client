@@ -13,7 +13,7 @@ import productService from "../../../service/ProductService";
 function Home() {
     const [queryParameters] = useSearchParams();
     const [items, setItems] = useState([]);
-    const [page, setPage] = useState(parseInt(queryParameters.get("page")) || 0);
+    const [page, setPage] = useState(parseInt(queryParameters.get("page")) || 1);
     const [totalPages, setTotalPages] = useState(1);
     const [categories, setCategories] = useState([]);
 
