@@ -55,7 +55,7 @@ function Category() {
 
     useEffect(() => {
         setMaxScrollCate(categoryRef?.current?.clientWidth)
-    }, [categoryRef])
+    }, [slug, categoryRef])
 
     function scrollCategory(scrollOffset) {
         const scroll = categoryRef.current.scrollLeft + scrollOffset;

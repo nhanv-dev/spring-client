@@ -18,6 +18,7 @@ function Searching() {
     const [searchParams] = useSearchParams();
     const [search, setSearch] = useState("");
     const [type, setType] = useState("");
+    const [page, setPage] = useState(parseInt(searchParams.get("page")) || 1);
 
     useEffect(() => {
         setSearch(searchParams.get("s"))
@@ -48,7 +49,7 @@ function Searching() {
     );
 }
 
-const SearchingShop = ({search}) => {
+const SearchingShop = ({page, search}) => {
     const [shops, setShops] = useState([]);
     const [pagination, setPagination] = useState(null);
 
@@ -95,7 +96,8 @@ const SearchingShop = ({search}) => {
         </div>
     )
 }
-const SearchingProduct = ({search}) => {
+
+const SearchingProduct = ({pageProduct, search}) => {
     const [products, setProducts] = useState([]);
     const [pagination, setPagination] = useState(null);
     const [filterSections] = useState([

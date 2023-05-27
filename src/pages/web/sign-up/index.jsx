@@ -11,9 +11,9 @@ function SignUp() {
     const navigate = useNavigate();
     const [name, setName] = useState("Trần Thanh Nhân");
     const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("12345678");
-    const [repeatPassword, setRepeatPassword] = useState("12345678");
-    const [phoneNumber, setPhoneNumber] = useState("0123456789");
+    const [password, setPassword] = useState("");
+    const [repeatPassword, setRepeatPassword] = useState("");
+    const [phoneNumber, setPhoneNumber] = useState("");
     const [error, setError] = useState(null);
     const [isWaiting, setIsWaiting] = useState(false);
 
