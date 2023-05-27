@@ -18,12 +18,10 @@ function Searching() {
     const [searchParams] = useSearchParams();
     const [search, setSearch] = useState("");
     const [type, setType] = useState("");
-    const [page, setPage] = useState(parseInt(searchParams.get("page")) || 1);
 
     useEffect(() => {
         setSearch(searchParams.get("s"))
         setType(searchParams.get("t"))
-        window.scrollTo(0, 0)
     }, [searchParams])
 
     return (
@@ -50,6 +48,7 @@ function Searching() {
 }
 
 const SearchingShop = ({page, search}) => {
+    const [searchParams] = useSearchParams();
     const [shops, setShops] = useState([]);
     const [pagination, setPagination] = useState(null);
 
@@ -79,7 +78,9 @@ const SearchingShop = ({page, search}) => {
                 <div className=" font-medium text-base">
                     <p className={"inline"}>Shop liên quan đến '{search}' </p>
                     <div className="inline font-medium text-md text-gray">
-                        (Tìm thấy <p className="inline font-semibold text-red text-base">{shops.length}</p> kết quả)
+                        (Tìm thấy <p
+                        className="inline font-semibold text-red text-base">{pagination?.totalElements || 0}</p> kết
+                        quả)
                     </div>
                 </div>
                 <Link to={`/tim-kiem?s=${search}&t=cua-hang`}
@@ -97,7 +98,8 @@ const SearchingShop = ({page, search}) => {
     )
 }
 
-const SearchingProduct = ({pageProduct, search}) => {
+const SearchingProduct = ({search}) => {
+    const [searchParams] = useSearchParams();
     const [products, setProducts] = useState([]);
     const [pagination, setPagination] = useState(null);
     const [filterSections] = useState([
@@ -108,11 +110,11 @@ const SearchingProduct = ({pageProduct, search}) => {
         {title: 'Giá cao đến thấp'},
     ]);
     const [activeFilter, setActiveFilter] = useState(0);
-    const [page, setPage] = useState();
+    const [page, setPage] = useState(parseInt(searchParams.get("page")) || 1);
 
     useEffect(() => {
         if (!search) return;
-        productService.searchProduct({search})
+        productService.searchProduct({page: page - 1, size: 30, search})
             .then(res => {
                 setProducts(res.data.content);
                 setPagination({
@@ -128,14 +130,15 @@ const SearchingProduct = ({pageProduct, search}) => {
                 setProducts([]);
                 setPagination(null);
             })
-    }, [search])
+    }, [page, search])
 
     return (
         <div>
             <div className="mb-4 font-medium text-base">
                 <p className={"inline"}>Kết quả tìm kiếm cho từ khoá '{search}' </p>
                 <div className="inline font-medium text-md text-gray">
-                    (Tìm thấy <div className="inline font-semibold text-red text-base">{products.length}</div> sản phẩm)
+                    (Tìm thấy <div
+                    className="inline font-semibold text-red text-base">{pagination?.totalElements || 0}</div> sản phẩm)
                 </div>
             </div>
             <div className="mb-5 p-5 pb-3.5 shadow bg-white rounded-md">
@@ -177,14 +180,18 @@ const SearchingProduct = ({pageProduct, search}) => {
         </div>
     )
 }
+
 const CustomPagination = ({count, page, handleChange}) => {
     const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
     const location = useLocation();
 
     return (
         <div>
             <Pagination count={count} page={page} onChange={(e, page) => {
-                navigate(`${location.pathname}?page=${page}`)
+                const search = searchParams.get("s");
+                const type = searchParams.get("t");
+                navigate(`${location.pathname}?s=${search}&t=${type}&page=${page}`)
                 handleChange(page)
             }} color={"primary"} showFirstButton showLastButton/>
         </div>
