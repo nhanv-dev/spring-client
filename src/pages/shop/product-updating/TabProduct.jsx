@@ -121,14 +121,14 @@ function TabProduct({handleSubmit}) {
             const deal = {...prev.product?.deal};
             deal[field] = value;
             if (field === 'price') {
-                if (deal.discountPercent) deal.finalPrice = deal.price * (1 - (deal.discountPercent / 100));
+                if ((!deal.discountPercent || deal.discountPercent === 0)) deal.finalPrice = deal.price
                 else if (deal.finalPrice) deal.discountPercent = Math.trunc(100 - (deal.finalPrice * 100 / deal.price));
-            }
-            if (field === 'discountPercent' && !deal.finalPrice) {
-                if (deal.price) deal.finalPrice = deal.price * (1 - (deal.discountPercent / 100));
-            }
-            if (field === 'finalPrice') {
+                else if (deal.discountPercent) deal.finalPrice = deal.price * (1 - (deal.discountPercent / 100));
+            } else if (field === 'finalPrice') {
                 if (deal.price) deal.discountPercent = Math.trunc(100 - (deal.finalPrice * 100 / deal.price));
+            } else if (field === 'discountPercent') {
+                if (deal.price && deal.discountPercent !== 0) deal.finalPrice = deal.price * (1 - (deal.discountPercent / 100));
+                if (!deal.finalPrice) deal.finalPrice = deal.price;
             }
             prev.product.deal = deal;
             return {...prev}
@@ -249,9 +249,13 @@ function TabProduct({handleSubmit}) {
                             <div>
                                 <p className="text-md font-semibold mb-2">Giảm giá</p>
                                 <div className="shadow bg-white w-full h-[40px] rounded-md px-3">
-                                    <input type="number" value={payload.product?.deal?.discountPercent}
-                                           onChange={(e) => handleChangeDeal('discountPercent', e.target.value)}
-                                           className="h-[40px] text-black-1 font-medium text-md w-full outline-none"/>
+                                    <CurrencyInput
+                                        suffix=" %"
+                                        value={payload.product?.deal?.discountPercent || 0}
+                                        intlConfig={{locale: 'vi-VN', currency: 'VND'}}
+                                        className="h-[40px] text-black-1 font-medium text-md w-full outline-none"
+                                        onValueChange={(value, name) => handleChangeDeal('discountPercent', value)}
+                                    />
                                 </div>
                             </div>
                         </div>
