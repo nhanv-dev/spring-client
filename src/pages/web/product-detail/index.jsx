@@ -29,6 +29,7 @@ function ProductDetail() {
     const [showLogin, setShowLogin] = useState(false);
 
     useEffect(() => {
+        setSelectedOptions([]);
         publicRequest().get(`/products/slug/${slug}`)
             .then(res => {
                 setProduct(res.data)

@@ -11,7 +11,7 @@ function SignIn() {
     const dispatch = useDispatch();
     const user = useSelector(state => state.user);
     const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("12345678");
+    const [password, setPassword] = useState("");
     const [error, setError] = useState(null);
 
     async function handleSubmit(e) {
