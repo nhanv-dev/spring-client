@@ -43,7 +43,7 @@ function ModalCategory(props) {
         <div onClick={handleClose}
              className={`fixed top-0 left-0 right-0 bottom-0 z-[50] after:absolute after:bg-[#000] after:opacity-40 after:top-0 after:left-0 after:right-0 after:bottom-0 transition-all ${props.showCategory || props.showSubCategory ? 'visible opacity-100' : 'invisible opacity-0'}`}>
             <div
-                className="shadow-md rounded-[5px] z-[50] bg-white shadow-md fixed top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] min-w-[400px]">
+                className="shadow-md rounded-[5px] z-[50] bg-white fixed top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] min-w-[400px]">
                 <div className="p-3">
                     <p className="font-semibold text-base mb-5">
                         Chọn loại sản phẩm
@@ -58,7 +58,7 @@ function ModalCategory(props) {
                     </div>
                 </div>
                 <button onClick={handleClose}
-                        className="absolute z-[60] right-[-10px] top-[-10px] w-[26px] h-[26px] flex items-center justify-center bg-primary-hover text-white rounded-full">
+                        className="absolute z-[60] right-[-10px] top-[-10px] w-[26px] h-[26px] flex items-center justify-center bg-danger text-white rounded-full">
                     <Icon.UilTimes className="w-[18px] h-[18px]"/>
                 </button>
             </div>

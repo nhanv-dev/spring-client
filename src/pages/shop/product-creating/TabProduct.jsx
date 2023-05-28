@@ -126,8 +126,10 @@ function TabProduct({handleSubmit}) {
             const deal = {...prev.product?.deal};
             deal[field] = value;
             if (field === 'price') {
-                if ((!deal.discountPercent || deal.discountPercent === 0)) deal.finalPrice = deal.price
-                else if (deal.finalPrice) deal.discountPercent = Math.trunc(100 - (deal.finalPrice * 100 / deal.price));
+                if ((!deal.discountPercent || deal.discountPercent === 0)) {
+                    deal.finalPrice = deal.price;
+                    deal.discountPercent = 0;
+                } else if (deal.finalPrice) deal.discountPercent = Math.trunc(100 - (deal.finalPrice * 100 / deal.price));
                 else if (deal.discountPercent) deal.finalPrice = deal.price * (1 - (deal.discountPercent / 100));
             } else if (field === 'finalPrice') {
                 if (deal.price) deal.discountPercent = Math.trunc(100 - (deal.finalPrice * 100 / deal.price));
@@ -136,6 +138,7 @@ function TabProduct({handleSubmit}) {
                 if (!deal.finalPrice) deal.finalPrice = deal.price;
             }
             prev.product.deal = deal;
+            console.log({...prev})
             return {...prev}
         });
     }

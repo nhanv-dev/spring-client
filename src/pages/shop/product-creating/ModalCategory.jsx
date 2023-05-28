@@ -58,7 +58,8 @@ function ModalCategory(props) {
                     </div>
                 </div>
                 <button onClick={handleClose}
-                        className="absolute z-[60] right-[-10px] top-[-10px] w-[26px] h-[26px] flex items-center justify-center bg-primary-hover text-white rounded-full">
+                        className="absolute z-[60] right-[-10px] top-[-10px] w-[26px] h-[26px] flex items-center justify-center bg-danger
+                         text-white rounded-full">
                     <Icon.UilTimes className="w-[18px] h-[18px]"/>
                 </button>
             </div>
