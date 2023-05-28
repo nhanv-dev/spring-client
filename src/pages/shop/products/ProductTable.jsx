@@ -147,12 +147,12 @@ export default function ProductTable({products, pagination, setPagination}) {
             <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center gap-5 justify-between">
                     <form
-                        className={"w-full flex items-center gap-3 rounded-full border-2 border-secondary-bg text-secondary text-md font-medium px-3 py-1.5"}>
-                        <button type={"submit"} className="text-primary">
+                        className={"w-[500px] max-w-[500px] flex items-center gap-3 rounded border-2 border-border-1 text-secondary text-md font-medium px-3 py-1.5"}>
+                        <input className="w-full bg-[transparent] outline-none border-none rounded-md"
+                               placeholder="Tìm theo tên sản phẩm, từ khóa..."/>
+                        <button type={"submit"} className="text-black-2">
                             <UilSearch className="w-[20px] h-[20px]"/>
                         </button>
-                        <input className="w-full bg-[transparent] outline-none border-none"
-                               placeholder="Tên sản phẩm, từ khóa"/>
                     </form>
                     <Link to={`/kenh-ban-hang/san-pham/dang-ban`}
                           className="min-w-max flex items-center gap-1.5 rounded-full bg-primary-bg text-primary text-[.85rem] font-bold px-3 py-1.5">

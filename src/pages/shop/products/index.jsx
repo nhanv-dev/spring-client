@@ -39,7 +39,6 @@ function Products() {
                         Quản lý sản phẩm
                         <span> ({pagination.totalElements}+)</span>
                     </p>
-
                 </div>
                 <div className="w-full p-5 bg-white rounded-md">
                     <ProductTable products={products} pagination={pagination} setPagination={setPagination}/>

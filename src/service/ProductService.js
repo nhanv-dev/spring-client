@@ -9,7 +9,7 @@ class ProductService {
 
     async getProductByCategorySlug({slugCategory, page}) {
         return new Promise((resolve, reject) => {
-            publicRequest().get(`/products/category/${slugCategory}?page=${page - 1}`).then(resolve).catch(reject)
+            publicRequest().get(`/products/category/${slugCategory}?page=${page}`).then(resolve).catch(reject)
         })
     }
 

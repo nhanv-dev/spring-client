@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {Link, useLocation, useNavigate, useSearchParams} from "react-router-dom";
 import Layout from "../../../components/web/layout";
 import Helmet from "../../../components/common/helmet";
@@ -18,10 +18,13 @@ function Searching() {
     const [searchParams] = useSearchParams();
     const [search, setSearch] = useState("");
     const [type, setType] = useState("");
+    const containerRef = useRef();
 
     useEffect(() => {
         setSearch(searchParams.get("s"))
         setType(searchParams.get("t"))
+        const top = containerRef.current.offsetTop;
+        window.scrollTo(0, top);
     }, [searchParams])
 
     return (
@@ -31,9 +34,9 @@ function Searching() {
                     <div className="container">
                         <Grid container spacing={2}>
                             <Grid item xs={2.2}><SidebarCategory/></Grid>
-                            <Grid item xs={12 - 2.2}>
+                            <Grid item xs={12 - 2.2} ref={containerRef}>
                                 {(type === TYPE_ALL || type === TYPE_SHOP) &&
-                                    <SearchingShop search={search}/>
+                                    <SearchingShop search={search} type={type}/>
                                 }
                                 {(type === TYPE_ALL || type === TYPE_PRODUCT) &&
                                     <SearchingProduct search={search}/>
@@ -47,14 +50,16 @@ function Searching() {
     );
 }
 
-const SearchingShop = ({page, search}) => {
+const SearchingShop = ({type, search}) => {
     const [searchParams] = useSearchParams();
     const [shops, setShops] = useState([]);
     const [pagination, setPagination] = useState(null);
+    const [page, setPage] = useState(parseInt(searchParams.get("page")) || 1);
 
     useEffect(() => {
         if (!search) return;
-        shopService.searchShop({search})
+        const currentPage = type === TYPE_SHOP ? page : 1;
+        shopService.searchShop({page: currentPage - 1, size: 5, search})
             .then(res => {
                 setShops(res.data.content);
                 setPagination({
@@ -70,7 +75,7 @@ const SearchingShop = ({page, search}) => {
                 setShops([]);
                 setPagination(null);
             })
-    }, [search])
+    }, [page, search])
 
     return (
         <div className="mb-8">
@@ -94,6 +99,14 @@ const SearchingShop = ({page, search}) => {
                     <ShopCard shop={shop}/>
                 </div>
             ))}
+            {(pagination && type === TYPE_SHOP) &&
+                <div className="flex items-center justify-center w-full mt-10">
+                    <CustomPagination
+                        count={parseInt(pagination.totalPages)}
+                        page={parseInt(pagination.page + 1)}
+                        handleChange={setPage}/>
+                </div>
+            }
         </div>
     )
 }
