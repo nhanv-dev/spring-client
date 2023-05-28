@@ -1,4 +1,4 @@
-import {useEffect, useRef, useState} from "react";
+import {useEffect, useLayoutEffect, useRef, useState} from "react";
 import {Link, useParams, useSearchParams} from "react-router-dom";
 import Layout from "../../../components/web/layout";
 import Helmet from "../../../components/common/helmet";
@@ -29,8 +29,6 @@ function Category() {
     ]);
     const [activeFilter, setActiveFilter] = useState(0);
     const categoryRef = useRef();
-    const [scrollCate, setScrollCate] = useState(0);
-    const [maxScrollCate, setMaxScrollCate] = useState();
 
     useEffect(() => {
         categoryService.getCategoryBySlug({slug})
@@ -45,7 +43,7 @@ function Category() {
     }, [slug])
 
     useEffect(() => {
-        productService.getProductByCategorySlug({page, slugCategory: slug})
+        productService.getProductByCategorySlug({page: page - 1, slugCategory: slug})
             .then(res => {
                 setItems(res.data.content)
                 setTotalPages(res.data.totalPages)
@@ -53,17 +51,8 @@ function Category() {
             })
     }, [page, slug])
 
-    useEffect(() => {
-        setMaxScrollCate(categoryRef?.current?.clientWidth)
-    }, [slug, categoryRef])
-
-    function scrollCategory(scrollOffset) {
-        const scroll = categoryRef.current.scrollLeft + scrollOffset;
-        if (scroll + scrollOffset >= maxScrollCate)
-            setScrollCate(maxScrollCate);
-        else
-            setScrollCate(scroll);
-        categoryRef.current.scrollLeft = scroll
+    function scrollCategory(value) {
+        categoryRef.current.scrollLeft = categoryRef.current.scrollLeft + value;
     }
 
     return (
@@ -119,32 +108,12 @@ function Category() {
                                         </div>
                                     </div>
                                     {category && (
-                                        <div className="relative w-full bg-white mb-3">
-                                            {scrollCate > 0 &&
-                                                <div
-                                                    className={`absolute left-0 top-0 bottom-0 flex items-center justify-center w-[60px]`}
-                                                    style={{
-                                                        background: 'linear-gradient(to left, rgba(255,255,255,0.7) 50%, #fff 75%)'
-                                                    }}>
-                                                    <button onClick={() => scrollCategory(-200)}
-                                                            className={` p-1.5 bg-primary-bg border-none outline-none text-primary rounded-full`}>
-                                                        <UilAngleLeft className={"w-[18px] h-[18px]"}/>
-                                                    </button>
-                                                </div>
-                                            }
-                                            {scrollCate < maxScrollCate &&
-                                                <div
-                                                    className={`absolute right-0 top-0 bottom-0 flex items-center justify-center w-[60px]`}
-                                                    style={{
-                                                        background: 'linear-gradient(to left, #fff 50%, rgba(255,255,255,0.7) 75%)'
-                                                    }}>
-                                                    <button onClick={() => scrollCategory(200)}
-                                                            className={`p-1.5 bg-primary-bg border-none outline-none text-primary rounded-full`}>
-                                                        <UilAngleRight className={"w-[18px] h-[18px]"}/>
-                                                    </button>
-                                                </div>
-                                            }
-                                            <div ref={categoryRef} className="scroll-smooth overflow-hidden">
+                                        <div className="relative w-full flex items-center gap-3 bg-white mb-3">
+                                            <button onClick={() => scrollCategory(-300)}
+                                                    className={`min-w-[32px] min-h-[32px] max-w-[32px] max-h-[32px] flex items-center justify-center bg-primary-bg border-none outline-none text-primary rounded-full`}>
+                                                <UilAngleLeft className={"w-[20px] h-[20px] relative left-[-1px]"}/>
+                                            </button>
+                                            <div ref={categoryRef} className="flex-1 scroll-smooth overflow-hidden">
                                                 <div className="flex gap-3 items-center">
                                                     <Link to={`/danh-muc/${category?.slug}`}
                                                           className={`${slug === category.slug ? "bg-primary-bg text-primary" : "bg-[#e7e8ea] text-black-1 border-[#e7e8ea] hover:text-primary"} border-2 block min-w-max py-1.5 px-4 rounded-md font-semibold text-sm transition-all`}>
@@ -158,6 +127,10 @@ function Category() {
                                                     ))}
                                                 </div>
                                             </div>
+                                            <button onClick={() => scrollCategory(300)}
+                                                    className={`min-w-[32px] min-h-[32px] max-w-[32px] max-h-[32px] flex items-center justify-center bg-primary-bg border-none outline-none text-primary rounded-full`}>
+                                                <UilAngleRight className={"w-[20px] h-[20px] relative left-[1px]"}/>
+                                            </button>
                                         </div>
                                     )}
                                     <div
@@ -171,9 +144,6 @@ function Category() {
                                                     {filter.title}
                                                 </button>
                                             ))}
-                                        </div>
-                                        <div>
-
                                         </div>
                                     </div>
 

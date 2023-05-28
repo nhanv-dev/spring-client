@@ -74,7 +74,8 @@ function UploadImages({images, setImages}) {
                     </form>
                     <form onSubmit={handleUploadImage} ref={formRef}>
                         <div className="flex items-center justify-start gap-2">
-                            <input type="file" id="upload-image" name="upload-image" accept="image/png, image/jpeg"
+                            <input type="file" id="upload-image" name="upload-image"
+                                   accept="image/png, image/jpeg, image/webp"
                                    onChange={handleReadImage} className="hidden" multiple="multiple"/>
                             <label htmlFor="upload-image"
                                    className="flex items-center justify-center gap-1 border-2 botext-primary rounded-md min-w-[70px] p-1.5 text-primary text-sm font-medium cursor-pointer">

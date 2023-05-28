@@ -37,17 +37,17 @@ function ShopCard({shop}) {
                     </div>
                 </div>
                 <div className="flex-1 flex items-center justify-end gap-5">
-                    <p className="w-[1px] h-[40px] bg-[#efefef]"/>
+                    <p className="w-[1px] h-[24px] bg-[#efefef]"/>
                     <div className="flex items-center gap-1">
                         {/*<Icon.UilCube className="relative text-black-2 w-[22px] h-[22px]"/>*/}
-                        <p className="text-black-2 text-tiny font-medium">{formatToK(shop.productTotal)} sản phẩm</p>
+                        <p className="text-black-2 text-tiny font-semibold">{formatToK(shop.productTotal)} sản phẩm</p>
                     </div>
-                    <p className="w-[1px] h-[40px] bg-[#efefef]"/>
+                    <p className="w-[1px] h-[24px] bg-[#efefef]"/>
                     <div className="flex items-center gap-1">
                         {/*<Icon.UilStar className="relative text-black-2 w-[22px] h-[22px]"/>*/}
-                        <p className="text-black-2 text-tiny font-medium">{shop?.ratingInfo?.totalRating} đánh giá</p>
+                        <p className="text-black-2 text-tiny font-semibold">{shop?.ratingInfo?.totalRating} đánh giá</p>
                     </div>
-                    <p className="w-[1px] h-[40px] bg-[#efefef]"/>
+                    <p className="w-[1px] h-[24px] bg-[#efefef]"/>
                     <div className="flex items-center gap-2">
                         <Link to={`/cua-hang/${shop.slug}`}
                               className="font-semibold text-tiny flex items-center justify-center rounded bg-primary-bg text-primary min-w-[100px] min-h-[32px]">

@@ -14,9 +14,9 @@ class ShopService {
         })
     }
 
-    async searchShop({search}) {
+    async searchShop({page,size,search}) {
         return new Promise((resolve, reject) => {
-            protectedRequest().get(`/search/shops?search=${search}`).then(resolve).catch(reject)
+            protectedRequest().get(`/search/shops?search=${search}&page=${page}&size=${size}`).then(resolve).catch(reject)
         })
     }
 

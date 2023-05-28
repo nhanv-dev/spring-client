@@ -120,7 +120,8 @@ function OrderBlock({order, setOrders}) {
                                     {/*</div>*/}
                                     <div
                                         className={`${openAddress ? 'opacity-100 visible' : 'opacity-0 hidden'} z-[1000] fixed left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] transition-all w-[450px] bg-white rounded-md`}>
-                                        <div className="p-3 mb-3 flex items-center justify-between border-b border-border-1">
+                                        <div
+                                            className="p-3 mb-3 flex items-center justify-between border-b border-border-1">
                                             <h5 className="font-semibold">
                                                 Thông tin nhận hàng
                                             </h5>
@@ -131,34 +132,36 @@ function OrderBlock({order, setOrders}) {
                                         </div>
                                         <div className="p-3">
                                             <div className={"flex items-center font-medium text-md mb-4 text-black-2"}>
-                                                <p className="w-[140px]">Họ tên:</p>
+                                                <p className="w-[140px] min-w-[140px]">Họ tên:</p>
                                                 <p className={"font-semibold"}>
                                                     {order.address?.customerName}
                                                 </p>
                                             </div>
                                             <div className={"flex items-center font-medium text-md mb-4 text-black-2"}>
-                                                <p className="w-[140px]">Số điện thoại:</p>
+                                                <p className="w-[140px] min-w-[140px]">Số điện thoại:</p>
                                                 <p className={"font-semibold"}>
                                                     {order.address?.phoneNumber}
                                                 </p>
                                             </div>
                                             {order.address?.email &&
-                                                <div className={"flex items-center font-medium text-md mb-5 text-black-2"}>
-                                                    <p className="w-[140px]">Email:</p>
+                                                <div
+                                                    className={"flex items-center font-medium text-md mb-5 text-black-2"}>
+                                                    <p className="w-[140px] min-w-[140px]">Email:</p>
                                                     <p>
                                                         {order.address?.email}
                                                     </p>
                                                 </div>
                                             }
                                             <div className={"flex items-center font-medium text-md mb-4 text-black-2"}>
-                                                <p className="w-[140px]">Địa chỉ nhận hàng:</p>
+                                                <p className="w-[140px] min-w-[140px]">Địa chỉ nhận hàng:</p>
                                                 <p className={"font-semibold"}>
                                                     {order.address?.addressDetail}
                                                 </p>
                                             </div>
                                             {order.note &&
-                                                <div className={"flex items-center font-medium text-md mb-5 text-black-2"}>
-                                                    <p className="w-[140px]">Ghi chú:</p>
+                                                <div
+                                                    className={"flex items-center font-medium text-md mb-5 text-black-2"}>
+                                                    <p className="w-[140px] min-w-[140px]">Ghi chú:</p>
                                                     <p>
                                                         {order.note}
                                                     </p>
