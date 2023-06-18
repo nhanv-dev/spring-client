@@ -1,13 +1,12 @@
-import {useEffect, useLayoutEffect, useRef, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {Link, useParams, useSearchParams} from "react-router-dom";
 import Layout from "../../../components/web/layout";
 import Helmet from "../../../components/common/helmet";
 import ProductCard from "../../../components/web/product-card";
 import SidebarCategory from "../../../components/web/sidebar-category";
-import {publicRequest} from "../../../util/request-method";
 import CustomPagination from "../../../components/web/custom-pagination";
 import {Grid} from "@mui/material";
-import {UilAngleLeft, UilAngleRight, UilAngleRightB, UilPlusCircle} from "@iconscout/react-unicons";
+import {UilAngleLeft, UilAngleRight, UilAngleRightB} from "@iconscout/react-unicons";
 import productService from "../../../service/ProductService";
 import categoryService from "../../../service/CategoryService";
 
@@ -29,6 +28,7 @@ function Category() {
     ]);
     const [activeFilter, setActiveFilter] = useState(0);
     const categoryRef = useRef();
+    const [pagination, setPagination] = useState({page: 0, size: 10, totalPages: 1, loaded: false})
 
     useEffect(() => {
         categoryService.getCategoryBySlug({slug})
@@ -39,6 +39,7 @@ function Category() {
                         return {...res.data}
                     return res.data.subCategories.filter(i => i.slug === slug)[0]
                 })
+
             })
     }, [slug])
 
@@ -48,6 +49,13 @@ function Category() {
                 setItems(res.data.content)
                 setTotalPages(res.data.totalPages)
                 window.scrollTo(0, 0);
+                setPagination({
+                    size: res.data.size,
+                    page: res.data.number,
+                    numberOfElements: res.data.numberOfElements,
+                    totalElements: res.data.totalElements,
+                    totalPages: res.data.totalPages,
+                });
             })
     }, [page, slug])
 
@@ -102,7 +110,7 @@ function Category() {
                                             <span className="font-medium text-md text-gray">
                                                 (Tìm thấy <span
                                                 className="font-semibold text-red text-base">
-                                                    {items.length}
+                                                    {pagination?.totalElements || 0}
                                                 </span> sản phẩm)
                                             </span>
                                         </div>
