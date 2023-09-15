@@ -340,7 +340,7 @@ function Home() {
                                 {products?.length > 0 &&
                                     <Grid container spacing={2}>
                                         {products.map((item) => (
-                                            <Grid item xl={12 / 4} md={12 / 4} xs={12 / 2} key={item.id}>
+                                            <Grid item lg={12 / 4} md={12 / 4} xs={12 / 2} key={item.id}>
                                                 <ProductCard item={item}/>
                                             </Grid>
                                         ))}

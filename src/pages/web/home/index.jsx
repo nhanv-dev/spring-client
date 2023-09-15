@@ -60,7 +60,7 @@ function Home() {
                                 </div>
                                 <Grid container spacing={0} className={"border-l border-b border-border-1"}>
                                     {categories?.map((category) => (
-                                        <Grid item key={category.id} xl={12 / 10} md={12 / 4} xs={12 / 4}
+                                        <Grid item key={category.id} lg={12 / 10} md={12 / 4} xs={12 / 4}
                                               className="min-h-full">
                                             <Link to={`/danh-muc/${category.slug}`}
                                                   className="min-h-[120px] p-1 border-r border-t border-border-1 text-black-2 hover:text-primary transition-all h-full flex flex-col items-center justify-center">
@@ -86,7 +86,7 @@ function Home() {
                             </div>
                             <Grid container spacing={2}>
                                 {items?.map((item, index) => (
-                                    <Grid item xl={12 / 6} md={12 / 4} xs={12 / 2} key={index}
+                                    <Grid item lg={12 / 6} md={12 / 4} xs={12 / 2} key={index}
                                           className="min-h-full">
                                         <ProductCard item={item}/>
                                     </Grid>

@@ -174,7 +174,7 @@ const SearchingProduct = ({search}) => {
                 <div>
                     <Grid container spacing={2}>
                         {products?.map((item, index) => (
-                            <Grid item xl={12 / 5} md={12 / 4} xs={12 / 2} key={index}
+                            <Grid item lg={12 / 5} md={12 / 4} xs={12 / 2} key={index}
                                   className="min-h-full">
                                 <ProductCard item={item}/>
                             </Grid>
